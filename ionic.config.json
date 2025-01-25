@@ -1,0 +1,7 @@
+{
+  "name": "AppHelpdesk",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
