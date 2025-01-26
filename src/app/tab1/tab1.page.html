@@ -2,17 +2,15 @@
   <ion-toolbar>
     <ion-title>
       Helpdesk
+      <ion-button
+        size="default"
+        [routerLink]="['/home']">
+        <ion-icon name="home"></ion-icon>
+      </ion-button>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <!-- <app-explore-container name="Tab 1 page"></app-explore-container> -->
-   <form-page></form-page>
+  <form-page></form-page>
 </ion-content>
