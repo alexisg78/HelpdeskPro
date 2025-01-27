@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content  class="ion-padding">
+<!-- <ion-content  class="ion-padding">
 
   <ion-button
     size="large"
@@ -20,5 +20,45 @@
     Ver Requerimientos
   </ion-button>
 
-</ion-content>
+</ion-content> -->
 
+
+<!-- otro -->
+
+<ion-grid class="ion-margin">
+  <ion-row class="ion-align-items-center ion-justify-content-center">
+    <ion-button
+      size="large"
+      expand="block"
+      [routerLink]="['/tabs/tab1']">
+      Crear Helpdesk
+    </ion-button>
+  </ion-row>
+  <ion-row class="ion-align-items-center ion-justify-content-center">
+    <ion-button
+      size="large"
+      expand="block"
+      [routerLink]="['/tabs/tab2']">
+      Requerimientos
+    </ion-button>
+  </ion-row>
+</ion-grid>
+
+<!-- <ion-content class="ion-padding">
+  <div class="ion-align-items-center ion-justify-content-center ion-height-full ion-display-flex">
+    <div class="ion-text-center">
+      <ion-button
+        size="large"
+        expand="block"
+        [routerLink]="['/tabs/tab1']">
+        Crear Helpdesk
+      </ion-button>
+      <ion-button
+        size="large"
+        expand="block"
+        [routerLink]="['/tabs/tab2']">
+        Requerimientos
+      </ion-button>
+    </div>
+  </div>
+</ion-content> -->
