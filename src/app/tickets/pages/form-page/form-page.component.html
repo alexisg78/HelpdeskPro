@@ -1,2 +1,19 @@
-<p>form-page works!</p>
-<ion-router-outlet></ion-router-outlet>
+<ion-content class="ion-padding">
+
+  <ion-select label="Empresa" label-placement="floating" fill="solid">
+    <ion-select-option value="HE">HE</ion-select-option>
+    <ion-select-option value="ALIARE">ALIARE</ion-select-option>
+  </ion-select>
+
+  <ion-select label="Area" label-placement="floating" fill="solid">
+    <ion-select-option value="Sistemas">Sistemas</ion-select-option>
+    <ion-select-option value="Técnica">Técnica</ion-select-option>
+  </ion-select>
+
+  <ion-input label="Título" label-placement="floating" fill="solid" placeholder="Título del helpdesk"></ion-input>
+
+  <ion-textarea class="h-6rem md:h-6rem sm:h-6rem" label="Requerimiento" labelPlacement="floating" fill="solid" placeholder="Ingrese el requerimiento"></ion-textarea>
+
+
+  <ion-button color="primary">Enviar</ion-button>
+</ion-content>
