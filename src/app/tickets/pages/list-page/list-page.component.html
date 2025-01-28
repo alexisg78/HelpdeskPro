@@ -1,2 +1,36 @@
-<p>list-page works!</p>
-<ion-router-outlet></ion-router-outlet>
+<ion-content>
+  <div class="table-container p-3">
+    <table class="p-datatable p-component">
+      <thead>
+        <tr>
+          <th class="p-text-center">Fecha</th>
+          <th class="p-text-center">Título</th>
+          <th class="p-text-center">Texto Reclamo</th>
+          <th class="p-text-center">Operador</th>
+          <th class="p-text-center">Código Área</th>
+          <th class="p-text-center">Nombre Cliente</th>
+          <th class="p-text-center">Fecha Requerida</th>
+          <th class="p-text-center">Estado</th>
+          <th class="p-text-center">Color</th>
+          <th class="p-text-center">Código Principal</th>
+          <th class="p-text-center">Código Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of tickets">
+          <td class="p-text-center">{{ item.fecha }}</td>
+          <td class="p-text-center">{{ item.titulo }}</td>
+          <td class="p-text-center">{{ item.textoreclamo }}</td>
+          <td class="p-text-center">{{ item.nombreoperador }}</td>
+          <td class="p-text-center">{{ item.codigoarea }}</td>
+          <td class="p-text-center">{{ item.nombre }}</td>
+          <td class="p-text-center">{{ item.fecharequerida }}</td>
+          <td class="p-text-center">{{ item.estado }}</td>
+          <td class="p-text-center">{{ item.color }}</td>
+          <td class="p-text-center">{{ item.codigoppal }}</td>
+          <td class="p-text-center">{{ item.codigoestado }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ion-content>
