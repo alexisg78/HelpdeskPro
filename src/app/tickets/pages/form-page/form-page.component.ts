@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { TicketsService } from '../../services/tickets-service.service';
+import { Tickets } from '../../interfaces/ticket.interface';
 
 @Component({
   selector: 'form-page',
@@ -7,5 +9,7 @@ import { Component } from '@angular/core';
   standalone: false
 })
 export class FormPageComponent {
+  tickets: Tickets[] = []
+  constructor  (private ticketsService : TicketsService) {}
 
 }
