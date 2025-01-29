@@ -1,7 +1,9 @@
-import { HttpClient } from '@angular/common/http/index.js';
+
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Tickets } from '../interfaces/ticket.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -11,14 +13,12 @@ export class TicketsService {
   private baseUrl: string = environment.baseUrl;
   constructor(private http: HttpClient) { }
 
-  getTickets():Observable<[]> {
-    return this.http.get<[]>(`${ this.baseUrl }/tickets`)
+  getTickets():Observable<Tickets[]> {
+    return this.http.get<Tickets[]>(`${this.baseUrl}/tickets`)
   }
 
-  // getTicketById(id: string): Observable<Hero|undefined> {
-
-  getTicketById(id: string): Observable<any|undefined> {
-    return this.http.get<any>(`${this.baseUrl}/tickets/${id}`)
+  getTicketById(id: number): Observable<Tickets|undefined> {
+    return this.http.get<Tickets>(`${this.baseUrl}/tickets/${id}`)
       .pipe(
         catchError( error => of( undefined ) )
        )
