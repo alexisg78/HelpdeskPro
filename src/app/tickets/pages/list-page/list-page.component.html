@@ -1,75 +1,39 @@
-<!-- <ion-content>
-  <div class="table-container p-3">
-    <table class="p-datatable p-component">
-      <thead>
-        <tr>
-          <th class="p-text-center">Fecha</th>
-          <th class="p-text-center">Título</th>
-          <th class="p-text-center">Texto Reclamo</th>
-          <th class="p-text-center">Operador</th>
-          <th class="p-text-center">Código Área</th>
-          <th class="p-text-center">Nombre Cliente</th>
-          <th class="p-text-center">Fecha Requerida</th>
-          <th class="p-text-center">Estado</th>
-          <th class="p-text-center">Color</th>
-          <th class="p-text-center">Código Principal</th>
-          <th class="p-text-center">Código Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of tickets">
-          <td class="p-text-center">{{ item.fecha }}</td>
-          <td class="p-text-center">{{ item.titulo }}</td>
-          <td class="p-text-center">{{ item.textoreclamo }}</td>
-          <td class="p-text-center">{{ item.nombreoperador }}</td>
-          <td class="p-text-center">{{ item.codigoarea }}</td>
-          <td class="p-text-center">{{ item.nombre }}</td>
-          <td class="p-text-center">{{ item.fecharequerida }}</td>
-          <td class="p-text-center">{{ item.estado }}</td>
-          <td class="p-text-center">{{ item.color }}</td>
-          <td class="p-text-center">{{ item.codigoppal }}</td>
-          <td class="p-text-center">{{ item.codigoestado }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</ion-content> -->
-
-<!-- otro -->
-
 <ion-content class="ion-padding">
   <div class="table-container p-3 col-12">
     <table class="custom-table">
       <thead>
         <tr>
-          <th>Fecha</th>
-          <th>Título</th>
-          <th>Texto Reclamo</th>
-          <th>Operador</th>
-          <th>Código Área</th>
-          <th>Nombre Cliente</th>
-          <th>Fecha Requerida</th>
-          <th>Estado</th>
-          <th>Color</th>
-          <th>Código Principal</th>
-          <th>Código Estado</th>
+          <th class="p-text-center">Fecha</th>
+          <th class="p-text-center">Título</th>
+          <th class="p-text-center">Reclamo</th>
+          <th class="p-text-center">Operador</th>
+          <th class="p-text-center">Área</th>
+          <th class="p-text-center">Responsable</th>
+          <th class="p-text-center">Atiende</th>
+          <th class="p-text-center">Empresa</th>
+          <th class="p-text-center">Estado</th>
+          <th class="p-text-center">Urgencia</th>
+          <th class="p-text-center">ir al detalle</th>
+
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of tickets">
-          <td>{{ item.fecha }}</td>
-          <td>{{ item.titulo }}</td>
-          <td>{{ item.textoreclamo }}</td>
-          <td>{{ item.nombreoperador }}</td>
-          <td>{{ item.codigoarea }}</td>
-          <td>{{ item.nombre }}</td>
-          <td>{{ item.fecharequerida }}</td>
-          <td class="status">{{ item.estado }}</td>
-          <td>
-            <span class="color-box" [style.background]="item.color"></span>
+          <td class="p-text-center w-auto">{{ item.fecha }}</td>
+          <td class="p-text-center w-auto">{{ item.titulo }}</td>
+          <td class="p-text-center w-auto">{{ item.textoreclamo }}</td>
+          <td class="p-text-center w-auto">{{ item.nombreoperador }}</td>
+          <td class="p-text-center w-auto">{{ item.area }}</td>
+          <td class="p-text-center w-auto">{{ item.responsable }}</td>
+          <td class="p-text-center w-auto">{{ item.userid_atiende }}</td>
+          <td class="p-text-center w-auto">{{ item.empresa }}</td>
+          <td class="status p-text-center w-auto">{{ item.estado }}</td>
+          <td class="p-text-center w-auto">{{ item.urgente }}</td>
+
+          <td class="p-text-center w-auto">
+            <ion-button (click)="getTicket(item.codigoppal)" color="primary">Detalle</ion-button>
           </td>
-          <td>{{ item.codigoppal }}</td>
-          <td>{{ item.codigoestado }}</td>
+
         </tr>
       </tbody>
     </table>

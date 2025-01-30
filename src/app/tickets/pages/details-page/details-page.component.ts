@@ -7,5 +7,7 @@ import { Component } from '@angular/core';
   standalone: false
 })
 export class DetailsPageComponent {
-
+  // mostrarTicket(event: any){
+  //   console.log('FormPage enviado desde la listPage', event)
+  // }
 }

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Tickets } from '../../interfaces/ticket.interface';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { HelpDesk, Tickets } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
 
 @Component({
@@ -10,15 +10,33 @@ import { TicketsService } from '../../services/tickets-service.service';
 })
 export class ListPageComponent implements OnInit{
 
-  public tickets: Tickets[] = []
+  public tickets: HelpDesk[] = []
+  public ticketSeleccionado?: HelpDesk
+
+  // @Output()
+  // ticketSeleccionado = new EventEmitter<HelpDesk>()
 
   constructor  (private ticketsService : TicketsService) {}
 
   ngOnInit(): void {
     this.ticketsService.getTickets()
        .subscribe( tickets => this.tickets =  tickets);
+       console.log(this.tickets)
   }
 
-
+  getTicket(id: number){
+    this.ticketsService.getTicketById(id)
+    .subscribe(
+      ticket => {
+        //this.ticketSeleccionado.emit(ticket);
+        this.ticketSeleccionado= ticket
+        console.log(this.ticketSeleccionado)
+      });
+  }
 
 }
+
+
+// getTicket(codigoppal: number) {
+//   this.router.navigate(['/detalle-ticket', codigoppal]);
+// }

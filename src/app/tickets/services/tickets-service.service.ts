@@ -1,9 +1,10 @@
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Tickets } from '../interfaces/ticket.interface';
+import { HelpDesk } from '../interfaces/ticket.interface';
+//import { Tickets } from '../interfaces/ticket.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -11,24 +12,37 @@ import { Tickets } from '../interfaces/ticket.interface';
 export class TicketsService {
 
   private baseUrl: string = environment.baseUrl;
+  private subUrl: string = 'HelpDesk?pageNumber=0'
+  private token : string = environment.token
+
   constructor(private http: HttpClient) { }
 
-  getTickets():Observable<Tickets[]> {
-    return this.http.get<Tickets[]>(`${this.baseUrl}/tickets`)
+  getTickets(): Observable<HelpDesk[]> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<HelpDesk[]>(`${this.baseUrl}/${this.subUrl}`, { headers });
   }
 
-  getTicketById(id: number): Observable<Tickets|undefined> {
-    return this.http.get<Tickets>(`${this.baseUrl}/tickets/${id}`)
+  getTicketById(id: number): Observable<HelpDesk|undefined> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<HelpDesk>(`${this.baseUrl}/getItemHelpDesk/${id}`, {headers})
       .pipe(
         catchError( error => of( undefined ) )
        )
   }
 
-  postTickets(tickets: Tickets[]): Observable<Tickets> {
-    return this.http.post<Tickets>(`${this.baseUrl}/tickets/`, tickets);
+  postTickets(helpdesk: HelpDesk[]): Observable<HelpDesk> {
+    return this.http.post<HelpDesk>(`${this.baseUrl}/HelpDesk/`, helpdesk);
   }
 
-  getSuggestions( query: string ): Observable<[]> {
-    return this.http.get<[]>( `${this.baseUrl}/heroes?q=${ query }&_limit=6` );
-  }
+  // getSuggestions( query: string ): Observable<[]> {
+  //   return this.http.get<[]>( `${this.baseUrl}/heroes?q=${ query }&_limit=6` );
+  // }
 }

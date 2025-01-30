@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Empresa, Tickets } from '../../interfaces/ticket.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -8,10 +8,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styles: ``,
   standalone: false
 })
-export class FormPageComponent {
-  tickets!: Tickets
+export class FormPageComponent implements OnInit {
 
   constructor( private fb: FormBuilder  ){}
+
+  ngOnInit(): void {
+
+  }
 
   public myForm: FormGroup = this.fb.group({
     empresa: [Empresa, Validators.required ],
@@ -32,6 +35,10 @@ export class FormPageComponent {
     if (this.myForm.invalid) return
     console.log(this.myForm.value)
     this.myForm.reset()
+  }
+
+  getTicket(id: number) {
+
   }
 
 }
