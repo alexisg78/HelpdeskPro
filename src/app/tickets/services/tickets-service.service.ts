@@ -25,7 +25,7 @@ export class TicketsService {
   }
 
   postTickets(tickets: Tickets[]): Observable<Tickets> {
-    return this.http.post<Tickets>(`${this.baseUrl}/tickets/post`, tickets);
+    return this.http.post<Tickets>(`${this.baseUrl}/tickets/`, tickets);
   }
 
   getSuggestions( query: string ): Observable<[]> {

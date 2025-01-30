@@ -1,0 +1,43 @@
+.table-container {
+  overflow-x: auto; /* Permite scroll horizontal en móviles */
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.custom-table thead {
+  background: #007bff;
+  color: white;
+  text-transform: uppercase;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.custom-table tbody tr:hover {
+  background: #f2f2f2;
+  transition: 0.3s;
+}
+
+.status {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.color-box {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}

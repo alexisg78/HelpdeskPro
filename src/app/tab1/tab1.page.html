@@ -1,13 +1,11 @@
 <ion-header [translucent]="true">
-  <ion-toolbar class="">
-    <ion-title class="ion-text-justify">
-      Helpdesk
-      <ion-button
-        size="default"
-        [routerLink]="['/home']">
-        <ion-icon name="home"></ion-icon>
+  <ion-toolbar>
+    <ion-title>Helpdesk</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" [routerLink]="['/home']">
+        <ion-icon class="h-2rem	w-2rem" name="home"></ion-icon>
       </ion-button>
-    </ion-title>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

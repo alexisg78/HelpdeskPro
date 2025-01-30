@@ -1,24 +1,28 @@
 <ion-content class="ion-padding">
 
-  <ion-select label="Empresa" label-placement="floating" fill="solid">
-    <ion-select-option value="HE">HE</ion-select-option>
-    <ion-select-option value="ALIARE">ALIARE</ion-select-option>
-  </ion-select>
+  <form [formGroup]="myForm" autocomplete="off" (ngSubmit)="onSave()">
 
-  <ion-select label="Area" label-placement="floating" fill="solid">
-    <ion-select-option value="Sistemas">Sistemas</ion-select-option>
-    <ion-select-option value="Técnica">Técnica</ion-select-option>
-  </ion-select>
+    <ion-select formControlName="empresa" label="Empresa" label-placement="floating" fill="solid">
+      <ion-select-option value="HE">HE</ion-select-option>
+      <ion-select-option value="ALIARE">ALIARE</ion-select-option>
+    </ion-select>
 
-  <ion-searchbar class="p-1" placeholder="Operador"></ion-searchbar>
-  <ion-searchbar class="p-1" placeholder="Sistema"></ion-searchbar>
-  <ion-searchbar class="p-1" placeholder="Tipo Requerimiento"></ion-searchbar>
-  <ion-searchbar class="p-1" placeholder="Menu"></ion-searchbar>
+    <ion-select formControlName="area" label="Area" label-placement="floating" fill="solid">
+      <ion-select-option value="Sistemas">Sistemas</ion-select-option>
+      <ion-select-option value="Técnica">Técnica</ion-select-option>
+    </ion-select>
 
-  <ion-input label="Título" label-placement="floating" fill="solid" placeholder="Título del helpdesk"></ion-input>
+    <ion-searchbar class="p-1" placeholder="Operador" (ionChange)="onSearchbarChange($event, 'operador')"></ion-searchbar>
+    <ion-searchbar class="p-1" placeholder="Tipo Requerimiento" (ionChange)="onSearchbarChange($event, 'tipoRequerimiento')"></ion-searchbar>
+    <ion-searchbar class="p-1" placeholder="Menu" (ionChange)="onSearchbarChange($event, 'menu')"></ion-searchbar>
 
-  <ion-textarea class="h-6rem md:h-6rem sm:h-6rem" label="Requerimiento" labelPlacement="floating" fill="solid" placeholder="Ingrese el requerimiento"></ion-textarea>
+    <ion-input formControlName="titulo" label="Título" label-placement="floating" fill="solid" placeholder="Título del helpdesk"></ion-input>
+
+    <ion-textarea formControlName="requerimiento" class="h-6rem md:h-6rem sm:h-6rem" label="Requerimiento" labelPlacement="floating" fill="solid" placeholder="Ingrese el requerimiento"></ion-textarea>
 
 
-  <ion-button color="primary">Enviar</ion-button>
+    <ion-button type="submit" color="primary">Enviar</ion-button>
+
+  </form>
+
 </ion-content>

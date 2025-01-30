@@ -5,7 +5,7 @@ import { TicketsService } from '../../services/tickets-service.service';
 @Component({
   selector: 'list-page',
   templateUrl: './list-page.component.html',
-  styles: ``,
+  styleUrl: './list-page.component.css',
   standalone: false
 })
 export class ListPageComponent implements OnInit{
