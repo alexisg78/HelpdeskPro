@@ -4,6 +4,7 @@ import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
 import { FormPageComponent } from './pages/form-page/form-page.component';
 import { ListPageComponent } from './pages/list-page/list-page.component';
 import { DetailsPageComponent } from './pages/details-page/details-page.component';
+import { HomeComponent } from './pages/home/home.component';
 
 
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
     path:'',
     component: LayoutPageComponent,
     children: [
+      { path: '', component: HomeComponent },
       { path: 'new-ticket', component: FormPageComponent },
       { path: 'tickets', component: ListPageComponent },
       { path: 'details/:id', component: DetailsPageComponent },

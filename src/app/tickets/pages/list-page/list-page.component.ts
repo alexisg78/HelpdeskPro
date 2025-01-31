@@ -28,7 +28,7 @@ export class ListPageComponent implements OnInit{
         if (!ticket) return;
         this.ticketSeleccionado = ticket
         console.log(this.ticketSeleccionado)
-        this.getEnviaTicket(this.ticketSeleccionado.codigoppal)
+        // this.getEnviaTicket(this.ticketSeleccionado.codigoppal)
       });
   }
 
