@@ -1,18 +1,3 @@
-export interface Tickets {
-  fecha: string;
-  titulo: string;
-  textoreclamo: string;
-  nombreoperador: string;
-  codigoarea: number;
-  nombre: string;
-  fecharequerida: string;
-  estado: string;
-  color: number;
-  codigoppal: number;
-  codigoestado: number;
-}
-
-
 export interface HelpDesk {
   fecha: string;
   titulo: string;
@@ -38,4 +23,29 @@ export enum Empresa {
 export enum Area {
   Tecnica = "Técnica",
   Sistemas = "Sistemas",
+}
+
+export interface TipoReclamo {
+    codigo: number
+    descripcion: string
+}
+
+export interface Menu {
+  codigo: number
+  descripcion: string
+}
+
+export interface Sector {
+  codigo: number
+  descripcion: string
+}
+
+export interface Responsable {
+  codigo: number
+  descripcion: string
+}
+
+export interface Operador {
+  codigo: number
+  descripcion: string
 }

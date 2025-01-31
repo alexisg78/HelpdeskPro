@@ -1,4 +1,4 @@
-<ion-content class="ion-padding">
+<!-- <ion-content class="ion-padding"> -->
 
   <form [formGroup]="myForm" autocomplete="off" (ngSubmit)="onSave()" >
     <ion-input formControlName="fecha" label="Fecha" label-placement="floating" fill="solid" type="date"></ion-input>
@@ -27,12 +27,12 @@
 
     <ion-input formControlName="titulo" label="Título" label-placement="floating" fill="solid" placeholder="Título del helpdesk"></ion-input>
 
-    <ion-textarea formControlName="requerimiento" class="h-6rem md:h-6rem sm:h-6rem" label="Requerimiento" labelPlacement="floating" fill="solid" placeholder="Ingrese el requerimiento"></ion-textarea>
+    <ion-textarea formControlName="textoreclamo" class="h-6rem md:h-6rem sm:h-6rem" label="Requerimiento" labelPlacement="floating" fill="solid" placeholder="Ingrese el requerimiento"></ion-textarea>
 
     <ion-checkbox  class="p-1 m-2 pr-2" formControlName="urgente" labelPlacement="end">Urgente</ion-checkbox>
-    <ion-button slot="end" type="submit" color="primary">Enviar</ion-button>
+    <ion-button *ngIf="!ticketRecibido; hidden" slot="end" type="submit" color="primary">Enviar</ion-button>
 
   </form>
 
-</ion-content>
+<!-- </ion-content> -->
 

@@ -32,7 +32,8 @@ import { HomeComponent } from './pages/home/home.component';
     DetailsPageComponent,
     FormPageComponent,
     LayoutPageComponent,
-    ListPageComponent
+    ListPageComponent,
+    HomeComponent
   ]
 })
 export class TicketsModule { }

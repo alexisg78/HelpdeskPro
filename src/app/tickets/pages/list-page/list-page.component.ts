@@ -1,5 +1,5 @@
 import { Component,  OnInit } from '@angular/core';
-import { HelpDesk, Tickets } from '../../interfaces/ticket.interface';
+import { HelpDesk } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
 import { Router } from '@angular/router';
 
@@ -22,20 +22,8 @@ export class ListPageComponent implements OnInit{
   }
 
   getTicket(id: number){
-    this.ticketsService.getTicketById(id)
-    .subscribe(
-      ticket => {
-        if (!ticket) return;
-        this.ticketSeleccionado = ticket
-        console.log(this.ticketSeleccionado)
-        // this.getEnviaTicket(this.ticketSeleccionado.codigoppal)
-      });
-  }
-
-  getEnviaTicket(codigoppal: number) {
-    this.router.navigate(['/details/:id', codigoppal]);
+    this.router.navigate([`home/details`, id]);
     console.log(this.ticketSeleccionado?.codigoppal)
   }
+
 }
-
-

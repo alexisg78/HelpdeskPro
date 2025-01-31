@@ -1,5 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Empresa, HelpDesk, Tickets } from '../../interfaces/ticket.interface';
+import { Component,  Input, SimpleChanges } from '@angular/core';
+import { HelpDesk } from '../../interfaces/ticket.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -8,15 +8,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styles: ``,
   standalone: false
 })
-export class FormPageComponent implements OnInit {
-  @Output()
-  ticketSeleccionado = new EventEmitter<HelpDesk>()
+export class FormPageComponent {
 
-  constructor( private fb: FormBuilder  ){}
+  @Input()
+  public ticketRecibido!: HelpDesk | null;
 
-  ngOnInit(): void {
-
-  }
+  constructor( private fb: FormBuilder  ){};
 
   public myForm: FormGroup = this.fb.group({
     fecha: ['', Validators.required],
@@ -29,9 +26,27 @@ export class FormPageComponent implements OnInit {
     empresa: ['', Validators.required],
     estado: ['', Validators.required],
     urgente: [false],
-    requerimiento: ['', Validators.maxLength(100)]
+    // requerimiento: ['', Validators.maxLength(100)]
   });
 
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['ticketRecibido'] && this.ticketRecibido) {
+      console.log('Actualizando formulario con ticket recibido:', this.ticketRecibido);
+      this.myForm.patchValue({
+        fecha: this.ticketRecibido.fecha || '',
+        titulo: this.ticketRecibido.titulo || '',
+        textoreclamo: this.ticketRecibido.textoreclamo || '',
+        nombreoperador: this.ticketRecibido.nombreoperador || '',
+        area: this.ticketRecibido.area || '',
+        responsable: this.ticketRecibido.responsable || '',
+        userid_atiende: this.ticketRecibido.userid_atiende || '',
+        empresa: this.ticketRecibido.empresa || '',
+        estado: this.ticketRecibido.estado || '',
+        urgente: this.ticketRecibido.urgente || false,
+      });
+    }
+  }
 
   // Captura el valor del ion-searchbar y lo asigna al form
   onSearchbarChange(event: any, controlName: string): void {
@@ -44,8 +59,10 @@ export class FormPageComponent implements OnInit {
     // this.myForm.reset()
   }
 
-  getTicket(id: number) {
 
-  }
+
+  // getTicket() {
+  //   console.log(`Ticket recibido desde el Form, enviado desde la list, ${this.ticketRecibido}`)
+  // }
 
 }
