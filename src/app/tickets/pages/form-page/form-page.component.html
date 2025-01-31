@@ -1,6 +1,7 @@
 <ion-content class="ion-padding">
 
-  <form [formGroup]="myForm" autocomplete="off" (ngSubmit)="onSave()">
+  <form [formGroup]="myForm" autocomplete="off" (ngSubmit)="onSave()" >
+    <ion-input formControlName="fecha" label="Fecha" label-placement="floating" fill="solid" type="date"></ion-input>
 
     <ion-select formControlName="empresa" label="Empresa" label-placement="floating" fill="solid">
       <ion-select-option value="HE">HE</ion-select-option>
@@ -13,15 +14,25 @@
     </ion-select>
 
     <ion-searchbar class="p-1" placeholder="Operador" (ionChange)="onSearchbarChange($event, 'operador')"></ion-searchbar>
-    <ion-searchbar class="p-1" placeholder="Tipo Requerimiento" (ionChange)="onSearchbarChange($event, 'tipoRequerimiento')"></ion-searchbar>
-    <ion-searchbar class="p-1" placeholder="Menu" (ionChange)="onSearchbarChange($event, 'menu')"></ion-searchbar>
+    <ion-searchbar class="p-1" placeholder="Usuario que atiende" (ionChange)="onSearchbarChange($event, 'userid_atiende')"></ion-searchbar>
+    <!-- <ion-searchbar class="p-1" placeholder="Tipo Requerimiento" (ionChange)="onSearchbarChange($event, 'tipoRequerimiento')"></ion-searchbar>
+    <ion-searchbar class="p-1" placeholder="Menu" (ionChange)="onSearchbarChange($event, 'menu')"></ion-searchbar> -->
+
+    <ion-select formControlName="estado" label="Estado" label-placement="floating" fill="solid">
+      <ion-select-option value="Pendiente">Pendiente</ion-select-option>
+      <ion-select-option value="En Proceso">En Proceso</ion-select-option>
+      <ion-select-option value="Resuelto">Resuelto</ion-select-option>
+    </ion-select>
+
 
     <ion-input formControlName="titulo" label="Título" label-placement="floating" fill="solid" placeholder="Título del helpdesk"></ion-input>
 
     <ion-textarea formControlName="requerimiento" class="h-6rem md:h-6rem sm:h-6rem" label="Requerimiento" labelPlacement="floating" fill="solid" placeholder="Ingrese el requerimiento"></ion-textarea>
 
+    <ion-checkbox  class="p-1 m-2 pr-2" formControlName="urgente" labelPlacement="end">Urgente</ion-checkbox>
     <ion-button slot="end" type="submit" color="primary">Enviar</ion-button>
 
   </form>
 
 </ion-content>
+

@@ -8,6 +8,7 @@ import { DetailsPageComponent } from './pages/details-page/details-page.componen
 import { FormPageComponent } from './pages/form-page/form-page.component';
 import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
 import { ListPageComponent } from './pages/list-page/list-page.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ListPageComponent } from './pages/list-page/list-page.component';
     ReactiveFormsModule,
     IonicModule,
     TicketsRoutingModule,
+    SharedModule,
   ],
   exports:[
     DetailsPageComponent,

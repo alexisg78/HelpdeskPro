@@ -8,6 +8,7 @@ import { ExploreContainerComponentModule } from '../explore-container/explore-co
 import { Tab2PageRoutingModule } from './tab2-routing.module';
 
 import { TicketsModule } from '../tickets/tickets.module';
+import { SharedModule } from "../tickets/shared/shared.module";
 
 @NgModule({
   imports: [
@@ -16,8 +17,8 @@ import { TicketsModule } from '../tickets/tickets.module';
     FormsModule,
     ExploreContainerComponentModule,
     Tab2PageRoutingModule,
-    TicketsModule
-
+    TicketsModule,
+    SharedModule
 ],
   declarations: [Tab2Page]
 })

@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Empresa, Tickets } from '../../interfaces/ticket.interface';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Empresa, HelpDesk, Tickets } from '../../interfaces/ticket.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -9,6 +9,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   standalone: false
 })
 export class FormPageComponent implements OnInit {
+  @Output()
+  ticketSeleccionado = new EventEmitter<HelpDesk>()
 
   constructor( private fb: FormBuilder  ){}
 
@@ -17,14 +19,19 @@ export class FormPageComponent implements OnInit {
   }
 
   public myForm: FormGroup = this.fb.group({
-    empresa: [Empresa, Validators.required ],
+    fecha: ['', Validators.required],
+    titulo: ['', [Validators.required, Validators.maxLength(50)]],
+    textoreclamo: ['', [Validators.required, Validators.maxLength(200)]],
+    nombreoperador: [''],
     area: ['', Validators.required],
-    operador: [''],
-    tipoRequerimiento:[''],
-    menu:[''],
-    titulo:[''],
-    requerimiento:['', Validators.maxLength(100)]
-  })
+    responsable: [''],
+    userid_atiende: [''],
+    empresa: ['', Validators.required],
+    estado: ['', Validators.required],
+    urgente: [false],
+    requerimiento: ['', Validators.maxLength(100)]
+  });
+
 
   // Captura el valor del ion-searchbar y lo asigna al form
   onSearchbarChange(event: any, controlName: string): void {
@@ -34,7 +41,7 @@ export class FormPageComponent implements OnInit {
   onSave():void {
     if (this.myForm.invalid) return
     console.log(this.myForm.value)
-    this.myForm.reset()
+    // this.myForm.reset()
   }
 
   getTicket(id: number) {
