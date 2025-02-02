@@ -1,38 +1,40 @@
-<!-- <ion-content class="ion-padding"> -->
+<form [formGroup]="myForm" autocomplete="off" (ngSubmit)="onSave()"
+  class="mx-auto mt-4 p-d-flex p-flex-column p-ai-center p-jc-center p-mx-auto p-p-3 p-shadow-2 p-border-round-lg p-fluid" style="max-width: 600px; width: 100%;">
 
-  <form [formGroup]="myForm" autocomplete="off" (ngSubmit)="onSave()" >
-    <ion-input formControlName="fecha" label="Fecha" label-placement="floating" fill="solid" type="date"></ion-input>
+  <ion-input class="p-mb-2 p-w-full" formControlName="fecha" label="Fecha" label-placement="floating" fill="solid" type="date"></ion-input>
 
-    <ion-select formControlName="empresa" label="Empresa" label-placement="floating" fill="solid">
-      <ion-select-option value="HE">HE</ion-select-option>
-      <ion-select-option value="ALIARE">ALIARE</ion-select-option>
-    </ion-select>
+  <ion-select class="p-mb-2 p-w-full" formControlName="empresa" label="Empresa" label-placement="floating" fill="solid">
+    <ion-select-option value="HE">HE</ion-select-option>
+    <ion-select-option value="ALIARE">ALIARE</ion-select-option>
+  </ion-select>
 
-    <ion-select formControlName="area" label="Area" label-placement="floating" fill="solid">
-      <ion-select-option value="Sistemas">Sistemas</ion-select-option>
-      <ion-select-option value="Técnica">Técnica</ion-select-option>
-    </ion-select>
+  <ion-select class="p-mb-2 p-w-full" formControlName="area" label="Área" label-placement="floating" fill="solid">
+    <ion-select-option value="Sistemas">Sistemas</ion-select-option>
+    <ion-select-option value="Técnica">Técnica</ion-select-option>
+  </ion-select>
 
-    <ion-searchbar class="p-1" placeholder="Operador" (ionChange)="onSearchbarChange($event, 'operador')"></ion-searchbar>
-    <ion-searchbar class="p-1" placeholder="Usuario que atiende" (ionChange)="onSearchbarChange($event, 'userid_atiende')"></ion-searchbar>
-    <!-- <ion-searchbar class="p-1" placeholder="Tipo Requerimiento" (ionChange)="onSearchbarChange($event, 'tipoRequerimiento')"></ion-searchbar>
-    <ion-searchbar class="p-1" placeholder="Menu" (ionChange)="onSearchbarChange($event, 'menu')"></ion-searchbar> -->
+  <ion-searchbar class="p-mb-2 p-w-full" placeholder="Operador" (ionChange)="onSearchbarChange($event, 'operador')"></ion-searchbar>
+  <ion-searchbar class="p-mb-2 p-w-full" placeholder="Usuario que atiende" (ionChange)="onSearchbarChange($event, 'userid_atiende')"></ion-searchbar>
 
-    <ion-select formControlName="estado" label="Estado" label-placement="floating" fill="solid">
-      <ion-select-option value="Pendiente">Pendiente</ion-select-option>
-      <ion-select-option value="En Proceso">En Proceso</ion-select-option>
-      <ion-select-option value="Resuelto">Resuelto</ion-select-option>
-    </ion-select>
+  <ion-select class="p-mb-2 p-w-full" formControlName="estado" label="Estado" label-placement="floating" fill="solid">
+    <ion-select-option value="Pendiente">Pendiente</ion-select-option>
+    <ion-select-option value="En Proceso">En Proceso</ion-select-option>
+    <ion-select-option value="Resuelto">Resuelto</ion-select-option>
+  </ion-select>
 
+  <ion-input class="p-mb-2 p-w-full" formControlName="titulo" label="Título" label-placement="floating" fill="solid" placeholder="Título del helpdesk"></ion-input>
 
-    <ion-input formControlName="titulo" label="Título" label-placement="floating" fill="solid" placeholder="Título del helpdesk"></ion-input>
+  <ion-textarea class="p-mb-2 p-w-full" formControlName="textoreclamo" label="Requerimiento" labelPlacement="floating" fill="solid" placeholder="Ingrese el requerimiento"></ion-textarea>
 
-    <ion-textarea formControlName="textoreclamo" class="h-6rem md:h-6rem sm:h-6rem" label="Requerimiento" labelPlacement="floating" fill="solid" placeholder="Ingrese el requerimiento"></ion-textarea>
+  <div class="p-d-flex p-ai-center p-jc-between p-w-full">
+    <ion-checkbox class="p-mb-2 mr-2 mt-2" formControlName="urgente" labelPlacement="end">Urgente</ion-checkbox>
+    <div class="flex justify-content-end mt-3">
+      <ion-button *ngIf="!ticketRecibido; hidden" type="submit" color="primary">Enviar</ion-button>
+    </div>
+  </div>
 
-    <ion-checkbox  class="p-1 m-2 pr-2" formControlName="urgente" labelPlacement="end">Urgente</ion-checkbox>
-    <ion-button *ngIf="!ticketRecibido; hidden" slot="end" type="submit" color="primary">Enviar</ion-button>
+</form>
 
-  </form>
-
-<!-- </ion-content> -->
-
+<div class="flex justify-content-end mt-3">
+  <ion-button *ngIf="botonVisible; hidden" type="click" color="primary" (click)="goBack()">Volver</ion-button>
+</div>

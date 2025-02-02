@@ -1,11 +1,19 @@
 import { Component,  Input, SimpleChanges } from '@angular/core';
 import { HelpDesk } from '../../interfaces/ticket.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'form-page',
   templateUrl: './form-page.component.html',
-  styles: ``,
+  styles: `
+      :host {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    padding: 1rem;
+  }`,
   standalone: false
 })
 export class FormPageComponent {
@@ -13,7 +21,10 @@ export class FormPageComponent {
   @Input()
   public ticketRecibido!: HelpDesk | null;
 
-  constructor( private fb: FormBuilder  ){};
+  @Input()
+  public botonVisible: boolean= false;
+
+  constructor( private fb: FormBuilder, private location: NavController ){};
 
   public myForm: FormGroup = this.fb.group({
     fecha: ['', Validators.required],
@@ -45,6 +56,7 @@ export class FormPageComponent {
         estado: this.ticketRecibido.estado || '',
         urgente: this.ticketRecibido.urgente || false,
       });
+      this.botonVisible = true;
     }
   }
 
@@ -59,10 +71,8 @@ export class FormPageComponent {
     // this.myForm.reset()
   }
 
-
-
-  // getTicket() {
-  //   console.log(`Ticket recibido desde el Form, enviado desde la list, ${this.ticketRecibido}`)
-  // }
+  goBack(){
+    this.location.back()
+  }
 
 }

@@ -1,18 +1,16 @@
-<div class="field grid my-auto mx-auto">
-  <div class="col-12 md:col-12 lg:col-12">
-    <ion-button
-      size="large"
-      expand="block"
-      [routerLink]="['/tabs/tab1']">
-      Crear Helpdesk
-    </ion-button>
-  </div>
-  <div class="col-12 md:col-12 lg:col-12">
-    <ion-button
-      size="large"
-      expand="block"
-      [routerLink]="['/tabs/tab2']">
-      Requerimientos
-    </ion-button>
+<div class="flex flex-column align-items-center justify-content-center h-screen">
+  <div class="w-10 sm:w-10 md:w-8 lg:w-6 xl:w-4">
+    <div class="grid">
+      <div class="col-12 p-0 my-auto">
+        <ion-button size="large" expand="block" [routerLink]="['/tabs/tab1']">
+          Crear Helpdesk
+        </ion-button>
+      </div>
+      <div class="col-12 p-0 my-auto">
+        <ion-button size="large" expand="block" [routerLink]="['/tabs/tab2']">
+          Requerimientos
+        </ion-button>
+      </div>
+    </div>
   </div>
 </div>

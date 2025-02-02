@@ -13,8 +13,8 @@ import { TicketsService } from '../../services/tickets-service.service';
 export class DetailsPageComponent implements OnInit{
   public idParams: string | null = ''
   public idTicket: number = 0;
-
   public ticket!: HelpDesk | null
+  public botonVolverVisible: boolean = false;
 
   constructor(private route: ActivatedRoute, private ticketService: TicketsService ) {}
 

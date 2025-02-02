@@ -13,7 +13,13 @@ export class ListPageComponent implements OnInit{
 
   public tickets: HelpDesk[] = []
   public ticketSeleccionado: HelpDesk | undefined
+  public selectedTicket: any = null;
+
   constructor  (private ticketsService : TicketsService, private router: Router) {}
+
+  selectRow(item: any) {
+    this.selectedTicket = item;
+  }
 
   ngOnInit(): void {
     this.ticketsService.getTickets()

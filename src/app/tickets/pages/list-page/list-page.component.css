@@ -1,8 +1,9 @@
-.table-container {
-  overflow-x: auto; /* Permite scroll horizontal en móviles */
-}
+/* Permite scroll horizontal en móviles */
+/* .table-container {
+  overflow-x: auto;
+} */
 
-.custom-table {
+/* .custom-table {
   width: 100%;
   border-collapse: collapse;
   background: #ffffff;
@@ -40,4 +41,68 @@
   height: 20px;
   border-radius: 50%;
   border: 1px solid #ccc;
+} */
+
+.table-container {
+  overflow-x: auto; /* Scroll horizontal en pantallas pequeñas */
+  max-width: 100%;
+}
+
+.custom-table {
+  width: 100%;
+  min-width: 800px; /* Evita que la tabla se comprima demasiado */
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.custom-table thead {
+  background: #007bff;
+  color: white;
+  text-transform: uppercase;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap; /* Evita que el texto se divida */
+}
+
+/* Hace que el texto largo se trunque con "..." */
+.truncate {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.custom-table tbody tr:hover {
+  background: #f2f2f2;
+  transition: 0.3s;
+}
+
+.status {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.color-box {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+
+.selected {
+  background-color: #98caec !important;   /* Color celeste claro */
+  transition: 0.3s;
 }
