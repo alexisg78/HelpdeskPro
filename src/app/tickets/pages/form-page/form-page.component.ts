@@ -1,7 +1,8 @@
-import { Component,  Input, SimpleChanges } from '@angular/core';
-import { HelpDesk } from '../../interfaces/ticket.interface';
+import { Component,  Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
+import { Empresa, HelpDesk, Operador, Responsable } from '../../interfaces/ticket.interface';
+import { TicketsService } from '../../services/tickets-service.service';
 
 @Component({
   selector: 'form-page',
@@ -16,7 +17,7 @@ import { NavController } from '@ionic/angular';
   }`,
   standalone: false
 })
-export class FormPageComponent {
+export class FormPageComponent implements OnInit {
 
   @Input()
   public ticketRecibido!: HelpDesk | null;
@@ -24,7 +25,38 @@ export class FormPageComponent {
   @Input()
   public botonVisible: boolean= false;
 
-  constructor( private fb: FormBuilder, private location: NavController ){};
+  public responsables!: Responsable[];
+  public operadores!: Operador[];
+  public empresas!: Empresa[];
+
+  public buscarResp!: Responsable[];
+  public results: string = '';
+  public showResults: boolean = false;
+  public timeoutId: any;
+
+  ngOnInit(): void {
+
+    this.ticketService.getResponsables()
+    .subscribe( responsables => {
+      this.responsables = responsables;
+      console.log('Responsables: ', this.responsables);
+    } );
+
+    this.ticketService.getOperadores()
+    .subscribe( op => {
+      this.operadores = op;
+      console.log('Operadores: ', this.operadores);
+    } )
+
+    this.ticketService.getEmpresa()
+    .subscribe( emp => {
+      this.empresas = emp;
+      console.log('Empresas: ', this.empresas);
+    } )
+
+  };
+
+  constructor( private fb: FormBuilder, private ticketService: TicketsService, private location: NavController ){}
 
   public myForm: FormGroup = this.fb.group({
     fecha: ['', Validators.required],
@@ -56,7 +88,9 @@ export class FormPageComponent {
         estado: this.ticketRecibido.estado || '',
         urgente: this.ticketRecibido.urgente || false,
       });
+
       this.botonVisible = true;
+
     }
   }
 
@@ -69,6 +103,48 @@ export class FormPageComponent {
     if (this.myForm.invalid) return
     console.log(this.myForm.value)
     // this.myForm.reset()
+  }
+
+  handleInput(event: Event) {
+    const target = event.target as HTMLIonSearchbarElement;
+    if (target.value?.length === 0) return;
+    const query = target.value?.toLowerCase() || '';
+    this.buscarResp= this.responsables.filter((d) => d.descripcion.toLowerCase().includes(query));
+
+    console.log(this.buscarResp)
+
+    clearTimeout(this.timeoutId);
+    this.timeoutId = setTimeout(() => {
+      this.buscarResp = [];
+    }, 4000);
+
+  }
+
+  onSearchFocus(){
+    this.showResults= true;
+  }
+
+  handleKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.buscarResp = [];
+    }
+  }
+
+  handleKeydownF9(event: KeyboardEvent) {
+    if (event.key === "F9") {   // Detecta si la tecla presionada es F9
+      this.buscarResp = this.responsables.filter((r) => r.descripcion.length > 0 )
+
+      clearTimeout(this.timeoutId);
+      this.timeoutId = setTimeout(() => {
+        this.buscarResp = [];
+      }, 4000);
+
+    }
+  }
+
+  selectItem(result: any, searchbar: any) {
+    searchbar.value = result.descripcion;
+    this.buscarResp = [];
   }
 
   goBack(){

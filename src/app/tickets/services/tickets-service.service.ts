@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { HelpDesk } from '../interfaces/ticket.interface';
-//import { Tickets } from '../interfaces/ticket.interface';
+import { Empresa, HelpDesk, Operador, Responsable } from '../interfaces/ticket.interface';
+
 
 @Injectable({
   providedIn: 'root'
@@ -38,11 +38,40 @@ export class TicketsService {
        )
   }
 
+  // Responsables
+  getResponsables(): Observable<Responsable[]> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Responsable[]>(`${this.baseUrl}/GetResponsables/`, { headers });
+  }
+
+  //Operadores
+  getOperadores(): Observable<Operador[]> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Operador[]>(`${this.baseUrl}/GetOperadores/1`, { headers });
+  }
+
+  getEmpresa(): Observable<Empresa[]> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Empresa[]>(`${this.baseUrl}/GetEmpresas/`, { headers });
+  }
+
   postTickets(helpdesk: HelpDesk[]): Observable<HelpDesk> {
     return this.http.post<HelpDesk>(`${this.baseUrl}/HelpDesk/`, helpdesk);
   }
 
-  // getSuggestions( query: string ): Observable<[]> {
-  //   return this.http.get<[]>( `${this.baseUrl}/heroes?q=${ query }&_limit=6` );
-  // }
+  getSuggestions( query: string ): Observable<[]> {
+    return this.http.get<[]>( `${this.baseUrl}/heroes?q=${ query }&_limit=6` );
+  }
 }

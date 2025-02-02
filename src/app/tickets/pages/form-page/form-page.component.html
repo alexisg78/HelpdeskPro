@@ -14,7 +14,23 @@
   </ion-select>
 
   <ion-searchbar class="p-mb-2 p-w-full" placeholder="Operador" (ionChange)="onSearchbarChange($event, 'operador')"></ion-searchbar>
-  <ion-searchbar class="p-mb-2 p-w-full" placeholder="Usuario que atiende" (ionChange)="onSearchbarChange($event, 'userid_atiende')"></ion-searchbar>
+
+  <!-- Responsables -->
+  <ion-searchbar #searchbar class="p-mb-2 p-w-full"
+                placeholder="Responsable (F9)"
+                (ionChange)="onSearchbarChange($event, 'userid_atiende')"
+                [debounce]="1000"
+                (onfocus)="onSearchFocus()"
+                (ionInput)="handleInput($event)"
+                (keydown)="handleKeydownF9($event)">
+  </ion-searchbar>
+
+  <ion-list *ngFor="let result of buscarResp">
+    <ion-item *ngIf="!showResults; hidden" (click)="selectItem(result, searchbar)">
+      <ion-label color="black">{{ result.descripcion }}</ion-label>
+    </ion-item>
+  </ion-list>
+
 
   <ion-select class="p-mb-2 p-w-full" formControlName="estado" label="Estado" label-placement="floating" fill="solid">
     <ion-select-option value="Pendiente">Pendiente</ion-select-option>

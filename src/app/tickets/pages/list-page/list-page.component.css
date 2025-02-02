@@ -103,6 +103,6 @@
 }
 
 .selected {
-  background-color: #98caec !important;   /* Color celeste claro */
+  background-color: #7de4f1fd !important;   /* Color celeste claro */
   transition: 0.3s;
 }

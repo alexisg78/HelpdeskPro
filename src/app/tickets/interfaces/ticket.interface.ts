@@ -15,14 +15,19 @@ export interface HelpDesk {
   codigoempresa: number;
 }
 
-export enum Empresa {
-  Aliare = "ALIARE",
-  He = "HE",
-}
+// export enum Empresa {
+//   Aliare = "ALIARE",
+//   He = "HE",
+// }
 
 export enum Area {
   Tecnica = "Técnica",
   Sistemas = "Sistemas",
+}
+
+export interface Empresa {
+  codigo: number
+  descripcion: string
 }
 
 export interface TipoReclamo {
