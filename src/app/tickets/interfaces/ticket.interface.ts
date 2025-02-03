@@ -54,3 +54,8 @@ export interface Operador {
   codigo: number
   descripcion: string
 }
+
+export interface Estado {
+  codigo: number
+  descripcion: string
+}

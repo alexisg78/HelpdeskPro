@@ -14,13 +14,15 @@
   </ion-select>
 
   <!-- Operadores -->
-  <ion-searchbar #searchbarOpe class="p-mb-2 p-w-full"
-                placeholder="Operador"
+  <ion-searchbar formControlName="nombreoperador"
+                #searchbarOpe class="p-mb-2 p-w-full"
+                placeholder="Operador (F9)"
                 (ionChange)="onSearchbarChange($event, 'operador')"
                 [debounce]="1000"
                 (onfocus)="onSearchFocus()"
                 (ionInput)="handleInputOperador($event)"
-                (keydown)="handleKeydownF9Operador($event)">
+                (keydown)="handleKeydownF9Operador($event)"
+                >
   </ion-searchbar>
 
   <ion-list *ngFor="let result of buscarOper">
@@ -30,27 +32,29 @@
   </ion-list>
 
   <!-- Responsables -->
-  <ion-searchbar #searchbarRespo class="p-mb-2 p-w-full"
+  <ion-searchbar formControlName="responsable"
+                #searchbarRespo class="p-mb-2 p-w-full"
                 placeholder="Responsable (F9)"
                 (ionChange)="onSearchbarChange($event, 'userid_atiende')"
                 [debounce]="1000"
                 (onfocus)="onSearchFocus()"
                 (ionInput)="handleInputRespo($event)"
-                (keydown)="handleKeydownF9Responsable($event)">
+                (keydown)="handleKeydownF9Responsable($event)"
+                >
   </ion-searchbar>
 
   <ion-list *ngFor="let result of buscarResp">
     <ion-item *ngIf="!showResults; hidden" (click)="selectItem(result, searchbarRespo)">
-      <ion-label color="black">{{ result.descripcion }}</ion-label>
+      <ion-label>{{ result.descripcion }}</ion-label>
     </ion-item>
   </ion-list>
 
 
-  <ion-select class="p-mb-2 p-w-full" formControlName="estado" label="Estado" label-placement="floating" fill="solid">
+  <!-- <ion-select class="p-mb-2 p-w-full" formControlName="estado" label="Estado" label-placement="floating" fill="solid">
     <ion-select-option value="Pendiente">Pendiente</ion-select-option>
     <ion-select-option value="En Proceso">En Proceso</ion-select-option>
     <ion-select-option value="Resuelto">Resuelto</ion-select-option>
-  </ion-select>
+  </ion-select> -->
 
   <ion-input class="p-mb-2 p-w-full" formControlName="titulo" label="Título" label-placement="floating" fill="solid" placeholder="Título del helpdesk"></ion-input>
 

@@ -1,8 +1,9 @@
-import { Component,  Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component,  Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Empresa, HelpDesk, Operador, Responsable } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'form-page',
@@ -17,7 +18,7 @@ import { TicketsService } from '../../services/tickets-service.service';
   }`,
   standalone: false
 })
-export class FormPageComponent implements OnInit {
+export class FormPageComponent implements OnInit, OnDestroy {
 
   @Input()
   public ticketRecibido!: HelpDesk | null;
@@ -31,39 +32,42 @@ export class FormPageComponent implements OnInit {
 
   public buscarResp!: Responsable[];
   public buscarOper!: Operador[];
-  public isSearchRespo: boolean = false;
-  public isSearchOper: boolean = false;
+
   public results: string = '';
   public showResults: boolean = false;
   public timeoutId: any;
 
+  private subscriptions: Subscription = new Subscription();
+
   ngOnInit(): void {
 
-    this.ticketService.getResponsables()
-    .subscribe( responsables => {
-      this.responsables = responsables;
-      console.log('Responsables: ', this.responsables);
-    } );
+    // Agrupo todas las subscripciones en una sola instancia
+    this.subscriptions.add(
+      this.ticketService.getResponsables().subscribe(responsables => {
+        this.responsables = responsables;
+        //console.log('Responsables: ', this.responsables);
+      })
+    );
 
-    this.ticketService.getOperadores()
-    .subscribe( op => {
-      this.operadores = op;
-      //console.log('Operadores: ', this.operadores);
-    } )
+    this.subscriptions.add(
+      this.ticketService.getOperadores().subscribe(op => {
+        this.operadores = op;
+      })
+    );
 
-    this.ticketService.getEmpresa()
-    .subscribe( emp => {
-      this.empresas = emp;
-      console.log('Empresas: ', this.empresas);
-    } )
+    this.subscriptions.add(
+      this.ticketService.getEmpresa().subscribe(emp => {
+        this.empresas = emp;
+        //console.log('Empresas: ', this.empresas);
+      })
+    );
 
   };
 
-  // ngOnDestroy(): void {
-  //   if (this.responsablesSub) this.responsablesSub.unsubscribe();
-  //   if (this.operadoresSub) this.operadoresSub.unsubscribe();
-  //   if (this.empresasSub) this.empresasSub.unsubscribe();
-  // }
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+    console.log('Desubscripcion exitosa!')
+  }
 
   constructor( private fb: FormBuilder, private ticketService: TicketsService, private location: NavController ){}
 
@@ -76,7 +80,7 @@ export class FormPageComponent implements OnInit {
     responsable: [''],
     userid_atiende: [''],
     empresa: ['', Validators.required],
-    estado: ['', Validators.required],
+    codigoestado: [1],
     urgente: [false],
     // requerimiento: ['', Validators.maxLength(100)]
   });
@@ -84,7 +88,7 @@ export class FormPageComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['ticketRecibido'] && this.ticketRecibido) {
-      console.log('Actualizando formulario con ticket recibido:', this.ticketRecibido);
+      //console.log('Actualizando formulario con ticket recibido:', this.ticketRecibido);
       this.myForm.patchValue({
         fecha: this.ticketRecibido.fecha || '',
         titulo: this.ticketRecibido.titulo || '',
@@ -94,7 +98,6 @@ export class FormPageComponent implements OnInit {
         responsable: this.ticketRecibido.responsable || '',
         userid_atiende: this.ticketRecibido.userid_atiende || '',
         empresa: this.ticketRecibido.empresa || '',
-        estado: this.ticketRecibido.estado || '',
         urgente: this.ticketRecibido.urgente || false,
       });
 
@@ -110,8 +113,8 @@ export class FormPageComponent implements OnInit {
 
   onSave():void {
     if (this.myForm.invalid) return
-    console.log(this.myForm.value)
-    // this.myForm.reset()
+    //console.log(this.myForm.value)
+     this.myForm.reset()
   }
 
   handleInputOperador(event: Event) {
@@ -155,7 +158,7 @@ export class FormPageComponent implements OnInit {
 
 
   handleKeydownF9Operador(event: KeyboardEvent) {
-    if (event.key === "F9" || event.key === "ArrowDown") {   // Detecta si la tecla presionada es F9
+    if (event.key === "F9" || event.key === "ArrowDown") {   // Detecta si la tecla presionada es F9 o flecha abajo
       this.buscarOper = this.operadores.filter((o) => o.descripcion.length > 0 )
 
       clearTimeout(this.timeoutId);
@@ -167,7 +170,7 @@ export class FormPageComponent implements OnInit {
   }
 
   handleKeydownF9Responsable(event: KeyboardEvent) {
-    if (event.key === "F9" || event.key === "ArrowDown") {   // Detecta si la tecla presionada es F9
+    if (event.key === "F9" || event.key === "ArrowDown") {   // Detecta si la tecla presionada es F9 o flecha abajo
       this.buscarResp = this.responsables.filter((r) => r.descripcion.length > 0 )
 
       clearTimeout(this.timeoutId);
