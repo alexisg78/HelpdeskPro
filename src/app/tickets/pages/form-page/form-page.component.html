@@ -13,20 +13,34 @@
     <ion-select-option value="Técnica">Técnica</ion-select-option>
   </ion-select>
 
-  <ion-searchbar class="p-mb-2 p-w-full" placeholder="Operador" (ionChange)="onSearchbarChange($event, 'operador')"></ion-searchbar>
+  <!-- Operadores -->
+  <ion-searchbar #searchbarOpe class="p-mb-2 p-w-full"
+                placeholder="Operador"
+                (ionChange)="onSearchbarChange($event, 'operador')"
+                [debounce]="1000"
+                (onfocus)="onSearchFocus()"
+                (ionInput)="handleInputOperador($event)"
+                (keydown)="handleKeydownF9Operador($event)">
+  </ion-searchbar>
+
+  <ion-list *ngFor="let result of buscarOper">
+    <ion-item *ngIf="!showResults; hidden" (click)="selectItem(result, searchbarOpe)">
+      <ion-label color="black">{{ result.descripcion }}</ion-label>
+    </ion-item>
+  </ion-list>
 
   <!-- Responsables -->
-  <ion-searchbar #searchbar class="p-mb-2 p-w-full"
+  <ion-searchbar #searchbarRespo class="p-mb-2 p-w-full"
                 placeholder="Responsable (F9)"
                 (ionChange)="onSearchbarChange($event, 'userid_atiende')"
                 [debounce]="1000"
                 (onfocus)="onSearchFocus()"
-                (ionInput)="handleInput($event)"
-                (keydown)="handleKeydownF9($event)">
+                (ionInput)="handleInputRespo($event)"
+                (keydown)="handleKeydownF9Responsable($event)">
   </ion-searchbar>
 
   <ion-list *ngFor="let result of buscarResp">
-    <ion-item *ngIf="!showResults; hidden" (click)="selectItem(result, searchbar)">
+    <ion-item *ngIf="!showResults; hidden" (click)="selectItem(result, searchbarRespo)">
       <ion-label color="black">{{ result.descripcion }}</ion-label>
     </ion-item>
   </ion-list>

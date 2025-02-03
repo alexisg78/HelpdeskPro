@@ -30,6 +30,9 @@ export class FormPageComponent implements OnInit {
   public empresas!: Empresa[];
 
   public buscarResp!: Responsable[];
+  public buscarOper!: Operador[];
+  public isSearchRespo: boolean = false;
+  public isSearchOper: boolean = false;
   public results: string = '';
   public showResults: boolean = false;
   public timeoutId: any;
@@ -45,7 +48,7 @@ export class FormPageComponent implements OnInit {
     this.ticketService.getOperadores()
     .subscribe( op => {
       this.operadores = op;
-      console.log('Operadores: ', this.operadores);
+      //console.log('Operadores: ', this.operadores);
     } )
 
     this.ticketService.getEmpresa()
@@ -55,6 +58,12 @@ export class FormPageComponent implements OnInit {
     } )
 
   };
+
+  // ngOnDestroy(): void {
+  //   if (this.responsablesSub) this.responsablesSub.unsubscribe();
+  //   if (this.operadoresSub) this.operadoresSub.unsubscribe();
+  //   if (this.empresasSub) this.empresasSub.unsubscribe();
+  // }
 
   constructor( private fb: FormBuilder, private ticketService: TicketsService, private location: NavController ){}
 
@@ -105,14 +114,27 @@ export class FormPageComponent implements OnInit {
     // this.myForm.reset()
   }
 
-  handleInput(event: Event) {
+  handleInputOperador(event: Event) {
+    const target = event.target as HTMLIonSearchbarElement;
+    if (target.value?.length === 0) return;
+    const query = target.value?.toLowerCase() || '';
+    this.buscarOper= this.operadores.filter((o) => o.descripcion.toLowerCase().includes(query));
+
+    //console.log(this.buscarOper)
+    clearTimeout(this.timeoutId);
+    this.timeoutId = setTimeout(() => {
+      this.buscarOper = [];
+    }, 4000);
+
+  }
+
+  handleInputRespo(event: Event) {
     const target = event.target as HTMLIonSearchbarElement;
     if (target.value?.length === 0) return;
     const query = target.value?.toLowerCase() || '';
     this.buscarResp= this.responsables.filter((d) => d.descripcion.toLowerCase().includes(query));
 
-    console.log(this.buscarResp)
-
+    //console.log(this.buscarResp)
     clearTimeout(this.timeoutId);
     this.timeoutId = setTimeout(() => {
       this.buscarResp = [];
@@ -127,11 +149,25 @@ export class FormPageComponent implements OnInit {
   handleKeydown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       this.buscarResp = [];
+      this.buscarOper= [];
     }
   }
 
-  handleKeydownF9(event: KeyboardEvent) {
-    if (event.key === "F9") {   // Detecta si la tecla presionada es F9
+
+  handleKeydownF9Operador(event: KeyboardEvent) {
+    if (event.key === "F9" || event.key === "ArrowDown") {   // Detecta si la tecla presionada es F9
+      this.buscarOper = this.operadores.filter((o) => o.descripcion.length > 0 )
+
+      clearTimeout(this.timeoutId);
+      this.timeoutId = setTimeout(() => {
+        this.buscarOper = [];
+      }, 4000);
+
+    }
+  }
+
+  handleKeydownF9Responsable(event: KeyboardEvent) {
+    if (event.key === "F9" || event.key === "ArrowDown") {   // Detecta si la tecla presionada es F9
       this.buscarResp = this.responsables.filter((r) => r.descripcion.length > 0 )
 
       clearTimeout(this.timeoutId);
