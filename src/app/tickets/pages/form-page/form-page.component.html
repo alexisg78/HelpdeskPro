@@ -1,21 +1,27 @@
 <form [formGroup]="myForm" autocomplete="off" (ngSubmit)="onSave()"
   class="mx-auto mt-4 p-d-flex p-flex-column p-ai-center p-jc-center p-mx-auto p-p-3 p-shadow-2 p-border-round-lg p-fluid" style="max-width: 600px; width: 100%;">
 
-  <ion-input class="p-mb-2 p-w-full" formControlName="fecha" label="Fecha" label-placement="floating" fill="solid" type="date"></ion-input>
+  <ion-input class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="fecha" label="Fecha" label-placement="floating" fill="solid" type="date"></ion-input>
 
-  <ion-select class="p-mb-2 p-w-full" formControlName="empresa" label="Empresa" label-placement="floating" fill="solid">
-    <ion-select-option value="HE">HE</ion-select-option>
-    <ion-select-option value="ALIARE">ALIARE</ion-select-option>
+  <ion-select class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="empresa" label="Empresa" label-placement="floating" fill="solid">
+    <ion-select-option [value]="item.descripcion"
+        *ngFor="let item of empresas">
+        {{item.descripcion}}
+    </ion-select-option>
   </ion-select>
 
-  <ion-select class="p-mb-2 p-w-full" formControlName="area" label="Área" label-placement="floating" fill="solid">
-    <ion-select-option value="Sistemas">Sistemas</ion-select-option>
-    <ion-select-option value="Técnica">Técnica</ion-select-option>
+  <ion-select class="p-mb-2 p-w-full mb-2 font-medium text-black-alpha-80" formControlName="area" label="Área" label-placement="floating" fill="solid">
+    <ion-select-option [value]="item.descripcion"
+        *ngFor="let item of areas">
+        {{item.descripcion}}
+    </ion-select-option>
   </ion-select>
 
   <!-- Operadores -->
-  <ion-searchbar formControlName="nombreoperador"
-                #searchbarOpe class="p-mb-2 p-w-full"
+  <ion-label class="p-mb-2 p-w-full mt-2 font-medium text-black-alpha-80">Operador</ion-label>
+  <ion-searchbar class="p-mb-2 p-w-full font-bold text-black-alpha-80"
+                formControlName="nombreoperador"
+                #searchbarOpe
                 placeholder="Operador (F9)"
                 (ionChange)="onSearchbarChange($event, 'operador')"
                 [debounce]="1000"
@@ -27,13 +33,15 @@
 
   <ion-list *ngFor="let result of buscarOper">
     <ion-item *ngIf="!showResults; hidden" (click)="selectItem(result, searchbarOpe)">
-      <ion-label color="black">{{ result.descripcion }}</ion-label>
+      <ion-label class="text-primary-600 font-semibold cursor-pointer">{{ result.descripcion }}</ion-label>
     </ion-item>
   </ion-list>
 
   <!-- Responsables -->
-  <ion-searchbar formControlName="responsable"
-                #searchbarRespo class="p-mb-2 p-w-full"
+  <ion-label class="p-mb-2 p-w-full font-medium text-black-alpha-80">Responsable</ion-label>
+  <ion-searchbar class="p-mb-2 p-w-full font-medium text-black-alpha-80"
+                formControlName="responsable"
+                #searchbarRespo
                 placeholder="Responsable (F9)"
                 (ionChange)="onSearchbarChange($event, 'userid_atiende')"
                 [debounce]="1000"
@@ -45,7 +53,7 @@
 
   <ion-list *ngFor="let result of buscarResp">
     <ion-item *ngIf="!showResults; hidden" (click)="selectItem(result, searchbarRespo)">
-      <ion-label>{{ result.descripcion }}</ion-label>
+      <ion-label class="text-primary-600 font-semibold cursor-pointer">{{ result.descripcion }}</ion-label>
     </ion-item>
   </ion-list>
 
@@ -56,12 +64,12 @@
     <ion-select-option value="Resuelto">Resuelto</ion-select-option>
   </ion-select> -->
 
-  <ion-input class="p-mb-2 p-w-full" formControlName="titulo" label="Título" label-placement="floating" fill="solid" placeholder="Título del helpdesk"></ion-input>
+  <ion-input class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="titulo" label="Título" label-placement="floating" fill="solid" placeholder="Título del helpdesk"></ion-input>
 
-  <ion-textarea class="p-mb-2 p-w-full" formControlName="textoreclamo" label="Requerimiento" labelPlacement="floating" fill="solid" placeholder="Ingrese el requerimiento"></ion-textarea>
+  <ion-textarea class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="textoreclamo" label="Requerimiento" labelPlacement="floating" fill="solid" placeholder="Ingrese el requerimiento"></ion-textarea>
 
   <div class="p-d-flex p-ai-center p-jc-between p-w-full">
-    <ion-checkbox class="p-mb-2 mr-2 mt-2" formControlName="urgente" labelPlacement="end">Urgente</ion-checkbox>
+    <ion-checkbox class="p-mb-2 mr-2 mt-2 font-medium text-black-alpha-80" formControlName="urgente" labelPlacement="end">Urgente</ion-checkbox>
     <div class="flex justify-content-end mt-3">
       <ion-button *ngIf="!ticketRecibido; hidden" type="submit" color="primary">Enviar</ion-button>
     </div>

@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Empresa, HelpDesk, Operador, Responsable } from '../interfaces/ticket.interface';
+import { Area, Empresa, HelpDesk, Operador, Responsable } from '../interfaces/ticket.interface';
 
 
 @Injectable({
@@ -49,13 +49,13 @@ export class TicketsService {
   }
 
   //Operadores
-  getOperadores(): Observable<Operador[]> {
+  getOperadores(codEmp: number): Observable<Operador[]> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<Operador[]>(`${this.baseUrl}/GetOperadores/1`, { headers });
+    return this.http.get<Operador[]>(`${this.baseUrl}/GetOperadores/${codEmp}`, { headers });
   }
 
   getEmpresa(): Observable<Empresa[]> {
@@ -65,6 +65,15 @@ export class TicketsService {
     });
 
     return this.http.get<Empresa[]>(`${this.baseUrl}/GetEmpresas/`, { headers });
+  }
+
+  getArea(): Observable<Area[]> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Area[]>(`${this.baseUrl}/GetAreas/`, { headers });
   }
 
   postTickets(helpdesk: HelpDesk[]): Observable<HelpDesk> {

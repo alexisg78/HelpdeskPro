@@ -1,7 +1,7 @@
 import { Component,  Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
-import { Empresa, HelpDesk, Operador, Responsable } from '../../interfaces/ticket.interface';
+import { Area, Empresa, HelpDesk, Operador, Responsable } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
 import { Subscription } from 'rxjs';
 
@@ -29,6 +29,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
   public responsables!: Responsable[];
   public operadores!: Operador[];
   public empresas!: Empresa[];
+  public areas!: Area[];
 
   public buscarResp!: Responsable[];
   public buscarOper!: Operador[];
@@ -37,28 +38,57 @@ export class FormPageComponent implements OnInit, OnDestroy {
   public showResults: boolean = false;
   public timeoutId: any;
 
+  public myForm!: FormGroup;
   private subscriptions: Subscription = new Subscription();
+
+  constructor( private fb: FormBuilder, private ticketService: TicketsService, private location: NavController ){}
 
   ngOnInit(): void {
 
+    this.myForm=  this.fb.group({
+      fecha: ['', Validators.required],
+      titulo: ['', [Validators.required, Validators.maxLength(50)]],
+      textoreclamo: ['', [Validators.required, Validators.maxLength(200)]],
+      nombreoperador: [''],
+      area: ['', Validators.required],
+      responsable: [''],
+      userid_atiende: [''],
+      empresa: [1, Validators.required],
+      codigoestado: [''],
+      codigoempresa: [1],
+      urgente: [false],
+      // requerimiento: ['', Validators.maxLength(100)]
+    });
+
     // Agrupo todas las subscripciones en una sola instancia
     this.subscriptions.add(
-      this.ticketService.getResponsables().subscribe(responsables => {
-        this.responsables = responsables;
-        //console.log('Responsables: ', this.responsables);
-      })
+      this.ticketService.getResponsables()
+      .subscribe( responsables => this.responsables = responsables )
     );
 
     this.subscriptions.add(
-      this.ticketService.getOperadores().subscribe(op => {
-        this.operadores = op;
-      })
+      this.ticketService.getEmpresa()
+      .subscribe( emp => this.empresas = emp )
     );
 
     this.subscriptions.add(
-      this.ticketService.getEmpresa().subscribe(emp => {
-        this.empresas = emp;
-        //console.log('Empresas: ', this.empresas);
+      this.ticketService.getArea()
+      .subscribe( area => this.areas= area )
+    );
+
+    // suscripción por defecto: codigoempresa = 1 para traer los operadores
+    this.subscriptions.add(
+      this.ticketService.getOperadores(this.myForm.value.codigoempresa)
+      .subscribe( op => this.operadores = op )
+    );
+
+    // Suscripción dinámica para obtener los operadores cuando 'codigoempresa' cambie
+    this.subscriptions.add(
+      this.myForm.get('codigoempresa')?.valueChanges.subscribe((codigoempresa: number) => {
+        // gestiona el cambio de 'codigoempresa' y hace la petición correspondiente
+        this.ticketService.getOperadores(codigoempresa).subscribe(operadores => {
+          this.operadores = operadores;
+        });
       })
     );
 
@@ -66,29 +96,29 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-    console.log('Desubscripcion exitosa!')
+    console.log('Desuscripcion exitosa!')
   }
 
-  constructor( private fb: FormBuilder, private ticketService: TicketsService, private location: NavController ){}
+  // constructor( private fb: FormBuilder, private ticketService: TicketsService, private location: NavController ){}
 
-  public myForm: FormGroup = this.fb.group({
-    fecha: ['', Validators.required],
-    titulo: ['', [Validators.required, Validators.maxLength(50)]],
-    textoreclamo: ['', [Validators.required, Validators.maxLength(200)]],
-    nombreoperador: [''],
-    area: ['', Validators.required],
-    responsable: [''],
-    userid_atiende: [''],
-    empresa: ['', Validators.required],
-    codigoestado: [1],
-    urgente: [false],
-    // requerimiento: ['', Validators.maxLength(100)]
-  });
+  // public myForm: FormGroup = this.fb.group({
+  //   fecha: ['', Validators.required],
+  //   titulo: ['', [Validators.required, Validators.maxLength(50)]],
+  //   textoreclamo: ['', [Validators.required, Validators.maxLength(200)]],
+  //   nombreoperador: [''],
+  //   area: ['', Validators.required],
+  //   responsable: [''],
+  //   userid_atiende: [''],
+  //   empresa: ['', Validators.required],
+  //   codigoestado: [1],
+  //   urgente: [false],
+  //   // requerimiento: ['', Validators.maxLength(100)]
+  // });
 
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['ticketRecibido'] && this.ticketRecibido) {
-      //console.log('Actualizando formulario con ticket recibido:', this.ticketRecibido);
+      console.log('Actualizando formulario con ticket recibido:', this.ticketRecibido);
       this.myForm.patchValue({
         fecha: this.ticketRecibido.fecha || '',
         titulo: this.ticketRecibido.titulo || '',
@@ -98,11 +128,11 @@ export class FormPageComponent implements OnInit, OnDestroy {
         responsable: this.ticketRecibido.responsable || '',
         userid_atiende: this.ticketRecibido.userid_atiende || '',
         empresa: this.ticketRecibido.empresa || '',
+        codigoempresa: this.ticketRecibido.codigoempresa ,
         urgente: this.ticketRecibido.urgente || false,
       });
 
       this.botonVisible = true;
-
     }
   }
 
@@ -127,7 +157,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
     clearTimeout(this.timeoutId);
     this.timeoutId = setTimeout(() => {
       this.buscarOper = [];
-    }, 4000);
+    }, 5000);
 
   }
 
@@ -141,7 +171,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
     clearTimeout(this.timeoutId);
     this.timeoutId = setTimeout(() => {
       this.buscarResp = [];
-    }, 4000);
+    }, 5000);
 
   }
 
@@ -164,7 +194,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
       clearTimeout(this.timeoutId);
       this.timeoutId = setTimeout(() => {
         this.buscarOper = [];
-      }, 4000);
+      }, 5000);
 
     }
   }
@@ -176,7 +206,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
       clearTimeout(this.timeoutId);
       this.timeoutId = setTimeout(() => {
         this.buscarResp = [];
-      }, 4000);
+      }, 5000);
 
     }
   }

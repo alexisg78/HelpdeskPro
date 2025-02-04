@@ -20,9 +20,9 @@ export interface HelpDesk {
 //   He = "HE",
 // }
 
-export enum Area {
-  Tecnica = "Técnica",
-  Sistemas = "Sistemas",
+export interface Area {
+  codigo: number
+  descripcion: string
 }
 
 export interface Empresa {
