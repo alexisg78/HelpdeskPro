@@ -6,7 +6,7 @@ export interface HelpDesk {
   area: string;
   responsable: string;
   userid_atiende: string;
-  empresa: string;
+  empresa: Empresa;
   codigoppal: number;
   codigoestado: number;
   estado: string;

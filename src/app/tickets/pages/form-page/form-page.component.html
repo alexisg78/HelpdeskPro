@@ -4,14 +4,14 @@
   <ion-input class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="fecha" label="Fecha" label-placement="floating" fill="solid" type="date"></ion-input>
 
   <ion-select class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="empresa" label="Empresa" label-placement="floating" fill="solid">
-    <ion-select-option [value]="item.descripcion"
+    <ion-select-option [value]="item"
         *ngFor="let item of empresas">
         {{item.descripcion}}
     </ion-select-option>
   </ion-select>
 
   <ion-select class="p-mb-2 p-w-full mb-2 font-medium text-black-alpha-80" formControlName="area" label="Área" label-placement="floating" fill="solid">
-    <ion-select-option [value]="item.descripcion"
+    <ion-select-option [value]="item"
         *ngFor="let item of areas">
         {{item.descripcion}}
     </ion-select-option>
@@ -32,7 +32,7 @@
   </ion-searchbar>
 
   <ion-list *ngFor="let result of buscarOper">
-    <ion-item *ngIf="!showResults; hidden" (click)="selectItem(result, searchbarOpe)">
+    <ion-item *ngIf="!showResults; hidden" (click)="selectItemOperador(result, searchbarOpe)">
       <ion-label class="text-primary-600 font-semibold cursor-pointer">{{ result.descripcion }}</ion-label>
     </ion-item>
   </ion-list>
@@ -52,7 +52,7 @@
   </ion-searchbar>
 
   <ion-list *ngFor="let result of buscarResp">
-    <ion-item *ngIf="!showResults; hidden" (click)="selectItem(result, searchbarRespo)">
+    <ion-item *ngIf="!showResults; hidden" (click)="selectItemResponsable(result, searchbarRespo)">
       <ion-label class="text-primary-600 font-semibold cursor-pointer">{{ result.descripcion }}</ion-label>
     </ion-item>
   </ion-list>
@@ -78,5 +78,5 @@
 </form>
 
 <div class="flex justify-content-end mt-3">
-  <ion-button *ngIf="botonVisible; hidden" type="click" color="primary" (click)="goBack()">Volver</ion-button>
+  <ion-button *ngIf="botonVolverVisible; hidden" type="click" color="primary" (click)="goBack()">Volver</ion-button>
 </div>

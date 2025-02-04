@@ -29,7 +29,7 @@ export class ListPageComponent implements OnInit{
 
   getTicket(id: number){
     this.router.navigate([`home/details`, id]);
-    console.log(this.ticketSeleccionado?.codigoppal)
+    //console.log(this.ticketSeleccionado?.codigoppal)
   }
 
 }

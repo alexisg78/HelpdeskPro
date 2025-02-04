@@ -24,7 +24,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
   public ticketRecibido!: HelpDesk | null;
 
   @Input()
-  public botonVisible: boolean= false;
+  public botonVolverVisible: boolean= false;
 
   public responsables!: Responsable[];
   public operadores!: Operador[];
@@ -53,9 +53,9 @@ export class FormPageComponent implements OnInit, OnDestroy {
       area: ['', Validators.required],
       responsable: [''],
       userid_atiende: [''],
-      empresa: [1, Validators.required],
-      codigoestado: [''],
+      empresa: ['', Validators.required],
       codigoempresa: [1],
+      codigoestado: [''],
       urgente: [false],
       // requerimiento: ['', Validators.maxLength(100)]
     });
@@ -84,9 +84,15 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
     // Suscripción dinámica para obtener los operadores cuando 'codigoempresa' cambie
     this.subscriptions.add(
-      this.myForm.get('codigoempresa')?.valueChanges.subscribe((codigoempresa: number) => {
+      this.myForm.get('codigoempresa')?.valueChanges.subscribe((empresa: Empresa) => {
+
+        if (!empresa) return
+
+        const codigo = typeof empresa === 'object' ? empresa.codigo : empresa;
+        if (!codigo) return; // Evita llamar al servicio si código es inválido
+
         // gestiona el cambio de 'codigoempresa' y hace la petición correspondiente
-        this.ticketService.getOperadores(codigoempresa).subscribe(operadores => {
+        this.ticketService.getOperadores(empresa.codigo).subscribe(operadores => {
           this.operadores = operadores;
         });
       })
@@ -97,24 +103,8 @@ export class FormPageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
     console.log('Desuscripcion exitosa!')
+    this.inicializaForm();
   }
-
-  // constructor( private fb: FormBuilder, private ticketService: TicketsService, private location: NavController ){}
-
-  // public myForm: FormGroup = this.fb.group({
-  //   fecha: ['', Validators.required],
-  //   titulo: ['', [Validators.required, Validators.maxLength(50)]],
-  //   textoreclamo: ['', [Validators.required, Validators.maxLength(200)]],
-  //   nombreoperador: [''],
-  //   area: ['', Validators.required],
-  //   responsable: [''],
-  //   userid_atiende: [''],
-  //   empresa: ['', Validators.required],
-  //   codigoestado: [1],
-  //   urgente: [false],
-  //   // requerimiento: ['', Validators.maxLength(100)]
-  // });
-
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['ticketRecibido'] && this.ticketRecibido) {
@@ -128,11 +118,12 @@ export class FormPageComponent implements OnInit, OnDestroy {
         responsable: this.ticketRecibido.responsable || '',
         userid_atiende: this.ticketRecibido.userid_atiende || '',
         empresa: this.ticketRecibido.empresa || '',
-        codigoempresa: this.ticketRecibido.codigoempresa ,
+        // codigoempresa: this.ticketRecibido.codigoempresa,
+        codigoempresa: this.ticketRecibido.empresa.codigo,
         urgente: this.ticketRecibido.urgente || false,
       });
 
-      this.botonVisible = true;
+      this.botonVolverVisible = true;
     }
   }
 
@@ -143,8 +134,24 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   onSave():void {
     if (this.myForm.invalid) return
-    //console.log(this.myForm.value)
-     this.myForm.reset()
+      console.log(this.myForm.value)
+      //this.myForm.reset()
+      this.inicializaForm();
+  }
+
+  inicializaForm(){
+    this.myForm.reset({
+      fecha: '',
+      titulo: '',
+      textoreclamo: '',
+      nombreoperador: '',
+      area: '',
+      responsable: '',
+      userid_atiende: '',
+      empresa: '',
+      codigoempresa: 1,
+      urgente: false
+    })
   }
 
   handleInputOperador(event: Event) {
@@ -211,9 +218,19 @@ export class FormPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  selectItem(result: any, searchbar: any) {
+  selectItemOperador(result: any, searchbar: any) {
+    //searchbar.value = result.descripcion;
+    this.myForm.patchValue({ nombreoperador: result.descripcion }); // Actualiza el formulario
+    searchbar.value = result.descripcion;
+    this.buscarOper = [];
+    this.showResults = false;
+  }
+
+  selectItemResponsable(result: any, searchbar: any) {
+    this.myForm.patchValue({ responsable: result.descripcion }); // Actualiza el formulario
     searchbar.value = result.descripcion;
     this.buscarResp = [];
+    this.showResults = false;
   }
 
   goBack(){
