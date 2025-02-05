@@ -3,7 +3,7 @@ export interface HelpDesk {
   titulo: string;
   textoreclamo: string;
   nombreoperador: string;
-  area: string;
+  area: Area;
   responsable: string;
   userid_atiende: string;
   empresa: Empresa;
@@ -15,10 +15,20 @@ export interface HelpDesk {
   codigoempresa: number;
 }
 
-// export enum Empresa {
-//   Aliare = "ALIARE",
-//   He = "HE",
-// }
+export interface CrearHelpDesk {
+  area:Area;
+  empresa: Empresa;
+  titulo: string;
+  codigooperador_solicita: number;
+  codigosistema?: number;
+  codigotiporeclamo?: number;
+  codigomenu?: number;
+  codigoestado?: number;
+  codigoresponsable: number;
+  tipoticket?: number;
+  helpdesk?: boolean;
+  textoreclamo: string
+}
 
 export interface Area {
   codigo: number

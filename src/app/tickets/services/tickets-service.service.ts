@@ -76,8 +76,15 @@ export class TicketsService {
     return this.http.get<Area[]>(`${this.baseUrl}/GetAreas/`, { headers });
   }
 
-  postTickets(helpdesk: HelpDesk[]): Observable<HelpDesk> {
-    return this.http.post<HelpDesk>(`${this.baseUrl}/HelpDesk/`, helpdesk);
+  postTickets(helpdesk: any): Observable<HelpDesk> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<HelpDesk>(`${this.baseUrl}/PostHelpDesk/`, helpdesk, { headers })
+
+    //.subscribe(response => console.log('Respuesta del Backend: ', response) )
   }
 
   getSuggestions( query: string ): Observable<[]> {

@@ -1,5 +1,5 @@
 import { Component,  Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Area, Empresa, HelpDesk, Operador, Responsable } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
@@ -48,6 +48,14 @@ export class FormPageComponent implements OnInit, OnDestroy {
     this.myForm=  this.fb.group({
       fecha: ['', Validators.required],
       titulo: ['', [Validators.required, Validators.maxLength(50)]],
+      codigosistema: [0],
+      codigooperador: [0],
+      codigotiporeclamo: [0],
+      codigomenu: [0],
+      codigoestado: [1],
+      codigoresponsable: [0],
+      tipoticket: [0],
+      helpdesk: true,
       textoreclamo: ['', [Validators.required, Validators.maxLength(200)]],
       nombreoperador: [''],
       area: ['', Validators.required],
@@ -55,7 +63,6 @@ export class FormPageComponent implements OnInit, OnDestroy {
       userid_atiende: [''],
       empresa: ['', Validators.required],
       codigoempresa: [1],
-      codigoestado: [''],
       urgente: [false],
       // requerimiento: ['', Validators.maxLength(100)]
     });
@@ -91,9 +98,11 @@ export class FormPageComponent implements OnInit, OnDestroy {
         const codigo = typeof empresa === 'object' ? empresa.codigo : empresa;
         if (!codigo) return; // Evita llamar al servicio si código es inválido
 
+        this.myForm.patchValue({ codigoempresa: empresa.codigo })
         // gestiona el cambio de 'codigoempresa' y hace la petición correspondiente
         this.ticketService.getOperadores(empresa.codigo).subscribe(operadores => {
           this.operadores = operadores;
+          this.myForm.patchValue({ codigooperador: operadores[0].codigo })
         });
       })
     );
@@ -111,14 +120,21 @@ export class FormPageComponent implements OnInit, OnDestroy {
       console.log('Actualizando formulario con ticket recibido:', this.ticketRecibido);
       this.myForm.patchValue({
         fecha: this.ticketRecibido.fecha || '',
+        empresa: this.ticketRecibido.empresa.descripcion || '',
         titulo: this.ticketRecibido.titulo || '',
+        codigosistema: 0,
+        codigooperador: 0,
+        codigotiporeclamo: 0,
+        codigomenu: 0,
+        codigoestado: 1,
+        codigoresponsable: 0,
+        tipoticket: 0,
+        helpdesk: true,
         textoreclamo: this.ticketRecibido.textoreclamo || '',
         nombreoperador: this.ticketRecibido.nombreoperador || '',
-        area: this.ticketRecibido.area || '',
+        area: this.ticketRecibido.area.codigo || '',
         responsable: this.ticketRecibido.responsable || '',
         userid_atiende: this.ticketRecibido.userid_atiende || '',
-        empresa: this.ticketRecibido.empresa || '',
-        // codigoempresa: this.ticketRecibido.codigoempresa,
         codigoempresa: this.ticketRecibido.empresa.codigo,
         urgente: this.ticketRecibido.urgente || false,
       });
@@ -134,8 +150,42 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   onSave():void {
     if (this.myForm.invalid) return
+
       console.log(this.myForm.value)
-      //this.myForm.reset()
+      const { area,
+              empresa,
+              titulo,
+              codigooperador_solicita,
+              codigosistema,
+              codigotiporeclamo,
+              codigomenu,
+              codigoestado,
+              codigoresponsable,
+              tipoticket,
+              helpdesk,
+              textoreclamo
+            } = this.myForm.value
+
+      const enviarHelpdesk = {
+              area,
+              empresa,
+              titulo,
+              codigooperador_solicita,
+              codigosistema,
+              codigotiporeclamo,
+              codigomenu,
+              codigoestado,
+              codigoresponsable,
+              tipoticket,
+              helpdesk,
+              textoreclamo
+            }
+
+      console.log(`Ticket para el post en el Backend: ${ JSON.stringify(enviarHelpdesk) }`) // solo para mostrarlo en el console.log
+
+      // this.ticketService.postTickets(enviarHelpdesk)
+      //   .subscribe( response => console.log('Rta del Backend: ', response))
+
       this.inicializaForm();
   }
 
@@ -148,8 +198,8 @@ export class FormPageComponent implements OnInit, OnDestroy {
       area: '',
       responsable: '',
       userid_atiende: '',
-      empresa: '',
-      codigoempresa: 1,
+      //empresa: '',
+      //codigoempresa: 1,
       urgente: false
     })
   }
@@ -190,6 +240,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
     if (event.key === 'Enter') {
       this.buscarResp = [];
       this.buscarOper= [];
+      this.showResults = false;
     }
   }
 
@@ -232,6 +283,14 @@ export class FormPageComponent implements OnInit, OnDestroy {
     this.buscarResp = [];
     this.showResults = false;
   }
+
+  // selectItem(result: any, searchbar: any) {
+  //   this.myForm.patchValue({ FormControlName: result.descripcion }); // Actualiza el formulario
+  //   searchbar.value = result.descripcion;
+  //   this.buscarResp = [];
+  //   this.buscarOper = [];
+  //   this.showResults = false;
+  // }
 
   goBack(){
     this.location.back()
