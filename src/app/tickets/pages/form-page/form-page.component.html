@@ -3,7 +3,8 @@
 
   <ion-input class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="fecha" label="Fecha" label-placement="floating" fill="solid" type="date"></ion-input>
 
-  <ion-select class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="empresa" label="Empresa" label-placement="floating" fill="solid">
+  <ion-select class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="empresa" label="Empresa" label-placement="floating" fill="solid"
+  (ionChange)="onEmpresaChange($event)">
     <ion-select-option [value]="item"
         *ngFor="let item of empresas">
         {{item.descripcion}}
@@ -22,14 +23,15 @@
   <ion-searchbar class="p-mb-2 p-w-full font-bold text-black-alpha-80"
                 formControlName="nombreoperador"
                 #searchbarOpe
-                placeholder="Operador (F9)"
-                (ionChange)="onSearchbarChange($event, 'operador')"
+                placeholder="Operador"
+                (ionChange)="onSearchbarChangeOperador($event, 'operador')"
                 [debounce]="1000"
                 (onfocus)="onSearchFocus()"
                 (ionInput)="handleInputOperador($event)"
                 (keydown)="handleKeydownF9Operador($event)"
                 >
   </ion-searchbar>
+
 
   <ion-list *ngFor="let result of buscarOper">
     <ion-item *ngIf="!showResults; hidden" (click)="selectItemOperador(result, searchbarOpe)">
@@ -42,8 +44,8 @@
   <ion-searchbar class="p-mb-2 p-w-full font-medium text-black-alpha-80"
                 formControlName="responsable"
                 #searchbarRespo
-                placeholder="Responsable (F9)"
-                (ionChange)="onSearchbarChange($event, 'userid_atiende')"
+                placeholder="Responsable"
+                (ionChange)="onSearchbarChangeResponsable($event, 'responsable')"
                 [debounce]="1000"
                 (onfocus)="onSearchFocus()"
                 (ionInput)="handleInputRespo($event)"
@@ -80,3 +82,7 @@
 <div class="flex justify-content-end mt-3">
   <ion-button *ngIf="botonVolverVisible; hidden" type="click" color="primary" (click)="goBack()">Volver</ion-button>
 </div>
+
+<pre>
+  {{ this.enviarHelpdesk | json}}
+</pre>
