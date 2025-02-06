@@ -72,8 +72,10 @@
 
   <div class="p-d-flex p-ai-center p-jc-between p-w-full">
     <ion-checkbox class="p-mb-2 mr-2 mt-2 font-medium text-black-alpha-80" formControlName="urgente" labelPlacement="end">Urgente</ion-checkbox>
+
     <div class="flex justify-content-end mt-3">
-      <ion-button *ngIf="!ticketRecibido; hidden" type="submit" color="primary">Enviar</ion-button>
+      <ion-button  id="open-loading" *ngIf="!ticketRecibido ; hidden" type="submit" color="primary">Enviar</ion-button>
+      <ion-loading *ngIf="isLoading" message="Enviando Ticket...!" ></ion-loading>
     </div>
   </div>
 
@@ -83,6 +85,6 @@
   <ion-button *ngIf="botonVolverVisible; hidden" type="click" color="primary" (click)="goBack()">Volver</ion-button>
 </div>
 
-<pre>
+<!-- <pre>
   {{ this.enviarHelpdesk | json}}
-</pre>
+</pre> -->

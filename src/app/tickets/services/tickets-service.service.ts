@@ -87,7 +87,7 @@ export class TicketsService {
     //.subscribe(response => console.log('Respuesta del Backend: ', response) )
   }
 
-  getSuggestions( query: string ): Observable<[]> {
-    return this.http.get<[]>( `${this.baseUrl}/heroes?q=${ query }&_limit=6` );
-  }
+  // getSuggestions( query: string ): Observable<[]> {
+  //   return this.http.get<[]>( `${this.baseUrl}/heroes?q=${ query }&_limit=6` );
+  // }
 }

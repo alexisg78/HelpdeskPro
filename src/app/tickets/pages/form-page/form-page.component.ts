@@ -1,5 +1,5 @@
 import { Component,  Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Area, CrearHelpDesk, Empresa, HelpDesk, Operador, Responsable } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
@@ -40,6 +40,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
   public timeoutId: any;
 
   public enviarHelpdesk!: CrearHelpDesk;
+  public isLoading: boolean= false
 
   public myForm!: FormGroup;
   private subscriptions: Subscription = new Subscription();
@@ -105,7 +106,6 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['ticketRecibido'] && this.ticketRecibido) {
-      console.log('Actualizando formulario con ticket recibido:', this.ticketRecibido);
       this.myForm.patchValue({
         fecha: this.ticketRecibido.fecha || '',
         empresa: this.ticketRecibido.empresa.descripcion || '',
@@ -132,6 +132,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Dependiendo de la empresa seleccionada, traigo los operadores desde el servicio
   onEmpresaChange(event: any) {
     const empresaSeleccionada = this.myForm.get('empresa')?.value;
     if (empresaSeleccionada) {
@@ -139,7 +140,8 @@ export class FormPageComponent implements OnInit, OnDestroy {
       this.myForm.patchValue({
       codigoempresa: codigo
       })
-      console.log('Codigo de la empresa seleccionada:', codigo);
+
+      //console.log('Codigo de la empresa seleccionada:', codigo);
 
       if (!codigo) return
       this.subscriptions.add(
@@ -157,7 +159,6 @@ export class FormPageComponent implements OnInit, OnDestroy {
       let codOpe: number= 0
       if (!this.buscaOperador[0]) return;
       codOpe= this.buscaOperador[0].codigo
-      console.log('Posible Operador: ', this.buscaOperador)
       this.myForm.patchValue({ codigooperador_solicita: codOpe })
     }
   }
@@ -167,9 +168,9 @@ export class FormPageComponent implements OnInit, OnDestroy {
       this.buscarResp = this.responsables.filter( op => op.descripcion.trim().toUpperCase() === this.myForm.value.responsable.trim().toUpperCase() )
       let codRespo: number= 0
       if (!this.buscarResp[0]) return;
-      codRespo= this.buscarResp[0].codigo
-      console.log('Posible Responsable: ', this.buscarResp)
+      codRespo= this.buscarResp[0].codigo;
       this.myForm.patchValue({ codigoresponsable: codRespo })
+      this.showResults = false;
     }
   }
 
@@ -186,49 +187,48 @@ export class FormPageComponent implements OnInit, OnDestroy {
   // }
 
   onSearchbarChangeOperador(event: any, controlName: string): void {
-    console.log('controlName: ', controlName);
-    this.myForm.patchValue({ [controlName]: event.detail.value.toUpperCase });
+    this.myForm.patchValue({ [controlName]: event.detail.value.toUpperCase() });
     this.buscar_Operador()
   }
 
   onSearchbarChangeResponsable(event: any, controlName: string): void {
-    console.log('controlName: ', controlName);
     this.myForm.patchValue({ [controlName]: event.detail.value.toUpperCase });
     this.buscar_Responsable()
   }
 
-  onSave():void {
-    if (this.myForm.invalid) return
+  onSave() {
 
-      console.log(this.myForm.value)
-      const { area,
-              empresa,
-              titulo,
-              codigosistema,
-              codigooperador_solicita,
-              codigotiporeclamo,
-              codigomenu,
-              codigoestado,
-              codigoresponsable,
-              tipoticket,
-              helpdesk,
-              textoreclamo
-            } = this.myForm.value
+    if (this.myForm.invalid) return;
+    this.isLoading= true;
 
-       this.enviarHelpdesk = {
-              area,
-              empresa,
-              titulo,
-              codigooperador_solicita,
-              codigosistema,
-              codigotiporeclamo,
-              codigomenu,
-              codigoestado,
-              codigoresponsable,
-              tipoticket,
-              helpdesk,
-              textoreclamo
-            }
+    const { area,
+            empresa,
+            titulo,
+            codigosistema,
+            codigooperador_solicita,
+            codigotiporeclamo,
+            codigomenu,
+            codigoestado,
+            codigoresponsable,
+            tipoticket,
+            helpdesk,
+            textoreclamo
+          } = this.myForm.value
+
+      this.enviarHelpdesk = {
+            area,
+            empresa,
+            titulo,
+            codigooperador_solicita,
+            codigosistema,
+            codigotiporeclamo,
+            codigomenu,
+            codigoestado,
+            codigoresponsable,
+            tipoticket,
+            helpdesk,
+            textoreclamo
+          }
 
       console.log(`Ticket para el post en el Backend: ${ JSON.stringify(this.enviarHelpdesk) }`) // solo para mostrarlo en el console.log
 
@@ -236,7 +236,17 @@ export class FormPageComponent implements OnInit, OnDestroy {
       if (!this.enviarHelpdesk) return
 
       // this.ticketService.postTickets(this.enviarHelpdesk)
-      //   .subscribe( response => console.log('Rta del Backend: ', response))
+      //   .subscribe( {
+      //     next: (response) => {
+      //       console.log('Ticket enviado:', response);
+      //       this.inicializaForm();
+      //       this.isLoading= false;
+      //     },
+      //     error: (err) => {
+      //       console.error('Error al enviar el ticket:', err);
+      //       this.isLoading= false;
+      //     }
+      //   })
 
   }
 
@@ -261,18 +271,28 @@ export class FormPageComponent implements OnInit, OnDestroy {
         codigoempresa: 0,
         urgente: false,
     })
+
+    this.isLoading= false
   }
 
   handleInputOperador(event: Event) {
     const target = event.target as HTMLIonSearchbarElement;
+
     if (target.value?.length === 0) return;
     const query = target.value?.toUpperCase() || '';
+
     this.buscarOper= this.operadores.filter((o) => o.descripcion.toUpperCase().includes(query));
 
-    //console.log(this.buscarOper)
+    if (!query) {
+      this.buscarOper = [];
+      this.showResults = false;
+      return
+    }
+
     clearTimeout(this.timeoutId);
     this.timeoutId = setTimeout(() => {
       this.buscarOper = [];
+      this.showResults = false;
     }, 4000);
 
   }
@@ -281,12 +301,18 @@ export class FormPageComponent implements OnInit, OnDestroy {
     const target = event.target as HTMLIonSearchbarElement;
     if (target.value?.length === 0) return;
     const query = target.value?.toUpperCase() || '';
+
     this.buscarResp= this.responsables.filter((d) => d.descripcion.toUpperCase().includes(query));
 
-    //console.log(this.buscarResp)
+    if (!query) {
+      this.buscarResp = [];
+      this.showResults = false;
+      return;
+    }
     clearTimeout(this.timeoutId);
     this.timeoutId = setTimeout(() => {
       this.buscarResp = [];
+      this.showResults = false;
     }, 4000);
 
   }
