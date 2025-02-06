@@ -129,6 +129,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
       this.botonVolverVisible = true;
       //this.buscar_Operador();
+      console.log('Ticket recibido: ', this.ticketRecibido)
     }
   }
 

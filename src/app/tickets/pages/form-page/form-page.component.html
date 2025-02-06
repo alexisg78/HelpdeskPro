@@ -59,16 +59,9 @@
     </ion-item>
   </ion-list>
 
-
-  <!-- <ion-select class="p-mb-2 p-w-full" formControlName="estado" label="Estado" label-placement="floating" fill="solid">
-    <ion-select-option value="Pendiente">Pendiente</ion-select-option>
-    <ion-select-option value="En Proceso">En Proceso</ion-select-option>
-    <ion-select-option value="Resuelto">Resuelto</ion-select-option>
-  </ion-select> -->
-
   <ion-input class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="titulo" label="Título" label-placement="floating" fill="solid" placeholder="Título del helpdesk"></ion-input>
 
-  <ion-textarea class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="textoreclamo" label="Requerimiento" labelPlacement="floating" fill="solid" placeholder="Ingrese el requerimiento"></ion-textarea>
+  <ion-textarea class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="textoreclamo" label="Requerimiento" labelPlacement="floating" fill="solid" placeholder="Ingrese el requerimiento" style="overflow-y: auto;"></ion-textarea>
 
   <div class="p-d-flex p-ai-center p-jc-between p-w-full">
     <ion-checkbox class="p-mb-2 mr-2 mt-2 font-medium text-black-alpha-80" formControlName="urgente" labelPlacement="end">Urgente</ion-checkbox>
