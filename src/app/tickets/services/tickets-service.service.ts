@@ -23,7 +23,7 @@ export class TicketsService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<HelpDesk[]>(`${this.baseUrl}/${this.subUrl}`, { headers });
+    return this.http.get<HelpDesk[]>(`${this.baseUrl}/Gestion/${this.subUrl}`, { headers });
   }
 
   getTicketById(id: number): Observable<HelpDesk|undefined> {
@@ -32,7 +32,7 @@ export class TicketsService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<HelpDesk>(`${this.baseUrl}/getItemHelpDesk/${id}`, {headers})
+    return this.http.get<HelpDesk>(`${this.baseUrl}/Gestion/getItemHelpDesk/${id}`, {headers})
       .pipe(
         catchError( error => of( undefined ) )
        )
@@ -45,7 +45,7 @@ export class TicketsService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<Responsable[]>(`${this.baseUrl}/GetResponsables/`, { headers });
+    return this.http.get<Responsable[]>(`${this.baseUrl}/Gestion/GetResponsables/`, { headers });
   }
 
   //Operadores
@@ -55,7 +55,7 @@ export class TicketsService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<Operador[]>(`${this.baseUrl}/GetOperadores/${codEmp}`, { headers });
+    return this.http.get<Operador[]>(`${this.baseUrl}/Gestion/GetOperadores/${codEmp}`, { headers });
   }
 
   getEmpresa(): Observable<Empresa[]> {
@@ -64,7 +64,7 @@ export class TicketsService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<Empresa[]>(`${this.baseUrl}/GetEmpresas/`, { headers });
+    return this.http.get<Empresa[]>(`${this.baseUrl}/Gestion/GetEmpresas/`, { headers });
   }
 
   getArea(): Observable<Area[]> {
@@ -73,7 +73,7 @@ export class TicketsService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<Area[]>(`${this.baseUrl}/GetAreas/`, { headers });
+    return this.http.get<Area[]>(`${this.baseUrl}/Gestion/GetAreas/`, { headers });
   }
 
   postTickets(helpdesk: any): Observable<HelpDesk> {
@@ -82,7 +82,7 @@ export class TicketsService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.post<HelpDesk>(`${this.baseUrl}/PostHelpDesk/`, helpdesk, { headers })
+    return this.http.post<HelpDesk>(`${this.baseUrl}/Gestion/PostHelpDesk/`, helpdesk, { headers })
 
     //.subscribe(response => console.log('Respuesta del Backend: ', response) )
   }

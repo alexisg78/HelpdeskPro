@@ -1,3 +1,52 @@
-<p>
-  login works!
-</p>
+<!-- <div class="flex flex-column align-items-center justify-content-center w-full h-full">
+  <div class="text-lg font-bold text-200">
+    <ion-icon name="key-outline"></ion-icon>
+    Login
+  </div>
+
+  <div class="field w-full">
+    <ion-input class="text-200 mt-2 w-full border-round"  label="Usuario" label-placement="floating" fill="outline" placeholder="Usuario"></ion-input>
+  </div>
+
+  <div class="field w-full">
+    <ion-input class="text-200 w-full border-round" label="Contraseña" label-placement="floating" fill="outline" placeholder="Contraseña" type="password"></ion-input>
+  </div>
+
+  <div class="flex justify-content-end w-full mt-3">
+    <ion-button type="click" color="secondary">Ingresar</ion-button>
+  </div>
+</div> -->
+
+
+<div class="flex flex-column align-items-center justify-content-center w-full h-full">
+  <div class="text-lg font-bold text-200">
+    <ion-icon name="key-outline"></ion-icon> Login
+  </div>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full">
+    <div class="field w-full">
+      <ion-input class="text-200 mt-2 w-full border-round"
+                 formControlName="username"
+                 label="Usuario"
+                 label-placement="floating"
+                 fill="outline"
+                 placeholder="Usuario">
+      </ion-input>
+    </div>
+
+    <div class="field w-full">
+      <ion-input class="text-200 w-full border-round"
+                 formControlName="password"
+                 label="Contraseña"
+                 label-placement="floating"
+                 fill="outline"
+                 placeholder="Contraseña"
+                 type="password">
+      </ion-input>
+    </div>
+
+    <div class="flex justify-content-end w-full mt-3">
+      <ion-button type="submit" color="secondary" [disabled]="loginForm.invalid">Ingresar</ion-button>
+    </div>
+  </form>
+</div>

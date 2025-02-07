@@ -30,6 +30,13 @@ export interface CrearHelpDesk {
   textoreclamo: string
 }
 
+export interface CredencialesAuth {
+  username: string;
+  password: string;
+  token?: string;
+}
+
+
 export interface Area {
   codigo: number
   descripcion: string
