@@ -25,14 +25,15 @@ export class AuthService {
       .pipe(
         tap(response => {
           if (response.token) {
+            if (localStorage.getItem('token')) localStorage.removeItem('token');
             localStorage.setItem('token', response.token);
           }
         })
       );
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
+  getToken(): string | '' {
+    return localStorage.getItem('token') || '';
   }
 
   logout(): void {

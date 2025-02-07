@@ -26,11 +26,19 @@ export class AuthLoginComponent {
   onSubmit() {
     if (this.loginForm.invalid) return;
 
-    const credenciales = this.loginForm.value;
-    console.log('credenciales: ', credenciales)
-    this.authService.postLogin(credenciales).subscribe({
+    const username = this.loginForm.get('username')?.value;
+    const password = this.loginForm.get('password')?.value;
+
+    // Convertir tanto el usuario como la contraseña a mayúsculas
+    const loginData = {
+      username: username.toUpperCase(),
+      password: password.toUpperCase()
+    };
+
+    //const credenciales = this.loginForm.value;
+
+    this.authService.postLogin(loginData).subscribe({
       next: (response) => {
-        console.log('Login exitoso:', response);
         localStorage.setItem('token', response.token); // Guardar token
         this.router.navigate(['/home']); // Redirigir a la página principal
       },

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
   {
@@ -8,11 +9,13 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: () => import('./tickets/tickets.module').then(m => m.TicketsModule)
+    loadChildren: () => import('./tickets/tickets.module').then(m => m.TicketsModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'tabs',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
+    canActivate: [AuthGuard]
   },
   { path:'', redirectTo: 'auth', pathMatch: 'full'}, // Redirige solo si no hay ninguna ruta.
   { path: '**', redirectTo: 'auth', pathMatch: 'full' }  // Redirige a 'home' para rutas inválidas.

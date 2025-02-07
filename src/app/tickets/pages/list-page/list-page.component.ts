@@ -24,7 +24,7 @@ export class ListPageComponent implements OnInit{
   ngOnInit(): void {
     this.ticketsService.getTickets()
        .subscribe( tickets => this.tickets =  tickets);
-       console.log(this.tickets)
+       //console.log(this.tickets)
   }
 
   getTicket(id: number){
