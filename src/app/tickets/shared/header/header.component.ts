@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from 'src/app/auth/services/auth-service.service';
 
 @Component({
   selector: 'shared-header',
@@ -7,5 +8,11 @@ import { Component } from '@angular/core';
   standalone: false
 })
 export class HeaderComponent {
+
+  constructor( private authService: AuthService){}
+
+  logout(){
+    this.authService.logout()
+  }
 
 }

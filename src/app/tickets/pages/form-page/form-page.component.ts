@@ -100,7 +100,6 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-    console.log('Desuscripcion exitosa!')
     this.inicializaForm();
   }
 
@@ -128,8 +127,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
       });
 
       this.botonVolverVisible = true;
-      //this.buscar_Operador();
-      console.log('Ticket recibido: ', this.ticketRecibido)
+      //console.log('Ticket recibido: ', this.ticketRecibido)
     }
   }
 
@@ -231,23 +229,20 @@ export class FormPageComponent implements OnInit, OnDestroy {
             textoreclamo
           }
 
-      console.log(`Ticket para el post en el Backend: ${ JSON.stringify(this.enviarHelpdesk) }`) // solo para mostrarlo en el console.log
-
       this.inicializaForm();
       if (!this.enviarHelpdesk) return
 
-      // this.ticketService.postTickets(this.enviarHelpdesk)
-      //   .subscribe( {
-      //     next: (response) => {
-      //       console.log('Ticket enviado:', response);
-      //       this.inicializaForm();
-      //       this.isLoading= false;
-      //     },
-      //     error: (err) => {
-      //       console.error('Error al enviar el ticket:', err);
-      //       this.isLoading= false;
-      //     }
-      //   })
+      this.ticketService.postTickets(this.enviarHelpdesk)
+        .subscribe( {
+          next: (response) => {
+            this.inicializaForm();
+            this.isLoading= false;
+          },
+          error: (err) => {
+            console.error('Error al enviar el ticket:', err);
+            this.isLoading= false;
+          }
+        })
 
   }
 

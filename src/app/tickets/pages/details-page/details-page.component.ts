@@ -19,10 +19,8 @@ export class DetailsPageComponent implements OnInit{
   constructor(private route: ActivatedRoute, private ticketService: TicketsService ) {}
 
   ngOnInit() {
-    //console.log('ID inicializado:', this.idParams);
     this.route.paramMap.subscribe(params => {
     this.idParams = params.get('id')
-    //console.log('ID actualizado:', this.idParams);
     this.obtenerTicket()
     })
   }
@@ -34,7 +32,6 @@ export class DetailsPageComponent implements OnInit{
         ticket => {
           if (!ticket) return;
           this.ticket = ticket
-          //console.log('Ticket Recibido', this.ticket)
         });
   }
 

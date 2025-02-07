@@ -6,5 +6,10 @@
         <ion-icon class="h-2rem	w-2rem" name="home"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="primary" [routerLink]="['/auth']" (click)="logout()">
+        <ion-icon class="h-2rem	w-2rem" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
