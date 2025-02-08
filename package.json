@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "backend":"json-server --watch data/db.json",
+    "backend": "json-server --watch data/db.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -31,6 +31,7 @@
     "ionicons": "^7.0.0",
     "primeflex": "^3.3.1",
     "rxjs": "~7.8.0",
+    "sweetalert2": "^11.16.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

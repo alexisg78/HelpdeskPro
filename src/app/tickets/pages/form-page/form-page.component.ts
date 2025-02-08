@@ -4,6 +4,7 @@ import { NavController } from '@ionic/angular';
 import { Area, CrearHelpDesk, Empresa, HelpDesk, Operador, Responsable } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
 import { Subscription } from 'rxjs';
+import { SweetAlertService } from 'src/app/sweet-alert/sweet-alert-service.service';
 
 @Component({
   selector: 'form-page',
@@ -46,7 +47,12 @@ export class FormPageComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription = new Subscription();
 
 
-  constructor( private fb: FormBuilder, private ticketService: TicketsService, private location: NavController ){}
+  constructor(
+    private fb: FormBuilder,
+    private ticketService: TicketsService,
+    private location: NavController,
+    private sweetAlertservice: SweetAlertService,
+  ){}
 
   ngOnInit(): void {
 
@@ -165,25 +171,14 @@ export class FormPageComponent implements OnInit, OnDestroy {
   buscar_Responsable(){
     if (this.myForm.value.responsable.length > 0 ) {
       this.buscarResp = this.responsables.filter( op => op.descripcion.trim().toUpperCase() === this.myForm.value.responsable.trim().toUpperCase() )
+
       let codRespo: number= 0
       if (!this.buscarResp[0]) return;
       codRespo= this.buscarResp[0].codigo;
       this.myForm.patchValue({ codigoresponsable: codRespo })
-      this.showResults = false;
+      //this.showResults = false;
     }
   }
-
-  //Captura el valor del ion-searchbar y lo asigna al form
-  // onSearchbarChange(event: any, controlName: string): void {
-  //   console.log('controlName: ', controlName);
-  //   this.myForm.patchValue({ [controlName]: event.detail.value.toUpperCase });
-
-  //   if (controlName === 'operador') {
-  //     this.buscar_Operador()
-  //   }else {
-  //     this.buscar_Responsable()
-  //   }
-  // }
 
   onSearchbarChangeOperador(event: any, controlName: string): void {
     this.myForm.patchValue({ [controlName]: event.detail.value.toUpperCase() });
@@ -193,57 +188,6 @@ export class FormPageComponent implements OnInit, OnDestroy {
   onSearchbarChangeResponsable(event: any, controlName: string): void {
     this.myForm.patchValue({ [controlName]: event.detail.value.toUpperCase });
     this.buscar_Responsable()
-  }
-
-  onSave() {
-
-    if (this.myForm.invalid) return;
-    this.isLoading= true;
-
-    const { area,
-            empresa,
-            titulo,
-            codigosistema,
-            codigooperador_solicita,
-            codigotiporeclamo,
-            codigomenu,
-            codigoestado,
-            codigoresponsable,
-            tipoticket,
-            helpdesk,
-            textoreclamo
-          } = this.myForm.value
-
-      this.enviarHelpdesk = {
-            area,
-            empresa,
-            titulo,
-            codigooperador_solicita,
-            codigosistema,
-            codigotiporeclamo,
-            codigomenu,
-            codigoestado,
-            codigoresponsable,
-            tipoticket,
-            helpdesk,
-            textoreclamo
-          }
-
-      this.inicializaForm();
-      if (!this.enviarHelpdesk) return
-
-      this.ticketService.postTickets(this.enviarHelpdesk)
-        .subscribe( {
-          next: (response) => {
-            this.inicializaForm();
-            this.isLoading= false;
-          },
-          error: (err) => {
-            console.error('Error al enviar el ticket:', err);
-            this.isLoading= false;
-          }
-        })
-
   }
 
   inicializaForm(){
@@ -295,6 +239,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   handleInputRespo(event: Event) {
     const target = event.target as HTMLIonSearchbarElement;
+
     if (target.value?.length === 0) return;
     const query = target.value?.toUpperCase() || '';
 
@@ -361,6 +306,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
   selectItemResponsable(result: any, searchbar: any) {
     this.myForm.patchValue({ responsable: result.descripcion }); // Actualiza el formulario
     searchbar.value = result.descripcion;
+    //this.resp_seleccionado= result.descripcion;
     this.buscarResp = [];
     this.showResults = false;
     this.buscar_Responsable();
@@ -373,6 +319,65 @@ export class FormPageComponent implements OnInit, OnDestroy {
   //   this.buscarOper = [];
   //   this.showResults = false;
   // }
+
+  onSave() {
+    const msjExito= 'Ticket enviado con éxito!'
+
+    if (this.myForm.invalid) {
+      this.sweetAlertservice.toast_alerta_validaDatos('Ingrese datos requeridos!', 1000)
+      return
+    };
+
+    this.isLoading= true;
+
+    const { area,
+            empresa,
+            titulo,
+            codigosistema,
+            codigooperador_solicita,
+            codigotiporeclamo,
+            codigomenu,
+            codigoestado,
+            codigoresponsable,
+            tipoticket,
+            helpdesk,
+            textoreclamo
+          } = this.myForm.value
+
+      this.enviarHelpdesk = {
+            area,
+            empresa,
+            titulo,
+            codigooperador_solicita,
+            codigosistema,
+            codigotiporeclamo,
+            codigomenu,
+            codigoestado,
+            codigoresponsable,
+            tipoticket,
+            helpdesk,
+            textoreclamo
+          }
+
+      this.inicializaForm();
+      if (!this.enviarHelpdesk) return
+
+      //console.log('Objeto enviado al backend: ', this.enviarHelpdesk);
+      this.sweetAlertservice.toast_alerta_exito( msjExito, 1000 );
+
+      this.ticketService.postTickets(this.enviarHelpdesk)
+        .subscribe( {
+          next: (response) => {
+            this.inicializaForm();
+            this.isLoading= false;
+          },
+          error: (err) => {
+            console.error('Error al enviar el ticket:', err);
+            this.isLoading= false;
+          }
+        })
+
+  }
 
   goBack(){
     this.location.back()

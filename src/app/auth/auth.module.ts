@@ -6,6 +6,7 @@ import { LayoutComponent } from './pages/layout/layout.component';
 import { AuthLoginComponent } from './pages/login/login.component';
 import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SweetAlertModule } from '../sweet-alert/sweet-alert.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     AuthRoutingModule,
     IonicModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SweetAlertModule
   ],
 })
 export class AuthModule { }

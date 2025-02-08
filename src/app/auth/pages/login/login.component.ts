@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth-service.service';
+import { SweetAlertService } from 'src/app/sweet-alert/sweet-alert-service.service';
 
 @Component({
   selector: 'appLogin-auth',
@@ -11,11 +12,15 @@ import { AuthService } from '../../services/auth-service.service';
 })
 export class AuthLoginComponent {
 
-  loginForm: FormGroup;
+  public loginForm: FormGroup;
+  public msjError= 'Usuario o Contraseña incorrecto!'
+  public msjExito= 'Logueado con éxito'
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private sweetAlert: SweetAlertService
   ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -39,10 +44,14 @@ export class AuthLoginComponent {
 
     this.authService.postLogin(loginData).subscribe({
       next: (response) => {
+        //this.sweetAlert.toast_alerta_exito(this.msjExito, 1000)
         localStorage.setItem('token', response.token); // Guardar token
         this.router.navigate(['/home']); // Redirigir a la página principal
       },
-      error: (error) => console.error('Error en login:', error)
+      error: (error) => {
+        this.sweetAlert.toast_alerta_error(this.msjError, 1000)
+        console.error('Error en login:', error)
+      }
     });
   }
 }

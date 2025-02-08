@@ -33,7 +33,7 @@
   </ion-searchbar>
 
 
-  <ion-list *ngFor="let result of buscarOper">
+  <ion-list  *ngFor="let result of buscarOper">
     <ion-item *ngIf="!showResults; hidden" (click)="selectItemOperador(result, searchbarOpe)">
       <ion-label class="text-primary-600 font-semibold cursor-pointer">{{ result.descripcion }}</ion-label>
     </ion-item>
