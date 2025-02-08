@@ -1,32 +1,36 @@
-<div class="flex flex-column align-items-center justify-content-center w-full h-full">
-  <div class="text-lg font-bold text-200">
-    <ion-icon name="key-outline"></ion-icon> Login
+<div class="flex flex-column align-items-center justify-content-center w-full h-full p-2">
+
+  <div class="text-lg font-bold text-200 pb-2 flex items-center self-start w-full max-w-96">
+    <span class="mr-2">Login</span>
+    <ion-icon name="key-outline"></ion-icon>
   </div>
 
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full max-w-96">
     <div class="field w-full">
-      <ion-input class="text-200 mt-2 w-full border-round"
+      <ion-input class="text-200 mt-2 w-full"
                  formControlName="username"
                  label="Usuario"
                  label-placement="floating"
                  fill="outline"
-                 placeholder="Usuario">
+                 placeholder="Usuario"
+                 color="light">
       </ion-input>
     </div>
 
     <div class="field w-full">
-      <ion-input class="text-200 w-full border-round"
+      <ion-input class="text-200 w-full"
                  formControlName="password"
                  label="Contraseña"
                  label-placement="floating"
                  fill="outline"
                  placeholder="Contraseña"
-                 type="password">
+                 type="password"
+                 color="light">
       </ion-input>
     </div>
 
-    <div class="flex justify-content-end w-full mt-3">
-      <ion-button type="submit" color="secondary" [disabled]="loginForm.invalid">Ingresar</ion-button>
+    <div class="flex justify-content-end w-full mt-3 mx-1">
+      <ion-button type="submit" color="primary" [disabled]="loginForm.invalid">Ingresar</ion-button>
     </div>
   </form>
 </div>

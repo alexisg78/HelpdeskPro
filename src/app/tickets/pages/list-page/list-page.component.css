@@ -14,7 +14,8 @@
 }
 
 .custom-table thead {
-  background: #007bff;
+  /* background: #007bff; */
+  background: #0054e9;
   color: white;
   text-transform: uppercase;
 }

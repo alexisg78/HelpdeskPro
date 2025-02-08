@@ -20,17 +20,17 @@
         <tr *ngFor="let item of tickets"
             [class.selected]="item === selectedTicket"
             (click)="selectRow(item)">
-          <td class="p-text-center nowrap">{{ item.fecha }}</td>
-          <td class="p-text-center truncate">{{ item.titulo }}</td>
-          <td class="p-text-center .textoreclamo-cell">{{ item.textoreclamo }}</td>
-          <td class="p-text-center nowrap">{{ item.nombreoperador }}</td>
-          <td class="p-text-center nowrap">{{ item.area }}</td>
-          <td class="p-text-center nowrap">{{ item.responsable }}</td>
-          <td class="p-text-center nowrap">{{ item.userid_atiende }}</td>
-          <td class="p-text-center nowrap">{{ item.empresa }}</td>
-          <td class="status p-text-center nowrap">{{ item.estado }}</td>
-          <td class="p-text-center nowrap">{{ item.urgente }}</td>
-          <td class="p-text-center nowrap">
+          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.fecha }}</td>
+          <td class="text-base font-medium select-none p-text-center truncate">{{ item.titulo }}</td>
+          <td class="text-base font-medium text-overflow-ellipsis select-none p-text-center truncate">{{ item.textoreclamo }}</td>
+          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.nombreoperador }}</td>
+          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.area }}</td>
+          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.responsable }}</td>
+          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.userid_atiende }}</td>
+          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.empresa }}</td>
+          <td class="text-base font-medium select-none status p-text-center nowrap">{{ item.estado }}</td>
+          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.urgente }}</td>
+          <td class="text-base font-medium select-none p-text-center nowrap">
             <ion-button (click)="getTicket(item.codigoppal)" color="primary" size="small">Ver</ion-button>
           </td>
         </tr>
