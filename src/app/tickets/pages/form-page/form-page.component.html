@@ -1,17 +1,38 @@
-<form [formGroup]="myForm" autocomplete="off" (ngSubmit)="onSave()"
-  class="mx-auto mt-4 p-d-flex p-flex-column p-ai-center p-jc-center p-mx-auto p-p-3 p-shadow-2 p-border-round-lg p-fluid" style="max-width: 600px; width: 100%;">
+<form [formGroup]="myForm"
+  autocomplete="off"
+  (ngSubmit)="onSave()"
+  class="mx-auto mt-4 p-d-flex p-flex-column p-ai-center p-jc-center p-mx-auto p-p-3 p-shadow-2 p-border-round-lg p-fluid"
+  style="max-width: 600px; width: 100%;">
 
-  <ion-input class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="fecha" label="Fecha" label-placement="floating" fill="solid" type="date"></ion-input>
+  <ion-input class="p-mb-2 p-w-full font-medium text-black-alpha-80"
+    formControlName="fecha"
+    label="Fecha"
+    label-placement="floating"
+    fill="solid"
+    type="date">
+  </ion-input>
 
-  <ion-select class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="empresa" label="Empresa" label-placement="floating" fill="solid"
-  (ionChange)="onEmpresaChange($event)">
+  <!-- empresa -->
+  <ion-select class="p-mb-2 p-w-full font-medium text-black-alpha-80"
+    formControlName="empresa"
+    label="Empresa"
+    label-placement="floating"
+    fill="solid"
+    (ionChange)="onEmpresaChange($event)">
+
     <ion-select-option [value]="item"
         *ngFor="let item of empresas">
         {{item.descripcion}}
     </ion-select-option>
   </ion-select>
 
-  <ion-select class="p-mb-2 p-w-full mb-2 font-medium text-black-alpha-80" formControlName="area" label="Área" label-placement="floating" fill="solid">
+  <!-- area -->
+  <ion-select class="p-mb-2 p-w-full mb-2 font-medium text-black-alpha-80"
+    formControlName="area"
+    label="Área"
+    label-placement="floating"
+    fill="solid">
+
     <ion-select-option [value]="item"
         *ngFor="let item of areas">
         {{item.descripcion}}
@@ -19,12 +40,14 @@
   </ion-select>
 
   <!-- Operadores -->
-  <ion-label class="p-mb-2 p-w-full mt-2 font-medium text-black-alpha-80">Operador</ion-label>
+  <ion-label class="p-mb-2 p-w-full mt-2 font-medium text-black-alpha-80">
+    Operador
+  </ion-label>
   <ion-searchbar class="p-mb-2 p-w-full font-bold text-black-alpha-80"
                 formControlName="nombreoperador"
                 #searchbarOpe
                 placeholder="Operador"
-                (ionChange)="onSearchbarChangeOperador($event, 'operador')"
+                (ionChange)="onSearchbarChange($event, 'operador', true)"
                 [debounce]="1000"
                 (onfocus)="onSearchFocus()"
                 (ionInput)="handleInputOperador($event)"
@@ -32,50 +55,92 @@
                 >
   </ion-searchbar>
 
-
   <ion-list  *ngFor="let result of buscarOper">
-    <ion-item *ngIf="!showResults; hidden" (click)="selectItemOperador(result, searchbarOpe)">
-      <ion-label class="text-primary-600 font-semibold cursor-pointer">{{ result.descripcion }}</ion-label>
+    <ion-item *ngIf="!showResults; hidden"
+      (click)="selectItem(result, searchbarOpe, true)">
+
+      <ion-label class="text-primary-600 font-semibold cursor-pointer">
+        {{ result.descripcion }}
+      </ion-label>
     </ion-item>
   </ion-list>
 
   <!-- Responsables -->
-  <ion-label class="p-mb-2 p-w-full font-medium text-black-alpha-80">Responsable</ion-label>
+  <ion-label class="p-mb-2 p-w-full font-medium text-black-alpha-80">
+    Responsable
+  </ion-label>
   <ion-searchbar class="p-mb-2 p-w-full font-medium text-black-alpha-80"
                 formControlName="responsable"
                 #searchbarRespo
                 placeholder="Responsable"
-                (ionChange)="onSearchbarChangeResponsable($event, 'responsable')"
+                (ionChange)="onSearchbarChange($event, 'responsable', false)"
                 [debounce]="1000"
                 (onfocus)="onSearchFocus()"
                 (ionInput)="handleInputRespo($event)"
-                (keydown)="handleKeydownF9Responsable($event)"
-                >
+                (keydown)="handleKeydownF9Responsable($event)">
   </ion-searchbar>
 
   <ion-list *ngFor="let result of buscarResp">
-    <ion-item *ngIf="!showResults; hidden" (click)="selectItemResponsable(result, searchbarRespo)">
-      <ion-label class="text-primary-600 font-semibold cursor-pointer">{{ result.descripcion }}</ion-label>
+    <ion-item *ngIf="!showResults; hidden"
+      (click)="selectItem(result, searchbarRespo, false)">
+
+      <ion-label class="text-primary-600 font-semibold cursor-pointer">
+        {{ result.descripcion }}
+      </ion-label>
     </ion-item>
   </ion-list>
 
-  <ion-input class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="titulo" label="Título" label-placement="floating" fill="solid" placeholder="Título del helpdesk"></ion-input>
+  <!-- titulo -->
+  <ion-input class="p-mb-2 p-w-full font-medium text-black-alpha-80"
+    formControlName="titulo"
+    label="Título"
+    label-placement="floating"
+    fill="solid"
+    placeholder="Título del helpdesk">
+  </ion-input>
 
-  <ion-textarea class="p-mb-2 p-w-full font-medium text-black-alpha-80" formControlName="textoreclamo" label="Requerimiento" labelPlacement="floating" fill="solid" placeholder="Ingrese el requerimiento" style="overflow-y: auto;"></ion-textarea>
+  <!-- reclamo  -->
+  <ion-textarea class="p-mb-2 p-w-full font-medium text-black-alpha-80"
+    formControlName="textoreclamo"
+    label="Requerimiento"
+    labelPlacement="floating"
+    fill="solid"
+    placeholder="Ingrese el requerimiento"
+    style="overflow-y: auto;">
+  </ion-textarea>
 
+  <!-- urgente -->
   <div class="p-d-flex p-ai-center p-jc-between p-w-full">
-    <ion-checkbox class="p-mb-2 mr-2 mt-2 font-medium text-black-alpha-80" formControlName="urgente" labelPlacement="end">Urgente</ion-checkbox>
+    <ion-checkbox class="p-mb-2 mr-2 mt-2 font-medium text-black-alpha-80"
+      formControlName="urgente"
+      labelPlacement="end">
+      Urgente
+    </ion-checkbox>
 
+    <!-- enviar -->
     <div class="flex justify-content-end mt-3">
-      <ion-button  id="open-loading" *ngIf="!ticketRecibido ; hidden" type="submit" color="primary">Enviar</ion-button>
-      <ion-loading *ngIf="isLoading" message="Enviando Ticket...!" ></ion-loading>
+      <ion-button  id="open-loading"
+        *ngIf="!ticketRecibido ; hidden"
+        type="submit"
+        color="primary">
+        Enviar
+      </ion-button>
+      <ion-loading *ngIf="isLoading"
+        message="Enviando Ticket...!">
+      </ion-loading>
     </div>
   </div>
 
 </form>
 
+<!-- volver -->
 <div class="flex justify-content-end mt-3">
-  <ion-button *ngIf="botonVolverVisible; hidden" type="click" color="primary" (click)="goBack()">Volver</ion-button>
+  <ion-button *ngIf="botonVolverVisible; hidden"
+    type="click"
+    color="primary"
+    (click)="goBack()">
+    Volver
+  </ion-button>
 </div>
 
 <!-- <pre>

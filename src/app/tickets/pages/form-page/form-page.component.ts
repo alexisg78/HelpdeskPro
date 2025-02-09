@@ -29,12 +29,16 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   public responsables!: Responsable[];
   public operadores!: Operador[];
+
   public buscaOperador: any;
+  public buscaResponsable: any;
+  public isOperador: boolean= false;
+
   public empresas!: Empresa[];
   public areas!: Area[];
 
-  public buscarResp!: Responsable[];
   public buscarOper!: Operador[];
+  public buscarResp!: Responsable[];
 
   public results: string = '';
   public showResults: boolean = false;
@@ -86,7 +90,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(
       this.ticketService.getEmpresa()
-      .subscribe( emp => this.empresas = emp )
+      .subscribe( emp => { this.empresas = emp })
     );
 
     this.subscriptions.add(
@@ -128,12 +132,29 @@ export class FormPageComponent implements OnInit, OnDestroy {
         area: this.ticketRecibido.area.codigo || '',
         responsable: this.ticketRecibido.responsable || '',
         userid_atiende: this.ticketRecibido.userid_atiende || '',
-        codigoempresa: this.ticketRecibido.empresa.codigo,
+        codigoempresa: this.ticketRecibido.empresa.codigo || 0,
         urgente: this.ticketRecibido.urgente || false,
       });
 
       this.botonVolverVisible = true;
       //console.log('Ticket recibido: ', this.ticketRecibido)
+
+      const empresaSeleccionada = (this.empresas || []).find(e => e.descripcion === String(this.ticketRecibido?.empresa) ) || null;
+      const areaSeleccionada = (this.areas || []).find(a => a.descripcion === String(this.ticketRecibido?.area) ) || null;
+
+      //empresa
+      if ( !empresaSeleccionada || !areaSeleccionada ) return;
+      this.myForm.patchValue({
+        empresa: empresaSeleccionada || '',
+        codigoempresa: empresaSeleccionada?.codigo || 0
+      });
+
+      //area
+      this.myForm.patchValue({
+        area: areaSeleccionada || '',
+        codigoarea: areaSeleccionada?.codigo || 0
+      });
+
     }
   }
 
@@ -147,7 +168,6 @@ export class FormPageComponent implements OnInit, OnDestroy {
       })
 
       //console.log('Codigo de la empresa seleccionada:', codigo);
-
       if (!codigo) return
       this.subscriptions.add(
         this.ticketService.getOperadores(codigo)
@@ -158,61 +178,34 @@ export class FormPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  buscar_Operador() {
-    if (this.myForm.value.nombreoperador.length > 0 ) {
+  buscar_codPersona(isOp: boolean){
+
+    if (isOp && this.myForm.value.nombreoperador.length > 0){
+      // es operador
       this.buscaOperador = this.operadores.filter( op => op.descripcion.trim().toUpperCase() === this.myForm.value.nombreoperador.trim().toUpperCase() )
       let codOpe: number= 0
       if (!this.buscaOperador[0]) return;
       codOpe= this.buscaOperador[0].codigo
       this.myForm.patchValue({ codigooperador_solicita: codOpe })
     }
-  }
 
-  buscar_Responsable(){
-    if (this.myForm.value.responsable.length > 0 ) {
-      this.buscarResp = this.responsables.filter( op => op.descripcion.trim().toUpperCase() === this.myForm.value.responsable.trim().toUpperCase() )
+    if (!isOp && this.myForm.value.responsable.length > 0 ) {
+      // es responsable
+      this.buscaResponsable = this.responsables.filter( op => op.descripcion.trim().toUpperCase() === this.myForm.value.responsable.trim().toUpperCase() )
 
       let codRespo: number= 0
-      if (!this.buscarResp[0]) return;
-      codRespo= this.buscarResp[0].codigo;
+      if (!this.buscaResponsable[0]) return;
+      codRespo= this.buscaResponsable[0].codigo;
       this.myForm.patchValue({ codigoresponsable: codRespo })
-      //this.showResults = false;
     }
+
   }
 
-  onSearchbarChangeOperador(event: any, controlName: string): void {
+  onSearchbarChange(event: any, controlName: string, isOp: boolean): void {
+    this.isOperador= isOp
     this.myForm.patchValue({ [controlName]: event.detail.value.toUpperCase() });
-    this.buscar_Operador()
-  }
-
-  onSearchbarChangeResponsable(event: any, controlName: string): void {
-    this.myForm.patchValue({ [controlName]: event.detail.value.toUpperCase });
-    this.buscar_Responsable()
-  }
-
-  inicializaForm(){
-    this.myForm.reset({
-        fecha: '',
-        empresa: '',
-        titulo: '',
-        codigosistema: 0,
-        codigooperador_solicita: 0,
-        codigotiporeclamo: 0,
-        codigomenu: 0,
-        codigoestado: 1,
-        codigoresponsable: 0,
-        tipoticket: 1,
-        helpdesk: true,
-        textoreclamo: '',
-        nombreoperador: '',
-        area: '',
-        responsable: '',
-        userid_atiende: '',
-        codigoempresa: 0,
-        urgente: false,
-    })
-
-    this.isLoading= false
+    // this.buscar_Responsable()
+    this.buscar_codPersona(this.isOperador)
   }
 
   handleInputOperador(event: Event) {
@@ -294,22 +287,27 @@ export class FormPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  selectItemOperador(result: any, searchbar: any) {
-    //searchbar.value = result.descripcion;
-    this.myForm.patchValue({ nombreoperador: result.descripcion }); // Actualiza el formulario
-    searchbar.value = result.descripcion;
-    this.buscarOper = [];
-    this.showResults = false;
-    this.buscar_Operador()
-  }
+  selectItem(result: any, searchbar: any, isOp: boolean) {
 
-  selectItemResponsable(result: any, searchbar: any) {
-    this.myForm.patchValue({ responsable: result.descripcion }); // Actualiza el formulario
-    searchbar.value = result.descripcion;
-    //this.resp_seleccionado= result.descripcion;
-    this.buscarResp = [];
-    this.showResults = false;
-    this.buscar_Responsable();
+    if (isOp) {
+      this.isOperador= true
+      this.myForm.patchValue({ nombreoperador: result.descripcion }); // Actualiza el formulario
+      searchbar.value = result.descripcion;
+
+      this.buscarOper = [];
+      this.showResults = false;
+    }
+
+    if (!isOp) {
+      this.isOperador= false
+      this.myForm.patchValue({ responsable: result.descripcion }); // Actualiza el formulario
+      searchbar.value = result.descripcion;
+
+      this.buscarResp = [];
+      this.showResults = false;
+    }
+
+    this.buscar_codPersona(this.isOperador)
   }
 
   // selectItem(result: any, searchbar: any) {
@@ -377,6 +375,31 @@ export class FormPageComponent implements OnInit, OnDestroy {
           }
         })
 
+  }
+
+  inicializaForm(){
+    this.myForm.reset({
+        fecha: '',
+        empresa: '',
+        titulo: '',
+        codigosistema: 0,
+        codigooperador_solicita: 0,
+        codigotiporeclamo: 0,
+        codigomenu: 0,
+        codigoestado: 1,
+        codigoresponsable: 0,
+        tipoticket: 1,
+        helpdesk: true,
+        textoreclamo: '',
+        nombreoperador: '',
+        area: '',
+        responsable: '',
+        userid_atiende: '',
+        codigoempresa: 0,
+        urgente: false,
+    })
+
+    this.isLoading= false
   }
 
   goBack(){
