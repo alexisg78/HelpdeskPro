@@ -1,7 +1,7 @@
 <form [formGroup]="myForm"
   autocomplete="off"
   (ngSubmit)="onSave()"
-  class="mx-auto mt-4 p-d-flex p-flex-column p-ai-center p-jc-center p-mx-auto p-p-3 p-shadow-2 p-border-round-lg p-fluid"
+  class="mx-auto mt-0 p-d-flex p-flex-column p-ai-center p-jc-center p-mx-auto p-p-3 p-shadow-2 p-border-round-lg p-fluid"
   style="max-width: 600px; width: 100%;">
 
   <ion-input class="p-mb-2 p-w-full font-medium text-black-alpha-80"
@@ -102,7 +102,7 @@
   <!-- reclamo  -->
   <ion-textarea class="p-mb-2 p-w-full font-medium text-black-alpha-80"
     formControlName="textoreclamo"
-    label="Requerimiento"
+    label="Reclamo"
     labelPlacement="floating"
     fill="solid"
     placeholder="Ingrese el requerimiento"
@@ -118,7 +118,7 @@
     </ion-checkbox>
 
     <!-- enviar -->
-    <div class="flex justify-content-end mt-3">
+    <div class="flex justify-content-end mt-0">
       <ion-button  id="open-loading"
         *ngIf="!ticketRecibido ; hidden"
         type="submit"
@@ -134,7 +134,7 @@
 </form>
 
 <!-- volver -->
-<div class="flex justify-content-end mt-3">
+<div class="flex justify-content-end mt-0">
   <ion-button *ngIf="botonVolverVisible; hidden"
     type="click"
     color="primary"
@@ -146,3 +146,4 @@
 <!-- <pre>
   {{ this.enviarHelpdesk | json}}
 </pre> -->
+

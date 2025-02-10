@@ -368,6 +368,8 @@ export class FormPageComponent implements OnInit, OnDestroy {
           next: (response) => {
             this.inicializaForm();
             this.isLoading= false;
+            this.ticketService.getEmpresa()
+              .subscribe( emp => { this.empresas = emp })
           },
           error: (err) => {
             console.error('Error al enviar el ticket:', err);

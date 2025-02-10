@@ -21,12 +21,13 @@ export class DetailsPageComponent implements OnInit{
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
     this.idParams = params.get('id')
+    this.idTicket= Number(this.idParams);
     this.obtenerTicket()
     })
   }
 
   obtenerTicket():void {
-    this.idTicket= Number(this.idParams);
+    //this.idTicket= Number(this.idParams);
     this.ticketService.getTicketById(this.idTicket)
       .subscribe(
         ticket => {

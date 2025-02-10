@@ -1,4 +1,4 @@
-import { Component,  OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HelpDesk } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
 import { Router } from '@angular/router';
@@ -12,22 +12,33 @@ import { Router } from '@angular/router';
 export class ListPageComponent implements OnInit{
 
   public tickets: HelpDesk[] = []
-  public ticketSeleccionado: HelpDesk | undefined
+  public ticketSeleccionado!: HelpDesk | null
   public selectedTicket: any = null;
 
   constructor  (private ticketsService : TicketsService, private router: Router) {}
 
+  ngOnInit(): void {
+    this.getActualiza()
+  }
+
   selectRow(item: any) {
     this.selectedTicket = item;
+    this.ticketSeleccionado= item;
   }
 
-  ngOnInit(): void {
-    this.ticketsService.getTickets()
-       .subscribe( tickets => this.tickets =  tickets);
-  }
-
-  getTicket(id: number){
+  getTicket(item:HelpDesk, id: number){
+    let pos: number;
     this.router.navigate([`home/details`, id]);
+    pos = this.tickets.findIndex(ticket => ticket.codigoppal === id);
+    this.selectRow(item)
+  }
+
+  getActualiza(){
+    this.ticketsService.getTickets()
+    .subscribe( tickets => {
+      this.tickets =  tickets
+      this.selectedTicket= this.tickets[0]
+    });
   }
 
 }

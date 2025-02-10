@@ -1,4 +1,14 @@
 <ion-content class="ion-padding">
+  <div class="flex justify-content-end mr-3 sm: mr-0 md: mr-0 h-3rem">
+    <ion-button
+      slot="end"
+      (click)="getActualiza()"
+      color="primary"
+      size="small">
+      <ion-icon class="pr-1" name="refresh"></ion-icon>
+      Actualizar
+    </ion-button>
+  </div>
   <div class="table-container p-3 col-12">
     <table class="custom-table">
       <thead>
@@ -31,7 +41,9 @@
           <td class="text-base font-medium select-none status p-text-center nowrap">{{ item.estado }}</td>
           <td class="text-base font-medium select-none p-text-center nowrap">{{ item.urgente }}</td>
           <td class="text-base font-medium select-none p-text-center nowrap">
-            <ion-button (click)="getTicket(item.codigoppal)" color="primary" size="small">Ver</ion-button>
+            <ion-button (click)="getTicket(item, item.codigoppal)" color="primary" size="small">
+              <ion-icon name="search"></ion-icon>
+            </ion-button>
           </td>
         </tr>
       </tbody>
