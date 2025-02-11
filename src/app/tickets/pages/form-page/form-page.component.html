@@ -138,12 +138,14 @@
   <ion-button *ngIf="botonVolverVisible; hidden"
     type="click"
     color="primary"
+    (click)="onUpdate()">
+    Actualizar
+  </ion-button>
+
+  <ion-button *ngIf="botonVolverVisible; hidden"
+    type="click"
+    color="primary"
     (click)="goBack()">
     Volver
   </ion-button>
 </div>
-
-<!-- <pre>
-  {{ this.enviarHelpdesk | json}}
-</pre> -->
-

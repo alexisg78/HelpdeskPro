@@ -310,14 +310,6 @@ export class FormPageComponent implements OnInit, OnDestroy {
     this.buscar_codPersona(this.isOperador)
   }
 
-  // selectItem(result: any, searchbar: any) {
-  //   this.myForm.patchValue({ FormControlName: result.descripcion }); // Actualiza el formulario
-  //   searchbar.value = result.descripcion;
-  //   this.buscarResp = [];
-  //   this.buscarOper = [];
-  //   this.showResults = false;
-  // }
-
   onSave() {
     const msjExito= 'Ticket enviado con éxito!'
 
@@ -361,13 +353,14 @@ export class FormPageComponent implements OnInit, OnDestroy {
       if (!this.enviarHelpdesk) return
 
       //console.log('Objeto enviado al backend: ', this.enviarHelpdesk);
-      this.sweetAlertservice.toast_alerta_exito( msjExito, 1000 );
+      //this.sweetAlertservice.toast_alerta_exito( msjExito, 1000 );
 
       this.ticketService.postTickets(this.enviarHelpdesk)
         .subscribe( {
           next: (response) => {
             this.inicializaForm();
             this.isLoading= false;
+            this.sweetAlertservice.toast_alerta_exito( msjExito, 1000 );
           },
           error: (err) => {
             console.error('Error al enviar el ticket:', err);
@@ -404,6 +397,43 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   goBack(){
     this.location.back()
+  }
+
+  onUpdate(){
+      const {
+        area,
+        empresa,
+        titulo,
+        codigosistema,
+        codigooperador_solicita,
+        codigotiporeclamo,
+        codigomenu,
+        codigoestado,
+        codigoresponsable,
+        tipoticket,
+        helpdesk,
+        textoreclamo
+      } = this.myForm.value
+
+  this.enviarHelpdesk = {
+        area,
+        empresa,
+        titulo,
+        codigooperador_solicita,
+        codigosistema,
+        codigotiporeclamo,
+        codigomenu,
+        codigoestado,
+        codigoresponsable,
+        tipoticket,
+        helpdesk,
+        textoreclamo
+      }
+
+      console.log('Objeto actualizado: ', this.enviarHelpdesk);
+
+      this.ticketService.putTicket(this.enviarHelpdesk)
+
   }
 
 }

@@ -89,4 +89,15 @@ export class TicketsService  {
     return this.http.post<HelpDesk>(`${this.baseUrl}/Gestion/PostHelpDesk/`, helpdesk, { headers })
   }
 
+  putTicket(helpdesk: any): Observable<HelpDesk> {
+    const { codigoppal } = helpdesk
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.put<HelpDesk>(`${this.baseUrl}/Gestion/putHelpDesk/${ codigoppal }`, helpdesk, {headers})
+
+  }
+
 }
