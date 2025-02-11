@@ -1,31 +1,30 @@
 <div class="flex flex-column align-items-center justify-content-center w-full h-full p-2">
 
   <div class="text-lg font-bold text-200 pb-2 flex items-center self-start w-full max-w-96">
-    <span class="mr-2">Login</span>
-    <ion-icon name="key-outline"></ion-icon>
+    <span class="mr-2 text-black-alpha-90">LOGIN</span>
+    <ion-icon class="text-black-alpha-90" name="key-outline"></ion-icon>
   </div>
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full max-w-96">
     <div class="field w-full">
-      <ion-input class="text-200 mt-2 w-full"
+      <ion-input class="text-black-alpha-90 mt-2 w-full h-3rem pt-2"
                  formControlName="username"
                  label="Usuario"
-                 label-placement="floating"
-                 fill="outline"
-                 placeholder="Usuario"
-                 color="light">
+                 label-placement="stacked"
+                 fill="solid"
+                 aria-label="Primary input">
       </ion-input>
     </div>
 
     <div class="field w-full">
-      <ion-input class="text-200 w-full"
+      <ion-input class="text-black-alpha-90 w-full h-3rem"
                  formControlName="password"
                  label="Contraseña"
-                 label-placement="floating"
-                 fill="outline"
-                 placeholder="Contraseña"
-                 type="password"
-                 color="light">
+                 label-placement="stacked"
+                 fill="solid"
+                 aria-label="Primary input"
+                 type="password">
+        <ion-input-password-toggle slot="end"></ion-input-password-toggle>
       </ion-input>
     </div>
 
