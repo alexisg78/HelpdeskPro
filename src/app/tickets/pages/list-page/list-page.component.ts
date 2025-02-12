@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HelpDesk } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
 import { Router } from '@angular/router';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'list-page',
@@ -34,7 +35,7 @@ export class ListPageComponent implements OnInit{
   }
 
   getActualiza(){
-    this.ticketsService.getTickets()
+    this.ticketsService.getTickets().pipe(take(1))
     .subscribe( tickets => {
       this.tickets =  tickets
       this.selectedTicket= this.tickets[0]

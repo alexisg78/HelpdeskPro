@@ -143,12 +143,13 @@ export class FormPageComponent implements OnInit, OnDestroy {
       const areaSeleccionada = (this.areas || []).find(a => a.descripcion === String(this.ticketRecibido?.area) ) || null;
 
       //empresa
-      if ( !empresaSeleccionada || !areaSeleccionada ) return;
+      if ( !empresaSeleccionada ) return;
       this.myForm.patchValue({
         empresa: empresaSeleccionada || '',
         codigoempresa: empresaSeleccionada?.codigo || 0
       });
 
+      if ( !areaSeleccionada ) return;
       //area
       this.myForm.patchValue({
         area: areaSeleccionada || '',
@@ -430,7 +431,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
         textoreclamo
       }
 
-      console.log('Objeto actualizado: ', this.enviarHelpdesk);
+      //console.log('Objeto actualizado: ', this.enviarHelpdesk);
 
       this.ticketService.putTicket(this.enviarHelpdesk)
 
