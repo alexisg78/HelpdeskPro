@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HelpDesk } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
+import { take } from 'rxjs';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class DetailsPageComponent implements OnInit{
 
   obtenerTicket():void {
     //this.idTicket= Number(this.idParams);
-    this.ticketService.getTicketById(this.idTicket)
+    this.ticketService.getTicketById(this.idTicket).pipe(take(1))
       .subscribe(
         ticket => {
           if (!ticket) return;
