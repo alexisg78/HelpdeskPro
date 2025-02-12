@@ -19,28 +19,9 @@ export class SweetAlertService {
     }
   });
 
-  toast_alerta_exito(msj: string, tiempo: number){
+  toast_alerta (msj: string, tiempo:number, icon: 'success' | 'error' | 'warning' | 'info' | 'question'){
     this.Toast.fire({
-        icon: "success",
-        title: msj,
-        timer: tiempo | 2000,
-      }
-    )
-  }
-
-  toast_alerta_error(msj: string, tiempo: number){
-    this.Toast.fire({
-        icon: "error",
-        title: msj,
-        timer: tiempo | 2000,
-      }
-    )
-      return false;
-  }
-
-  toast_alerta_validaDatos(msj: string, tiempo:number){
-    this.Toast.fire({
-        icon: "warning",
+        icon: icon,
         title: msj,
         timer: tiempo | 2000,
       }

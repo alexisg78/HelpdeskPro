@@ -40,16 +40,13 @@ export class AuthLoginComponent {
       password: password.toUpperCase()
     };
 
-    //const credenciales = this.loginForm.value;
-
     this.authService.postLogin(loginData).subscribe({
       next: (response) => {
-        //this.sweetAlert.toast_alerta_exito(this.msjExito, 1000)
         localStorage.setItem('token', response.token); // Guardar token
         this.router.navigate(['/home']); // Redirigir a la página principal
       },
       error: (error) => {
-        this.sweetAlert.toast_alerta_error(this.msjError, 1000)
+        this.sweetAlert.toast_alerta(this.msjError, 1000, 'error')
         console.error('Error en login:', error)
       }
     });

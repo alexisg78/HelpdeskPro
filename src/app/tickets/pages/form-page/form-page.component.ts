@@ -314,7 +314,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
     const msjExito= 'Ticket enviado con éxito!'
 
     if (this.myForm.invalid) {
-      this.sweetAlertservice.toast_alerta_validaDatos('Ingrese datos requeridos!', 1000)
+      this.sweetAlertservice.toast_alerta('Ingrese datos requeridos!', 1000, 'warning')
       return
     };
 
@@ -352,15 +352,15 @@ export class FormPageComponent implements OnInit, OnDestroy {
       this.inicializaForm();
       if (!this.enviarHelpdesk) return
 
-      //console.log('Objeto enviado al backend: ', this.enviarHelpdesk);
-      //this.sweetAlertservice.toast_alerta_exito( msjExito, 1000 );
+      // console.log('Objeto enviado al backend: ', this.enviarHelpdesk);
+      // this.sweetAlertservice.toast_alerta( msjExito, 1000, 'success' );
 
       this.ticketService.postTickets(this.enviarHelpdesk)
         .subscribe( {
           next: (response) => {
             this.inicializaForm();
             this.isLoading= false;
-            this.sweetAlertservice.toast_alerta_exito( msjExito, 1000 );
+            this.sweetAlertservice.toast_alerta( msjExito, 1000, 'success' );
           },
           error: (err) => {
             console.error('Error al enviar el ticket:', err);
@@ -430,9 +430,9 @@ export class FormPageComponent implements OnInit, OnDestroy {
         textoreclamo
       }
 
-      console.log('Objeto actualizado: ', this.enviarHelpdesk);
-
-      this.ticketService.putTicket(this.enviarHelpdesk)
+      console.log('Objeto actualizado: ', this.ticketRecibido);
+      this.sweetAlertservice.toast_alerta( 'Datos actualizados correctamente!', 1000, 'info' );
+      //this.ticketService.putTicket(this.enviarHelpdesk)
 
   }
 
