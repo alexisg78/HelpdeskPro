@@ -8,15 +8,15 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then( (m)=> m.AuthModule )
   },
   {
-    path: 'home',
+    path: 'helpdesk',
     loadChildren: () => import('./tickets/tickets.module').then(m => m.TicketsModule),
     canActivate: [AuthGuard]
   },
-  {
-    path: 'tabs',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
-    canActivate: [AuthGuard]
-  },
+  // {
+  //   path: 'tabs',
+  //   loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
+  //   canActivate: [AuthGuard]
+  // },
   { path:'', redirectTo: 'auth', pathMatch: 'full'}, // Redirige solo si no hay ninguna ruta.
   { path: '**', redirectTo: 'auth', pathMatch: 'full' }  // Redirige a 'home' para rutas inválidas.
 ];

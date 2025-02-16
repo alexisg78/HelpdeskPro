@@ -15,10 +15,10 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: '', component: HomeComponent, canActivate: [AuthGuard], },
-      { path: 'new-ticket', component: FormPageComponent },
-      { path: 'tickets', component: ListPageComponent },
+      { path: 'new-ticket', component: FormPageComponent},
+      { path: 'tickets', component: ListPageComponent},
       { path: 'details/:id', component: DetailsPageComponent },
-      { path: '', redirectTo: 'home', pathMatch: 'full'}, // Redirige solo si no hay ninguna ruta.
+      { path: '', redirectTo: 'helpdesk', pathMatch: 'full'}, // Redirige solo si no hay ninguna ruta.
       { path: '**', redirectTo: '', pathMatch: 'full'} // Redirige a 'home' para rutas inválidas.
     ]
   },

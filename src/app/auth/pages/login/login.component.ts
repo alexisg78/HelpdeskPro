@@ -43,7 +43,7 @@ export class AuthLoginComponent {
     this.authService.postLogin(loginData).subscribe({
       next: (response) => {
         localStorage.setItem('token', response.token); // Guardar token
-        this.router.navigate(['/home']); // Redirigir a la página principal
+        this.router.navigate(['/helpdesk']); // Redirigir a la página principal
       },
       error: (error) => {
         this.sweetAlert.toast_alerta(this.msjError, 1000, 'error')
