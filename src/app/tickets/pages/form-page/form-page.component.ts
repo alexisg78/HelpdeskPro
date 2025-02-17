@@ -27,6 +27,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
   @Input()
   public botonVolverVisible: boolean= false;
 
+  public ticket?: HelpDesk | null
   public responsables!: Responsable[];
   public operadores!: Operador[];
 
@@ -61,25 +62,22 @@ export class FormPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.myForm=  this.fb.group({
+      area: [this.ticket?.area, Validators.required],
+      empresa: [this.ticket?.empresa, Validators.required],
+      codigoempresa: [this.ticket?.empresa.codigo],
+      estado: [this.ticket?.estado],
+      responsable: [this.ticket?.responsable],
+      solicita: [this.ticket?.solicita],
+      sistema: [this.ticket?.sistema],
       fecha: ['', Validators.required],
       titulo: ['', [Validators.required, Validators.maxLength(50)]],
-      codigosistema: [0],
-      codigooperador_solicita: [0],
+      textoreclamo: ['', [Validators.required, Validators.maxLength(200)]],
+      userid_atiende: [''],
       codigotiporeclamo: [0],
       codigomenu: [0],
-      codigoestado: [1],
-      codigoresponsable: [0],
-      tipoticket: [1],
-      helpdesk: true,
-      textoreclamo: ['', [Validators.required, Validators.maxLength(200)]],
-      nombreoperador: [''],
-      area: ['', Validators.required],
-      responsable: [''],
-      userid_atiende: [''],
-      empresa: ['', Validators.required],
-      codigoempresa: [1],
       urgente: [false],
-      // requerimiento: ['', Validators.maxLength(100)]
+      helpdesk: true,
+      tipoticket: [1],
     });
 
     // Agrupo todas las subscripciones en una sola instancia
@@ -90,7 +88,10 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(
       this.ticketService.getEmpresa()
-      .subscribe( emp => { this.empresas = emp })
+      .subscribe( emp => {
+        this.empresas = emp
+        //console.log('Empresas: ', this.empresas)
+      })
     );
 
     this.subscriptions.add(
@@ -99,10 +100,19 @@ export class FormPageComponent implements OnInit, OnDestroy {
     );
 
     // suscripción por defecto: codigoempresa = 1 para traer los operadores
+    // this.subscriptions.add(
+    //   this.ticketService.getOperadores(this.myForm.get('codigoempresa')?.value)
+    //   .subscribe( op => {
+    //       this.operadores = op;
+    //       // console.log('operadores: ', this.operadores)
+    //     })
+    // );
+
     this.subscriptions.add(
-      this.ticketService.getOperadores(this.myForm.get('codigoempresa')?.value)
+      this.ticketService.getOperadores(this.myForm.value.empresa)
       .subscribe( op => {
           this.operadores = op;
+          // console.log('operadores: ', this.operadores)
         })
     );
 
@@ -115,46 +125,67 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['ticketRecibido'] && this.ticketRecibido) {
-      this.myForm.patchValue({
-        fecha: this.ticketRecibido.fecha || '',
-        empresa: this.ticketRecibido.empresa.descripcion || '',
-        titulo: this.ticketRecibido.titulo || '',
-        codigosistema: 0,
-        codigooperador_solicita: 0,
-        codigotiporeclamo: 0,
-        codigomenu: 0,
-        codigoestado: 1,
-        codigoresponsable: 0,
-        tipoticket: 0,
-        helpdesk: true,
-        textoreclamo: this.ticketRecibido.textoreclamo || '',
-        nombreoperador: this.ticketRecibido.nombreoperador || '',
-        area: this.ticketRecibido.area.codigo || '',
-        responsable: this.ticketRecibido.responsable || '',
-        userid_atiende: this.ticketRecibido.userid_atiende || '',
-        codigoempresa: this.ticketRecibido.empresa.codigo || 0,
-        urgente: this.ticketRecibido.urgente || false,
-      });
+    //   this.myForm.patchValue({
+    //     area: this.ticketRecibido.area,
+    //     empresa: this.ticketRecibido.empresa,
+    //     codigoempresa: this.ticketRecibido.empresa.codigo,
+    //     estado: 1,
+    //     responsable: this.ticketRecibido.responsable,
+    //     solicita: this.ticketRecibido.solicita,
+    //     codigosistema: 0,
+    //     fecha: this.ticketRecibido.fecha,
+    //     titulo: this.ticketRecibido.titulo,
+    //     textoreclamo: this.ticketRecibido.textoreclamo,
+    //     userid_atiende: this.ticketRecibido.userid_atiende,
+    //     codigotiporeclamo: 0,
+    //     codigomenu: 0,
+    //     urgente: this.ticketRecibido.urgente || false,
+    //     helpdesk: true,
+    //     tipoticket: 0,
+    //     codigooperador_solicita: 0,
+    //     codigoresponsable: 0,
+    //   }
+    // );
 
       this.botonVolverVisible = true;
-      //console.log('Ticket recibido: ', this.ticketRecibido)
 
-      const empresaSeleccionada = (this.empresas || []).find(e => e.descripcion === String(this.ticketRecibido?.empresa) ) || null;
-      const areaSeleccionada = (this.areas || []).find(a => a.descripcion === String(this.ticketRecibido?.area) ) || null;
+      this.myForm.reset(this.ticketRecibido);
+      //console.log('Valor del Form: ', this.myForm.value)
+      console.log('Ticket: ', this.ticketRecibido)
 
-      //empresa
-      if ( !empresaSeleccionada ) return;
-      this.myForm.patchValue({
-        empresa: empresaSeleccionada || '',
-        codigoempresa: empresaSeleccionada?.codigo || 0
-      });
+      if ( !this.empresas ){
+        this.ticketService.getEmpresa()
+        .subscribe( emp => {
+          this.empresas = emp
+        })
+      }
 
-      if ( !areaSeleccionada ) return;
-      //area
-      this.myForm.patchValue({
-        area: areaSeleccionada || '',
-        codigoarea: areaSeleccionada?.codigo || 0
-      });
+      if ( !this.areas ){
+        this.ticketService.getArea()
+        .subscribe( area => {
+          this.areas = area
+        })
+      }
+
+      const empresaSeleccionada = this.empresas ? this.empresas.find(e => e.codigo === this.ticketRecibido?.empresa.codigo) : this.ticketRecibido?.empresa
+      const areaSeleccionada =  this.areas ? this.areas.find(a => a.codigo === this.ticketRecibido?.area.codigo) : this.ticketRecibido?.area
+
+      console.log('Empresa seleccionada', empresaSeleccionada)
+      console.log('Area seleccionada', areaSeleccionada)
+
+      if ( empresaSeleccionada ) {
+        this.myForm.get('empresa')?.setValue(empresaSeleccionada)
+      }
+      else{
+        this.myForm.get('empresa')?.setValue(this.ticketRecibido.empresa)
+      }
+
+      if ( areaSeleccionada ) {
+        this.myForm.get('area')?.setValue(areaSeleccionada)
+      }
+      else{
+        this.myForm.get('area')?.setValue(this.ticket?.area)
+      }
 
     }
   }
@@ -166,15 +197,15 @@ export class FormPageComponent implements OnInit, OnDestroy {
       const { codigo }= empresaSeleccionada
       this.myForm.patchValue({
       codigoempresa: codigo
-      })
+    })
 
-      //console.log('Codigo de la empresa seleccionada:', codigo);
-      if (!codigo) return
-      this.subscriptions.add(
-        this.ticketService.getOperadores(codigo)
-          .subscribe( op => {
-              this.operadores = op;
-            })
+    //console.log('Codigo de la empresa seleccionada:', codigo);
+    if (!empresaSeleccionada) return
+    this.subscriptions.add(
+      this.ticketService.getOperadores(empresaSeleccionada)
+        .subscribe( op => {
+            this.operadores = op;
+          })
       )
     }
   }

@@ -23,17 +23,20 @@ export class DetailsPageComponent implements OnInit{
     this.route.paramMap.subscribe(params => {
     this.idParams = params.get('id')
     this.idTicket= Number(this.idParams);
+    console.log('ID Ticket desde la ruta: ', this.idTicket)
     this.obtenerTicket()
     })
   }
 
   obtenerTicket():void {
     //this.idTicket= Number(this.idParams);
+    if ( !this.idTicket ) return;
+
     this.ticketService.getTicketById(this.idTicket).pipe(take(1))
       .subscribe(
-        ticket => {
-          if (!ticket) return;
-          this.ticket = ticket
+        return_ticket => {
+          if (!return_ticket) return;
+          this.ticket = return_ticket
         });
   }
 

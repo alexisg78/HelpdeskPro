@@ -30,16 +30,16 @@ export class TicketsService  {
     return this.http.get<HelpDesk[]>(`${this.baseUrl}/Gestion/Helpdesk`, { headers });
   }
 
-  getTicketById(id: number): Observable<HelpDesk|undefined> {
+  getTicketById(id: number): Observable<HelpDesk> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
       'Content-Type': 'application/json'
     });
 
     return this.http.get<HelpDesk>(`${this.baseUrl}/Gestion/getItemHelpDesk/${id}`, {headers})
-      .pipe(
-        catchError( error => of( undefined ) )
-       )
+      // .pipe(
+      //   catchError( error => of( undefined ) )
+      //  )
   }
 
   // Responsables
@@ -53,12 +53,13 @@ export class TicketsService  {
   }
 
   //Operadores
-  getOperadores(codEmp: number): Observable<Operador[]> {
+  getOperadores(emp: Empresa): Observable<Operador[]> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
       'Content-Type': 'application/json'
     });
 
+    const codEmp= emp === null ? 1 : emp.codigo
     return this.http.get<Operador[]>(`${this.baseUrl}/Gestion/GetOperadores/${codEmp}`, { headers });
   }
 
