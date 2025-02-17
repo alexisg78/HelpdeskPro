@@ -62,13 +62,13 @@ export class FormPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.myForm=  this.fb.group({
-      area: [this.ticket?.area, Validators.required],
-      empresa: [this.ticket?.empresa, Validators.required],
-      codigoempresa: [this.ticket?.empresa.codigo],
-      estado: [this.ticket?.estado],
-      responsable: [this.ticket?.responsable],
-      solicita: [this.ticket?.solicita],
-      sistema: [this.ticket?.sistema],
+      area: [this.ticketRecibido?.area, Validators.required],
+      empresa: [this.ticketRecibido?.empresa, Validators.required],
+      codigoempresa: [this.ticketRecibido?.empresa.codigo],
+      estado: [this.ticketRecibido?.estado],
+      responsable: [this.ticketRecibido?.responsable],
+      solicita: [this.ticketRecibido?.solicita],
+      sistema: [this.ticketRecibido?.sistema],
       fecha: ['', Validators.required],
       titulo: ['', [Validators.required, Validators.maxLength(50)]],
       textoreclamo: ['', [Validators.required, Validators.maxLength(200)]],
@@ -125,31 +125,33 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['ticketRecibido'] && this.ticketRecibido) {
-    //   this.myForm.patchValue({
-    //     area: this.ticketRecibido.area,
-    //     empresa: this.ticketRecibido.empresa,
-    //     codigoempresa: this.ticketRecibido.empresa.codigo,
-    //     estado: 1,
-    //     responsable: this.ticketRecibido.responsable,
-    //     solicita: this.ticketRecibido.solicita,
-    //     codigosistema: 0,
-    //     fecha: this.ticketRecibido.fecha,
-    //     titulo: this.ticketRecibido.titulo,
-    //     textoreclamo: this.ticketRecibido.textoreclamo,
-    //     userid_atiende: this.ticketRecibido.userid_atiende,
-    //     codigotiporeclamo: 0,
-    //     codigomenu: 0,
-    //     urgente: this.ticketRecibido.urgente || false,
-    //     helpdesk: true,
-    //     tipoticket: 0,
-    //     codigooperador_solicita: 0,
-    //     codigoresponsable: 0,
-    //   }
-    // );
+
+      const ticketActual = changes['ticketRecibido'].currentValue
+        this.myForm.patchValue({
+        area: this.ticketRecibido.area,
+        empresa: this.ticketRecibido.empresa,
+        codigoempresa: this.ticketRecibido.empresa.codigo,
+        estado: 1,
+        responsable: this.ticketRecibido.responsable,
+        solicita: this.ticketRecibido.solicita,
+        codigosistema: 0,
+        fecha: this.ticketRecibido.fecha,
+        titulo: this.ticketRecibido.titulo,
+        textoreclamo: this.ticketRecibido.textoreclamo,
+        userid_atiende: this.ticketRecibido.userid_atiende,
+        codigotiporeclamo: 0,
+        codigomenu: 0,
+        urgente: this.ticketRecibido.urgente || false,
+        helpdesk: true,
+        tipoticket: 0,
+        codigooperador_solicita: 0,
+        codigoresponsable: 0,
+      });
 
       this.botonVolverVisible = true;
+      console.log('Ticket actual: ', ticketActual)
+      //this.myForm.reset(ticketActual);
 
-      this.myForm.reset(this.ticketRecibido);
       //console.log('Valor del Form: ', this.myForm.value)
       console.log('Ticket: ', this.ticketRecibido)
 
@@ -157,6 +159,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
         this.ticketService.getEmpresa()
         .subscribe( emp => {
           this.empresas = emp
+          console.log('Empresas: ', this.empresas)
         })
       }
 
@@ -164,28 +167,39 @@ export class FormPageComponent implements OnInit, OnDestroy {
         this.ticketService.getArea()
         .subscribe( area => {
           this.areas = area
+          console.log('Areas: ', this.areas)
         })
       }
 
+      console.log('Empresas: ', this.empresas)
+      console.log('Areas: ', this.areas)
       const empresaSeleccionada = this.empresas ? this.empresas.find(e => e.codigo === this.ticketRecibido?.empresa.codigo) : this.ticketRecibido?.empresa
       const areaSeleccionada =  this.areas ? this.areas.find(a => a.codigo === this.ticketRecibido?.area.codigo) : this.ticketRecibido?.area
+
+      // const empresaSeleccionada = ticketActual.empresa || this.ticketRecibido.empresa
+      // const areaSeleccionada =  ticketActual.area || this.ticketRecibido.area
 
       console.log('Empresa seleccionada', empresaSeleccionada)
       console.log('Area seleccionada', areaSeleccionada)
 
-      if ( empresaSeleccionada ) {
-        this.myForm.get('empresa')?.setValue(empresaSeleccionada)
-      }
-      else{
-        this.myForm.get('empresa')?.setValue(this.ticketRecibido.empresa)
-      }
+      // if ( empresaSeleccionada ) {
+      //    this.myForm.get('empresa')?.setValue(empresaSeleccionada)
+      // }
+      // else{
+      //   this.myForm.get('empresa')?.setValue(this.ticketRecibido.empresa)
+      // }
 
-      if ( areaSeleccionada ) {
-        this.myForm.get('area')?.setValue(areaSeleccionada)
-      }
-      else{
-        this.myForm.get('area')?.setValue(this.ticket?.area)
-      }
+      // if ( areaSeleccionada ) {
+      //   this.myForm.get('area')?.setValue(areaSeleccionada)
+      // }
+      // else{
+      //   this.myForm.get('area')?.setValue(this.ticket?.area)
+      // }
+
+      this.myForm.patchValue({
+        empresa: empresaSeleccionada,
+        area: areaSeleccionada
+      });
 
     }
   }
