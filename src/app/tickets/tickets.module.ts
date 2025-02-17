@@ -14,13 +14,16 @@ import { ListPageComponent } from './pages/list-page/list-page.component';
 import { HomeComponent } from './pages/home/home.component';
 import { SharedModule } from './shared/shared.module';
 
+
+
 @NgModule({
   declarations: [
     DetailsPageComponent,
     FormPageComponent,
     LayoutPageComponent,
     ListPageComponent,
-    HomeComponent
+    HomeComponent,
+
   ],
   imports: [
     CommonModule,
@@ -36,7 +39,7 @@ import { SharedModule } from './shared/shared.module';
     FormPageComponent,
     LayoutPageComponent,
     ListPageComponent,
-    HomeComponent
+    HomeComponent,
   ]
 })
 export class TicketsModule { }

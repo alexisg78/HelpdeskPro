@@ -29,7 +29,7 @@ export class ListPageComponent implements OnInit{
 
   getTicket(item:HelpDesk, id: number){
     let pos: number;
-    this.router.navigate([`home/details`, id]);
+    this.router.navigate([`helpdesk/details`, id]);
     pos = this.tickets.findIndex(ticket => ticket.codigoppal === id);
     this.selectRow(item)
   }
