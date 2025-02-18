@@ -62,9 +62,10 @@ export class FormPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.myForm=  this.fb.group({
+      codigoppal: 0,
       area: [this.ticketRecibido?.area, Validators.required],
       empresa: [this.ticketRecibido?.empresa, Validators.required],
-      codigoempresa: [this.ticketRecibido?.empresa.codigo],
+      //codigoempresa: [this.ticketRecibido?.empresa.codigo],
       estado: [this.ticketRecibido?.estado],
       responsable: [this.ticketRecibido?.responsable],
       solicita: [this.ticketRecibido?.solicita],
@@ -113,9 +114,10 @@ export class FormPageComponent implements OnInit, OnDestroy {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['ticketRecibido'] && this.ticketRecibido) {
       this.myForm.patchValue({
+        codigoppal: this.ticketRecibido.codigoppal,
         area: this.ticketRecibido.area,
         empresa: this.ticketRecibido.empresa,
-        codigoempresa: this.ticketRecibido.empresa.codigo,
+        // codigoempresa: this.ticketRecibido.empresa.codigo,
         estado: 1,
         responsable: this.ticketRecibido.responsable.descripcion,
         solicita: this.ticketRecibido.solicita.descripcion,
@@ -159,7 +161,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
     this.myForm.patchValue({
       empresa: empresaSeleccionada,
-      codigoempresa: empresaSeleccionada.codigo,
+      // codigoempresa: empresaSeleccionada.codigo,
       area: areaSeleccionada
     });
   }
@@ -170,7 +172,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
     if (empresaSeleccionada) {
       const { codigo }= empresaSeleccionada
       this.myForm.patchValue({
-      codigoempresa: codigo
+      // codigoempresa: codigo
     })
 
     if (!empresaSeleccionada) return
@@ -290,7 +292,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   selectItem(result: any, searchbar: any, isOp: boolean) {
     const per= result.descripcion
-    console.log('select item: ', per)
+    // console.log('select item: ', per)
 
     if (isOp) {
       this.isOperador= true
@@ -314,7 +316,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
-    const msjExito= 'Ticket enviado con éxito!'
+    const msjExito= 'El Ticket fue enviado con éxito!'
 
     if (this.myForm.invalid) {
       this.sweetAlertservice.toast_alerta('Ingrese datos requeridos!', 1000, 'warning')
@@ -327,91 +329,30 @@ export class FormPageComponent implements OnInit, OnDestroy {
     this.myForm.patchValue({ solicita: this.buscaOperador })
     this.myForm.patchValue({ responsable: this.buscaResponsable })
 
-    const {
-        codigoppal,
-        area,
-        empresa,
-        estado,
-        responsable,
-        solicita,
-        sistema,
-        fecha,
-        titulo,
-        textoreclamo,
-        userid_atiende,
-        codigotiporeclamo,
-        codigomenu,
-        urgente,
-        helpdesk,
-        tipoticket
-    } = this.myForm.value
+    let post_ticket: HelpDesk = this.myForm.value
+    console.log('Objeto enviado al backend: ', post_ticket);
 
-    this.enviarHelpdesk = {
-      codigoppal,
-      area,
-      empresa,
-      estado,
-      responsable,
-      solicita,
-      sistema,
-      fecha,
-      titulo,
-      textoreclamo,
-      userid_atiende,
-      codigotiporeclamo,
-      codigomenu,
-      urgente,
-      helpdesk,
-      tipoticket
-    }
+    if (!post_ticket) return
 
+    this.ticketService.postTickets(post_ticket)
+      .subscribe( {
+        next: (response) => {
+          this.inicializaForm();
+          this.isLoading= false;
+          this.sweetAlertservice.toast_alerta( msjExito, 1000, 'success' );
+        },
+        error: (err) => {
+          console.error('Error al enviar el ticket:', err);
+          this.isLoading= false;
+          this.sweetAlertservice.toast_alerta( 'Error al enviar el ticket!', 1000, 'error' );
+        }
+      })
 
-    let post_ticket = this.cargarTicket
-    console.log('Objeto enviado al backend: ', this.myForm.value);
-    // console.log('Objeto enviado al backend: ', this.enviarHelpdesk);
-    this.inicializaForm();
-
-      // if (!this.enviarHelpdesk) return
-
-      this.sweetAlertservice.toast_alerta( msjExito, 1000, 'success' );
-
-      // this.ticketService.postTickets(this.enviarHelpdesk)
-      //   .subscribe( {
-      //     next: (response) => {
-      //       this.inicializaForm();
-      //       this.isLoading= false;
-      //       this.sweetAlertservice.toast_alerta( msjExito, 1000, 'success' );
-      //     },
-      //     error: (err) => {
-      //       console.error('Error al enviar el ticket:', err);
-      //       this.isLoading= false;
-      //     }
-      //   })
-
+      this.inicializaForm();
   }
 
   inicializaForm(){
-    this.myForm.reset({
-        fecha: '',
-        empresa: '',
-        titulo: '',
-        codigosistema: 0,
-        codigooperador_solicita: 0,
-        codigotiporeclamo: 0,
-        codigomenu: 0,
-        codigoestado: 1,
-        codigoresponsable: 0,
-        tipoticket: 1,
-        helpdesk: true,
-        textoreclamo: '',
-        nombreoperador: '',
-        area: '',
-        responsable: '',
-        userid_atiende: '',
-        codigoempresa: 0,
-        urgente: false,
-    })
-
+    this.myForm.reset()
     this.isLoading= false
   }
 
@@ -450,7 +391,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
   //       textoreclamo
   //     }
 
-      console.log('Objeto actualizado: ', this.ticketRecibido);
+      //console.log('Objeto actualizado: ', this.ticketRecibido);
       this.sweetAlertservice.toast_alerta( 'Datos actualizados correctamente!', 1000, 'info' );
       //this.ticketService.putTicket(this.enviarHelpdesk)
 

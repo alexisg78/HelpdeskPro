@@ -78,7 +78,7 @@ export class TicketsService  {
     return this.http.get<Area[]>(`${this.baseUrl}/Gestion/GetAreas`, { headers });
   }
 
-  postTickets(helpdesk: any): Observable<HelpDesk> {
+  postTickets(helpdesk: HelpDesk): Observable<HelpDesk> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
       'Content-Type': 'application/json'
