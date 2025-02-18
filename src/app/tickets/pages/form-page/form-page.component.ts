@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Area, CrearHelpDesk, Empresa, HelpDesk, Operador, Responsable } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { SweetAlertService } from 'src/app/sweet-alert/sweet-alert-service.service';
 
 @Component({
@@ -45,7 +45,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
   public showResults: boolean = false;
   public timeoutId: any;
 
-  public enviarHelpdesk!: CrearHelpDesk;
+  public enviarHelpdesk!: HelpDesk;
   public isLoading: boolean= false
 
   public myForm!: FormGroup;
@@ -80,39 +80,20 @@ export class FormPageComponent implements OnInit, OnDestroy {
       tipoticket: [1],
     });
 
-    // Agrupo todas las subscripciones en una sola instancia
-    this.subscriptions.add(
-      this.ticketService.getResponsables()
-      .subscribe( responsables => this.responsables = responsables )
-    );
-
-    this.subscriptions.add(
-      this.ticketService.getEmpresa()
-      .subscribe( emp => {
-        this.empresas = emp
-        //console.log('Empresas: ', this.empresas)
-      })
-    );
-
-    this.subscriptions.add(
-      this.ticketService.getArea()
-      .subscribe( area => this.areas= area )
-    );
-
-    // suscripción por defecto: codigoempresa = 1 para traer los operadores
-    // this.subscriptions.add(
-    //   this.ticketService.getOperadores(this.myForm.get('codigoempresa')?.value)
-    //   .subscribe( op => {
-    //       this.operadores = op;
-    //       // console.log('operadores: ', this.operadores)
-    //     })
-    // );
+    forkJoin({
+      responsables: this.ticketService.getResponsables(),
+      empresas: this.ticketService.getEmpresa(),
+      areas: this.ticketService.getArea()
+    }).subscribe(({ responsables, empresas, areas }) => {
+      this.responsables = responsables;
+      this.empresas = empresas;
+      this.areas = areas;
+    });
 
     this.subscriptions.add(
       this.ticketService.getOperadores(this.myForm.value.empresa)
       .subscribe( op => {
           this.operadores = op;
-          // console.log('operadores: ', this.operadores)
         })
     );
 
@@ -123,17 +104,21 @@ export class FormPageComponent implements OnInit, OnDestroy {
     this.inicializaForm();
   }
 
+  get cargarTicket(): HelpDesk {
+    let post_ticket: HelpDesk
+    post_ticket = this.myForm.value as HelpDesk;
+    return post_ticket
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['ticketRecibido'] && this.ticketRecibido) {
-
-      const ticketActual = changes['ticketRecibido'].currentValue
-        this.myForm.patchValue({
+      this.myForm.patchValue({
         area: this.ticketRecibido.area,
         empresa: this.ticketRecibido.empresa,
         codigoempresa: this.ticketRecibido.empresa.codigo,
         estado: 1,
-        responsable: this.ticketRecibido.responsable,
-        solicita: this.ticketRecibido.solicita,
+        responsable: this.ticketRecibido.responsable.descripcion,
+        solicita: this.ticketRecibido.solicita.descripcion,
         codigosistema: 0,
         fecha: this.ticketRecibido.fecha,
         titulo: this.ticketRecibido.titulo,
@@ -148,60 +133,35 @@ export class FormPageComponent implements OnInit, OnDestroy {
         codigoresponsable: 0,
       });
 
+      //Si las listas no están cargadas, cargar ambas
+      if (!this.empresas || !this.areas || this.empresas.length === 0 || this.areas.length === 0) {
+        forkJoin({
+          empresas: this.ticketService.getEmpresa(),
+          areas: this.ticketService.getArea()
+        }).subscribe(({ empresas, areas }) => {
+          this.empresas = empresas;
+          this.areas = areas;
+          this.patchEmpresaArea();
+        });
+      } else {
+        this.patchEmpresaArea();
+      }
+
       this.botonVolverVisible = true;
-      console.log('Ticket actual: ', ticketActual)
-      //this.myForm.reset(ticketActual);
-
-      //console.log('Valor del Form: ', this.myForm.value)
-      console.log('Ticket: ', this.ticketRecibido)
-
-      if ( !this.empresas ){
-        this.ticketService.getEmpresa()
-        .subscribe( emp => {
-          this.empresas = emp
-          console.log('Empresas: ', this.empresas)
-        })
-      }
-
-      if ( !this.areas ){
-        this.ticketService.getArea()
-        .subscribe( area => {
-          this.areas = area
-          console.log('Areas: ', this.areas)
-        })
-      }
-
-      console.log('Empresas: ', this.empresas)
-      console.log('Areas: ', this.areas)
-      const empresaSeleccionada = this.empresas ? this.empresas.find(e => e.codigo === this.ticketRecibido?.empresa.codigo) : this.ticketRecibido?.empresa
-      const areaSeleccionada =  this.areas ? this.areas.find(a => a.codigo === this.ticketRecibido?.area.codigo) : this.ticketRecibido?.area
-
-      // const empresaSeleccionada = ticketActual.empresa || this.ticketRecibido.empresa
-      // const areaSeleccionada =  ticketActual.area || this.ticketRecibido.area
-
-      console.log('Empresa seleccionada', empresaSeleccionada)
-      console.log('Area seleccionada', areaSeleccionada)
-
-      // if ( empresaSeleccionada ) {
-      //    this.myForm.get('empresa')?.setValue(empresaSeleccionada)
-      // }
-      // else{
-      //   this.myForm.get('empresa')?.setValue(this.ticketRecibido.empresa)
-      // }
-
-      // if ( areaSeleccionada ) {
-      //   this.myForm.get('area')?.setValue(areaSeleccionada)
-      // }
-      // else{
-      //   this.myForm.get('area')?.setValue(this.ticket?.area)
-      // }
-
-      this.myForm.patchValue({
-        empresa: empresaSeleccionada,
-        area: areaSeleccionada
-      });
-
     }
+  }
+
+  patchEmpresaArea() {
+    const empresaSeleccionada = this.empresas ? this.empresas.find(e => e.codigo === this.ticketRecibido?.empresa.codigo) : this.ticketRecibido?.empresa
+    const areaSeleccionada =  this.areas ? this.areas.find(a => a.codigo === this.ticketRecibido?.area.codigo) : this.ticketRecibido?.area
+
+    if (!empresaSeleccionada || !areaSeleccionada) return;
+
+    this.myForm.patchValue({
+      empresa: empresaSeleccionada,
+      codigoempresa: empresaSeleccionada.codigo,
+      area: areaSeleccionada
+    });
   }
 
   // Dependiendo de la empresa seleccionada, traigo los operadores desde el servicio
@@ -213,7 +173,6 @@ export class FormPageComponent implements OnInit, OnDestroy {
       codigoempresa: codigo
     })
 
-    //console.log('Codigo de la empresa seleccionada:', codigo);
     if (!empresaSeleccionada) return
     this.subscriptions.add(
       this.ticketService.getOperadores(empresaSeleccionada)
@@ -224,34 +183,30 @@ export class FormPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  buscar_codPersona(isOp: boolean){
-
-    if (isOp && this.myForm.value.nombreoperador.length > 0){
+  buscar_codPersona(isOp: boolean, pers: string){
+    if ( isOp && this.myForm.value.solicita ){
       // es operador
-      this.buscaOperador = this.operadores.filter( op => op.descripcion.trim().toUpperCase() === this.myForm.value.nombreoperador.trim().toUpperCase() )
-      let codOpe: number= 0
-      if (!this.buscaOperador[0]) return;
-      codOpe= this.buscaOperador[0].codigo
-      this.myForm.patchValue({ codigooperador_solicita: codOpe })
+      this.buscaOperador = this.operadores.find( op => op.descripcion.trim().toUpperCase() === pers.trim().toUpperCase() );
+
+      if ( !this.buscaOperador ) return;
+      this.myForm.patchValue({ solicita: this.buscaOperador.descripcion })
     }
 
-    if (!isOp && this.myForm.value.responsable.length > 0 ) {
+    if ( !isOp && this.myForm.value.responsable ) {
       // es responsable
-      this.buscaResponsable = this.responsables.filter( op => op.descripcion.trim().toUpperCase() === this.myForm.value.responsable.trim().toUpperCase() )
+      this.buscaResponsable = this.responsables.find( op => op.descripcion.trim().toUpperCase() === pers.trim().toUpperCase() );
 
-      let codRespo: number= 0
-      if (!this.buscaResponsable[0]) return;
-      codRespo= this.buscaResponsable[0].codigo;
-      this.myForm.patchValue({ codigoresponsable: codRespo })
+      if ( !this.buscaResponsable ) return;
+      this.myForm.patchValue({ responsable: this.buscaResponsable.descripcion })
     }
 
   }
 
   onSearchbarChange(event: any, controlName: string, isOp: boolean): void {
     this.isOperador= isOp
-    this.myForm.patchValue({ [controlName]: event.detail.value.toUpperCase() });
-    // this.buscar_Responsable()
-    this.buscar_codPersona(this.isOperador)
+
+    const pers= event.detail.value.toUpperCase()
+    this.buscar_codPersona(this.isOperador, pers)
   }
 
   handleInputOperador(event: Event) {
@@ -334,11 +289,13 @@ export class FormPageComponent implements OnInit, OnDestroy {
   }
 
   selectItem(result: any, searchbar: any, isOp: boolean) {
+    const per= result.descripcion
+    console.log('select item: ', per)
 
     if (isOp) {
       this.isOperador= true
-      this.myForm.patchValue({ nombreoperador: result.descripcion }); // Actualiza el formulario
-      searchbar.value = result.descripcion;
+      //this.myForm.patchValue({ solicita: per }); // Actualiza el formulario
+      searchbar.value = per;
 
       this.buscarOper = [];
       this.showResults = false;
@@ -346,14 +303,14 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
     if (!isOp) {
       this.isOperador= false
-      this.myForm.patchValue({ responsable: result.descripcion }); // Actualiza el formulario
-      searchbar.value = result.descripcion;
+      //this.myForm.patchValue({ responsable: per }); // Actualiza el formulario
+      searchbar.value = per;
 
       this.buscarResp = [];
       this.showResults = false;
     }
 
-    this.buscar_codPersona(this.isOperador)
+    this.buscar_codPersona(this.isOperador, per)
   }
 
   onSave() {
@@ -366,53 +323,70 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
     this.isLoading= true;
 
-    const { area,
-            empresa,
-            titulo,
-            codigosistema,
-            codigooperador_solicita,
-            codigotiporeclamo,
-            codigomenu,
-            codigoestado,
-            codigoresponsable,
-            tipoticket,
-            helpdesk,
-            textoreclamo
-          } = this.myForm.value
+    //seteo los objetos solicita y responsable
+    this.myForm.patchValue({ solicita: this.buscaOperador })
+    this.myForm.patchValue({ responsable: this.buscaResponsable })
 
-      this.enviarHelpdesk = {
-            area,
-            empresa,
-            titulo,
-            codigooperador_solicita,
-            codigosistema,
-            codigotiporeclamo,
-            codigomenu,
-            codigoestado,
-            codigoresponsable,
-            tipoticket,
-            helpdesk,
-            textoreclamo
-          }
+    const {
+        codigoppal,
+        area,
+        empresa,
+        estado,
+        responsable,
+        solicita,
+        sistema,
+        fecha,
+        titulo,
+        textoreclamo,
+        userid_atiende,
+        codigotiporeclamo,
+        codigomenu,
+        urgente,
+        helpdesk,
+        tipoticket
+    } = this.myForm.value
 
-      this.inicializaForm();
-      if (!this.enviarHelpdesk) return
+    this.enviarHelpdesk = {
+      codigoppal,
+      area,
+      empresa,
+      estado,
+      responsable,
+      solicita,
+      sistema,
+      fecha,
+      titulo,
+      textoreclamo,
+      userid_atiende,
+      codigotiporeclamo,
+      codigomenu,
+      urgente,
+      helpdesk,
+      tipoticket
+    }
 
-      // console.log('Objeto enviado al backend: ', this.enviarHelpdesk);
-      // this.sweetAlertservice.toast_alerta( msjExito, 1000, 'success' );
 
-      this.ticketService.postTickets(this.enviarHelpdesk)
-        .subscribe( {
-          next: (response) => {
-            this.inicializaForm();
-            this.isLoading= false;
-            this.sweetAlertservice.toast_alerta( msjExito, 1000, 'success' );
-          },
-          error: (err) => {
-            console.error('Error al enviar el ticket:', err);
-            this.isLoading= false;
-          }
-        })
+    let post_ticket = this.cargarTicket
+    console.log('Objeto enviado al backend: ', this.myForm.value);
+    // console.log('Objeto enviado al backend: ', this.enviarHelpdesk);
+    this.inicializaForm();
+
+      // if (!this.enviarHelpdesk) return
+
+      this.sweetAlertservice.toast_alerta( msjExito, 1000, 'success' );
+
+      // this.ticketService.postTickets(this.enviarHelpdesk)
+      //   .subscribe( {
+      //     next: (response) => {
+      //       this.inicializaForm();
+      //       this.isLoading= false;
+      //       this.sweetAlertservice.toast_alerta( msjExito, 1000, 'success' );
+      //     },
+      //     error: (err) => {
+      //       console.error('Error al enviar el ticket:', err);
+      //       this.isLoading= false;
+      //     }
+      //   })
 
   }
 
@@ -461,20 +435,20 @@ export class FormPageComponent implements OnInit, OnDestroy {
         textoreclamo
       } = this.myForm.value
 
-  this.enviarHelpdesk = {
-        area,
-        empresa,
-        titulo,
-        codigooperador_solicita,
-        codigosistema,
-        codigotiporeclamo,
-        codigomenu,
-        codigoestado,
-        codigoresponsable,
-        tipoticket,
-        helpdesk,
-        textoreclamo
-      }
+  // this.enviarHelpdesk = {
+  //       area,
+  //       empresa,
+  //       titulo,
+  //       codigooperador_solicita,
+  //       codigosistema,
+  //       codigotiporeclamo,
+  //       codigomenu,
+  //       codigoestado,
+  //       codigoresponsable,
+  //       tipoticket,
+  //       helpdesk,
+  //       textoreclamo
+  //     }
 
       console.log('Objeto actualizado: ', this.ticketRecibido);
       this.sweetAlertservice.toast_alerta( 'Datos actualizados correctamente!', 1000, 'info' );

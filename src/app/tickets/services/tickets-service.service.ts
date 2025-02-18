@@ -37,9 +37,6 @@ export class TicketsService  {
     });
 
     return this.http.get<HelpDesk>(`${this.baseUrl}/Gestion/getItemHelpDesk/${id}`, {headers})
-      // .pipe(
-      //   catchError( error => of( undefined ) )
-      //  )
   }
 
   // Responsables

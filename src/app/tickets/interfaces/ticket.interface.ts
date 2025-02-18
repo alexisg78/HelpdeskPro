@@ -17,45 +17,6 @@ export interface HelpDesk {
   tipoticket: number;
 }
 
-// {
-//   "codigoppal": 0,
-//   "area": {
-//     "codigo": 0,
-//     "descripcion": "string"
-//   },
-//   "empresa": {
-//     "codigo": 0,
-//     "descripcion": "string"
-//   },
-//   "estado": {
-//     "codigo": 0,
-//     "descripcion": "string",
-//     "color": 0
-//   },
-//   "responsable": {
-//     "codigo": 0,
-//     "descripcion": "string"
-//   },
-//   "solicita": {
-//     "codigo": 0,
-//     "descripcion": "string"
-//   },
-//   "sistema": {
-//     "codigo": 0,
-//     "descripcion": "string"
-//   },
-//   "fecha": "string",
-//   "titulo": "string",
-//   "textoreclamo": "string",
-//   "userid_atiende": "string",
-//   "codigotiporeclamo": 0,
-//   "codigomenu": 0,
-//   "urgente": true,
-//   "helpdesk": true,
-//   "tipoticket": 0
-// }
-
-
 export interface CrearHelpDesk {
   area:Area;
   empresa: Empresa;
