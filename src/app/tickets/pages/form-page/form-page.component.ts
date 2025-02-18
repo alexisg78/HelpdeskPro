@@ -1,7 +1,7 @@
 import { Component,  Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
-import { Area, CrearHelpDesk, Empresa, HelpDesk, Operador, Responsable } from '../../interfaces/ticket.interface';
+import { Area, Empresa, HelpDesk, Operador, Responsable } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
 import { forkJoin, Subscription } from 'rxjs';
 import { SweetAlertService } from 'src/app/sweet-alert/sweet-alert-service.service';
@@ -66,10 +66,10 @@ export class FormPageComponent implements OnInit, OnDestroy {
       area: [this.ticketRecibido?.area, Validators.required],
       empresa: [this.ticketRecibido?.empresa, Validators.required],
       //codigoempresa: [this.ticketRecibido?.empresa.codigo],
-      estado: [this.ticketRecibido?.estado],
+      estado: [{ codigo: 1, descripcion: 'SIN RECIBIR' }],
       responsable: [this.ticketRecibido?.responsable],
       solicita: [this.ticketRecibido?.solicita],
-      sistema: [this.ticketRecibido?.sistema],
+      sistema: [{ codigo: 1, descripcion: '' }],
       fecha: ['', Validators.required],
       titulo: ['', [Validators.required, Validators.maxLength(50)]],
       textoreclamo: ['', [Validators.required, Validators.maxLength(200)]],
@@ -117,8 +117,9 @@ export class FormPageComponent implements OnInit, OnDestroy {
         codigoppal: this.ticketRecibido.codigoppal,
         area: this.ticketRecibido.area,
         empresa: this.ticketRecibido.empresa,
-        // codigoempresa: this.ticketRecibido.empresa.codigo,
-        estado: 1,
+        //sistema: this.ticketRecibido.sistema,
+        sistema: { codigo: 1, descripcion: '' },
+        estado: this.ticketRecibido.estado,
         responsable: this.ticketRecibido.responsable.descripcion,
         solicita: this.ticketRecibido.solicita.descripcion,
         codigosistema: 0,
@@ -130,7 +131,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
         codigomenu: 0,
         urgente: this.ticketRecibido.urgente || false,
         helpdesk: true,
-        tipoticket: 0,
+        tipoticket: 1,
         codigooperador_solicita: 0,
         codigoresponsable: 0,
       });
@@ -170,7 +171,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
   onEmpresaChange(event: any) {
     const empresaSeleccionada = this.myForm.get('empresa')?.value;
     if (empresaSeleccionada) {
-      const { codigo }= empresaSeleccionada
+      //const { codigo }= empresaSeleccionada
       this.myForm.patchValue({
       // codigoempresa: codigo
     })
@@ -292,7 +293,6 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   selectItem(result: any, searchbar: any, isOp: boolean) {
     const per= result.descripcion
-    // console.log('select item: ', per)
 
     if (isOp) {
       this.isOperador= true
@@ -330,7 +330,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
     this.myForm.patchValue({ responsable: this.buscaResponsable })
 
     let post_ticket: HelpDesk = this.myForm.value
-    console.log('Objeto enviado al backend: ', post_ticket);
+    //console.log('Objeto enviado al backend: ', post_ticket);
 
     if (!post_ticket) return
 
@@ -361,39 +361,27 @@ export class FormPageComponent implements OnInit, OnDestroy {
   }
 
   onUpdate(){
-      const {
-        area,
-        empresa,
-        titulo,
-        codigosistema,
-        codigooperador_solicita,
-        codigotiporeclamo,
-        codigomenu,
-        codigoestado,
-        codigoresponsable,
-        tipoticket,
-        helpdesk,
-        textoreclamo
-      } = this.myForm.value
 
-  // this.enviarHelpdesk = {
-  //       area,
-  //       empresa,
-  //       titulo,
-  //       codigooperador_solicita,
-  //       codigosistema,
-  //       codigotiporeclamo,
-  //       codigomenu,
-  //       codigoestado,
-  //       codigoresponsable,
-  //       tipoticket,
-  //       helpdesk,
-  //       textoreclamo
-  //     }
+    let post_ticket: HelpDesk = this.myForm.value
 
-      //console.log('Objeto actualizado: ', this.ticketRecibido);
-      this.sweetAlertservice.toast_alerta( 'Datos actualizados correctamente!', 1000, 'info' );
-      //this.ticketService.putTicket(this.enviarHelpdesk)
+    //seteo los objetos solicita y responsable dado que del form sino me toma los valores en string de los searchBox
+    post_ticket.solicita= this.ticketRecibido?.solicita || { codigo: 0 , descripcion: '' }
+    post_ticket.responsable= this.ticketRecibido?.responsable || { codigo: 0 , descripcion: '' }
+
+    post_ticket.tipoticket= this.ticketRecibido?.tipoticket || 1
+
+    console.log('Ticket actualizado: ', post_ticket);
+
+    this.ticketService.putTicket(post_ticket)
+    .subscribe({
+        next: (response) => {
+          this.sweetAlertservice.toast_alerta('Datos actualizados correctamente!', 1000, 'info');
+        },
+        error: (err) => {
+          console.error('Error al actualizar ticket:', err);
+          this.sweetAlertservice.toast_alerta('Error al actualizar datos.', 2000, 'error');
+        },
+    });
 
   }
 

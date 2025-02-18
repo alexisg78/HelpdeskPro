@@ -1,7 +1,7 @@
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Area, Empresa, HelpDesk, Operador, Responsable } from '../interfaces/ticket.interface';
 import { AuthService } from './../../auth/services/auth-service.service';
@@ -87,15 +87,39 @@ export class TicketsService  {
     return this.http.post<HelpDesk>(`${this.baseUrl}/Gestion/PostHelpDesk/`, helpdesk, { headers })
   }
 
-  putTicket(helpdesk: any): Observable<HelpDesk> {
-    const { codigoppal } = helpdesk
+  // putTicket(helpdesk: HelpDesk): Observable<HelpDesk> {
+  //   const { codigoppal } = helpdesk
+  //   const headers = new HttpHeaders({
+  //     'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
+  //     'Content-Type': 'application/json'
+  //   });
+
+  //   return this.http.put<HelpDesk>(`${this.baseUrl}/Gestion/putHelpDesk/${ codigoppal }`, helpdesk, {headers})
+
+  // }
+
+  putTicket(helpdesk: HelpDesk): Observable<HelpDesk> {
+    if (!helpdesk?.codigoppal) {
+      console.error('Error: El código principal del ticket es inválido');
+      return throwError(() => new Error('Código principal inválido'));
+    }
+
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
+      'Authorization': `Bearer ${this.token}`,
       'Content-Type': 'application/json'
     });
 
-    return this.http.put<HelpDesk>(`${this.baseUrl}/Gestion/putHelpDesk/${ codigoppal }`, helpdesk, {headers})
-
+    return this.http.put<HelpDesk>(
+      `${this.baseUrl}/Gestion/putHelpDesk/${helpdesk.codigoppal}`,
+      helpdesk,
+      { headers }
+    ).pipe(
+      catchError((error) => {
+        console.error('Error al actualizar el ticket:', error);
+        return throwError(() => new Error('No se pudo actualizar el ticket.'));
+      })
+    );
   }
+
 
 }
