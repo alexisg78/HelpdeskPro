@@ -44,7 +44,7 @@
     Operador
   </ion-label>
   <ion-searchbar class="p-mb-2 p-w-full font-bold text-black-alpha-80"
-                formControlName="nombreoperador"
+                formControlName="solicita"
                 #searchbarOpe
                 placeholder="Operador"
                 (ionChange)="onSearchbarChange($event, 'operador', true)"
@@ -100,13 +100,14 @@
   </ion-input>
 
   <!-- reclamo  -->
-  <ion-textarea class="p-mb-2 p-w-full font-medium text-black-alpha-80"
+  <ion-textarea class="p-mb-2 p-w-full font-medium text-black-alpha-80 h-8rem p-h-full"
     formControlName="textoreclamo"
     label="Reclamo"
     labelPlacement="floating"
     fill="solid"
     placeholder="Ingrese el requerimiento"
-    style="overflow-y: auto;">
+    style="overflow-y: auto;"
+    [autoGrow]="true">
   </ion-textarea>
 
   <!-- urgente -->

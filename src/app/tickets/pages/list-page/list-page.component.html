@@ -33,12 +33,12 @@
           <td class="text-base font-medium select-none p-text-center nowrap">{{ item.fecha }}</td>
           <td class="text-base font-medium select-none p-text-center truncate">{{ item.titulo }}</td>
           <td class="text-base font-medium text-overflow-ellipsis select-none p-text-center truncate">{{ item.textoreclamo }}</td>
-          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.nombreoperador }}</td>
-          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.area }}</td>
-          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.responsable }}</td>
+          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.solicita.descripcion }}</td>
+          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.area.descripcion }}</td>
+          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.responsable.descripcion }}</td>
           <td class="text-base font-medium select-none p-text-center nowrap">{{ item.userid_atiende }}</td>
-          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.empresa }}</td>
-          <td class="text-base font-medium select-none status p-text-center nowrap">{{ item.estado }}</td>
+          <td class="text-base font-medium select-none p-text-center nowrap">{{ item.empresa.descripcion }}</td>
+          <td class="text-base font-medium select-none status p-text-center nowrap">{{ item.estado?.descripcion }}</td>
           <td class="text-base font-medium select-none p-text-center nowrap">{{ item.urgente }}</td>
           <td class="text-base font-medium select-none p-text-center nowrap">
             <ion-button (click)="getTicket(item, item.codigoppal)" color="primary" size="small">

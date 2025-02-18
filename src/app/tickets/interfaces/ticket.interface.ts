@@ -1,18 +1,20 @@
 export interface HelpDesk {
+  codigoppal: number;
+  area: Area;
+  empresa: Empresa;
+  estado?: Estado;
+  responsable: Responsable;
+  solicita: Operador;
+  sistema: Sistema;
   fecha: string;
   titulo: string;
   textoreclamo: string;
-  nombreoperador: string;
-  area: Area;
-  responsable: string;
   userid_atiende: string;
-  empresa: Empresa;
-  codigoppal: number;
-  codigoestado: number;
-  estado: string;
-  color: number;
+  codigotiporeclamo?: number;
+  codigomenu?: number;
   urgente: boolean;
-  codigoempresa: number;
+  helpdesk: boolean;
+  tipoticket: number;
 }
 
 export interface CrearHelpDesk {
@@ -47,6 +49,12 @@ export interface Empresa {
   descripcion: string
 }
 
+export interface Estado {
+  codigo: 0,
+  descripcion: "string",
+  color: 0
+}
+
 export interface TipoReclamo {
     codigo: number
     descripcion: string
@@ -72,7 +80,8 @@ export interface Operador {
   descripcion: string
 }
 
-export interface Estado {
+export interface Sistema {
   codigo: number
   descripcion: string
 }
+
