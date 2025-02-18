@@ -370,8 +370,6 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
     post_ticket.tipoticket= this.ticketRecibido?.tipoticket || 1
 
-    console.log('Ticket actualizado: ', post_ticket);
-
     this.ticketService.putTicket(post_ticket)
     .subscribe({
         next: (response) => {
