@@ -50,9 +50,8 @@ export interface Empresa {
 }
 
 export interface Estado {
-  codigo: 0,
-  descripcion: "string",
-  color: 0
+  codigo: number,
+  descripcion: string,
 }
 
 export interface TipoReclamo {

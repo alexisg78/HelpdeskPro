@@ -39,6 +39,19 @@
     </ion-select-option>
   </ion-select>
 
+  <!-- estado -->
+  <ion-select class="p-mb-2 p-w-full mb-2 font-medium text-black-alpha-80"
+    formControlName="estado"
+    label="Estado"
+    label-placement="floating"
+    fill="solid">
+
+    <ion-select-option [value]="item"
+        *ngFor="let item of estados">
+        {{item.descripcion}}
+    </ion-select-option>
+  </ion-select>
+
   <!-- Operadores -->
   <ion-label class="p-mb-2 p-w-full mt-2 font-medium text-black-alpha-80">
     Operador
@@ -140,7 +153,7 @@
     type="click"
     color="primary"
     (click)="onUpdate()">
-    Actualizar
+    Grabar
   </ion-button>
 
   <ion-button *ngIf="botonVolverVisible; hidden"

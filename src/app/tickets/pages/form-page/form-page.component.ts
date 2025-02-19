@@ -1,7 +1,7 @@
 import { Component,  Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
-import { Area, Empresa, HelpDesk, Operador, Responsable } from '../../interfaces/ticket.interface';
+import { Area, Empresa, Estado, HelpDesk, Operador, Responsable } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
 import { forkJoin, Subscription } from 'rxjs';
 import { SweetAlertService } from 'src/app/sweet-alert/sweet-alert-service.service';
@@ -37,6 +37,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   public empresas!: Empresa[];
   public areas!: Area[];
+  public estados!: Estado[];
 
   public buscarOper!: Operador[];
   public buscarResp!: Responsable[];
@@ -61,12 +62,19 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
+    this.estados= [
+      { codigo: 1, descripcion: "SIN RECIBIR" },
+      { codigo: 2, descripcion: "RECIBIDO" },
+      { codigo: 3, descripcion: "EN EJECUCIÓN" },
+      { codigo: 4, descripcion: "EN ESPERA" },
+    ]
+
     this.myForm=  this.fb.group({
       codigoppal: 0,
       area: [this.ticketRecibido?.area, Validators.required],
       empresa: [this.ticketRecibido?.empresa, Validators.required],
       //codigoempresa: [this.ticketRecibido?.empresa.codigo],
-      estado: [{ codigo: 1, descripcion: 'SIN RECIBIR' }],
+      estado: this.estados[0],
       responsable: [this.ticketRecibido?.responsable],
       solicita: [this.ticketRecibido?.solicita],
       sistema: [{ codigo: 1, descripcion: '' }],
@@ -330,23 +338,23 @@ export class FormPageComponent implements OnInit, OnDestroy {
     this.myForm.patchValue({ responsable: this.buscaResponsable })
 
     let post_ticket: HelpDesk = this.myForm.value
-    //console.log('Objeto enviado al backend: ', post_ticket);
+    console.log('Objeto enviado al backend: ', post_ticket);
 
-    if (!post_ticket) return
+    // if (!post_ticket) return
 
-    this.ticketService.postTickets(post_ticket)
-      .subscribe( {
-        next: (response) => {
-          this.inicializaForm();
-          this.isLoading= false;
-          this.sweetAlertservice.toast_alerta( msjExito, 1000, 'success' );
-        },
-        error: (err) => {
-          console.error('Error al enviar el ticket:', err);
-          this.isLoading= false;
-          this.sweetAlertservice.toast_alerta( 'Error al enviar el ticket!', 1000, 'error' );
-        }
-      })
+    // this.ticketService.postTickets(post_ticket)
+    //   .subscribe( {
+    //     next: (response) => {
+    //       this.inicializaForm();
+    //       this.isLoading= false;
+    //       this.sweetAlertservice.toast_alerta( msjExito, 1000, 'success' );
+    //     },
+    //     error: (err) => {
+    //       console.error('Error al enviar el ticket:', err);
+    //       this.isLoading= false;
+    //       this.sweetAlertservice.toast_alerta( 'Error al enviar el ticket!', 1000, 'error' );
+    //     }
+    //   })
 
       this.inicializaForm();
   }
