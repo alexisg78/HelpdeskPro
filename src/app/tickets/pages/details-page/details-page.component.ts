@@ -15,7 +15,7 @@ export class DetailsPageComponent implements OnInit{
   public idParams: string | null = ''
   public idTicket: number = 0;
   public ticket!: HelpDesk | null
-  public botonVolverVisible: boolean = false;
+  public botonVisible: boolean = false;
 
   constructor(private route: ActivatedRoute, private ticketService: TicketsService ) {}
 

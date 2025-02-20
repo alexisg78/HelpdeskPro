@@ -17,27 +17,11 @@ export interface HelpDesk {
   tipoticket: number;
 }
 
-export interface CrearHelpDesk {
-  area:Area;
-  empresa: Empresa;
-  titulo: string;
-  codigooperador_solicita: number;
-  codigosistema?: number;
-  codigotiporeclamo?: number;
-  codigomenu?: number;
-  codigoestado?: number;
-  codigoresponsable: number;
-  tipoticket?: number;
-  helpdesk?: boolean;
-  textoreclamo: string
-}
-
 export interface CredencialesAuth {
   username: string;
   password: string;
   token?: string;
 }
-
 
 export interface Area {
   codigo: number
@@ -50,8 +34,9 @@ export interface Empresa {
 }
 
 export interface Estado {
-  codigo: number,
-  descripcion: string,
+  codigo: number
+  descripcion: string
+  color: number
 }
 
 export interface TipoReclamo {
@@ -80,6 +65,11 @@ export interface Operador {
 }
 
 export interface Sistema {
+  codigo: number
+  descripcion: string
+}
+
+export interface Seguimiento {
   codigo: number
   descripcion: string
 }

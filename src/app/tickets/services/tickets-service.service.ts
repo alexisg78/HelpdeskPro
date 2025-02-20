@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Area, Empresa, HelpDesk, Operador, Responsable } from '../interfaces/ticket.interface';
+import { Area, Empresa, Estado, HelpDesk, Operador, Responsable, Seguimiento } from '../interfaces/ticket.interface';
 import { AuthService } from './../../auth/services/auth-service.service';
 
 
@@ -13,7 +13,6 @@ import { AuthService } from './../../auth/services/auth-service.service';
 export class TicketsService  {
 
   private baseUrl: string = environment.baseUrl;
-  //private subUrl: string = 'HelpDesk?pageNumber=0'
   private token: string= ''
 
   constructor(private http: HttpClient, private authService: AuthService) {
@@ -26,7 +25,6 @@ export class TicketsService  {
       'Content-Type': 'application/json'
     });
 
-    // ${this.subUrl}
     return this.http.get<HelpDesk[]>(`${this.baseUrl}/Gestion/Helpdesk`, { headers });
   }
 
@@ -76,6 +74,24 @@ export class TicketsService  {
     });
 
     return this.http.get<Area[]>(`${this.baseUrl}/Gestion/GetAreas`, { headers });
+  }
+
+  getEstado(): Observable<Estado[]> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Estado[]>(`${this.baseUrl}/Gestion/GetEstados`, { headers });
+  }
+
+  getSeguimiento(id: number): Observable<Seguimiento> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<Seguimiento>(`${this.baseUrl}/Gestion/GetSeguimientoHelpdesk/${id}`, { headers });
   }
 
   postTickets(helpdesk: HelpDesk): Observable<HelpDesk> {

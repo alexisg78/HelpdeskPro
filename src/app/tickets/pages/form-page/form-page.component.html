@@ -27,7 +27,7 @@
   </ion-select>
 
   <!-- area -->
-  <ion-select class="p-mb-2 p-w-full mb-2 font-medium text-black-alpha-80"
+  <ion-select class="p-mb-2 p-w-full  font-medium text-black-alpha-80"
     formControlName="area"
     label="Área"
     label-placement="floating"
@@ -123,6 +123,18 @@
     [autoGrow]="true">
   </ion-textarea>
 
+  <!-- seguimiento  -->
+  <!-- <ion-textarea class="p-mb-2 p-w-full font-medium text-black-alpha-80 h-8rem p-h-full"
+    label="Seguimiento"
+    labelPlacement="floating"
+    fill="solid"
+    placeholder="Ingrese el requerimiento"
+    style="overflow-y: auto;"
+    [autoGrow]="true"
+    [disabled]="true"
+    >
+  </ion-textarea> -->
+
   <!-- urgente -->
   <div class="p-d-flex p-ai-center p-jc-between p-w-full">
     <ion-checkbox class="p-mb-2 mr-2 mt-2 font-medium text-black-alpha-80"
@@ -147,19 +159,28 @@
 
 </form>
 
-<!-- volver -->
+<!-- Botones de edición -->
 <div class="flex justify-content-end mt-0">
-  <ion-button *ngIf="botonVolverVisible; hidden"
+  <!-- <ion-button *ngIf="botonVisible; hidden"
+    type="click"
+    color="primary"
+    slot="start"
+    >
+    Seguimiento
+  </ion-button> -->
+
+  <ion-button  *ngIf="botonVisible; hidden"
     type="click"
     color="primary"
     (click)="onUpdate()">
     Grabar
   </ion-button>
 
-  <ion-button *ngIf="botonVolverVisible; hidden"
+  <ion-button *ngIf="botonVisible; hidden"
     type="click"
     color="primary"
     (click)="goBack()">
     Volver
   </ion-button>
 </div>
+

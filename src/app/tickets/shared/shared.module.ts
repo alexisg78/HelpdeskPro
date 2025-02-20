@@ -5,18 +5,22 @@ import { HeaderComponent } from './header/header.component';
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from './footer/footer.component';
 import { NavFooterComponent } from './nav-footer/nav-footer.component';
+import { ModalComponent } from './modal/modal.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent, NavFooterComponent],
+  declarations: [HeaderComponent, FooterComponent, NavFooterComponent, ModalComponent],
   imports: [
     CommonModule,
     IonicModule,
-    RouterModule
+    RouterModule,
+    FormsModule
   ],
   exports:[
     HeaderComponent,
     FooterComponent,
-    NavFooterComponent
+    NavFooterComponent,
+    ModalComponent
   ]
 })
 export class SharedModule { }
