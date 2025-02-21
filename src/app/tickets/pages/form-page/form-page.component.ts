@@ -92,6 +92,12 @@ export class FormPageComponent implements OnInit, OnDestroy {
       this.empresas = empresas;
       this.areas = areas;
       this.estados = estados
+
+      const estadoDefecto =  this.estados ? this.estados.find(e => e.codigo === 1) : this.ticketRecibido?.estado
+      this.myForm.patchValue({
+          estado: estadoDefecto,
+        });
+
     });
 
     this.subscriptions.add(
@@ -373,8 +379,6 @@ export class FormPageComponent implements OnInit, OnDestroy {
     post_ticket.responsable= this.ticketRecibido?.responsable || { codigo: 0 , descripcion: '' }
 
     post_ticket.tipoticket= this.ticketRecibido?.tipoticket || 1
-
-    // console.log('Objeto Actualizado Enviado al backend: ', post_ticket);
 
     this.ticketService.putTicket(post_ticket)
     .subscribe({
