@@ -94,6 +94,15 @@ export class TicketsService  {
     return this.http.get<Seguimiento>(`${this.baseUrl}/Gestion/GetSeguimientoHelpdesk/${id}`, { headers });
   }
 
+  postSeguimiento(seguimiento: Seguimiento): Observable<Seguimiento> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<Seguimiento>(`${this.baseUrl}/Gestion/PostSeguimientoHelpdesk/`, seguimiento, { headers })
+  }
+
   postTickets(helpdesk: HelpDesk): Observable<HelpDesk> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.token}`,  // Agrega el token en el header
