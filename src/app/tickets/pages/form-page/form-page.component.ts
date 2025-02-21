@@ -335,23 +335,22 @@ export class FormPageComponent implements OnInit, OnDestroy {
     this.myForm.patchValue({ responsable: this.buscaResponsable })
 
     let post_ticket: HelpDesk = this.myForm.value
-    console.log('Objeto enviado al backend: ', post_ticket);
 
-    // if (!post_ticket) return
+    if (!post_ticket) return
 
-    // this.ticketService.postTickets(post_ticket)
-    //   .subscribe( {
-    //     next: (response) => {
-    //       this.inicializaForm();
-    //       this.isLoading= false;
-    //       this.sweetAlertservice.toast_alerta( msjExito, 1000, 'success' );
-    //     },
-    //     error: (err) => {
-    //       console.error('Error al enviar el ticket:', err);
-    //       this.isLoading= false;
-    //       this.sweetAlertservice.toast_alerta( 'Error al enviar el ticket!', 1000, 'error' );
-    //     }
-    //   })
+    this.ticketService.postTickets(post_ticket)
+      .subscribe( {
+        next: (response) => {
+          this.inicializaForm();
+          this.isLoading= false;
+          this.sweetAlertservice.toast_alerta( msjExito, 1000, 'success' );
+        },
+        error: (err) => {
+          console.error('Error al enviar el ticket:', err);
+          this.isLoading= false;
+          this.sweetAlertservice.toast_alerta( 'Error al enviar el ticket!', 1000, 'error' );
+        }
+      })
 
       this.inicializaForm();
   }
@@ -377,16 +376,16 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
     console.log('Objeto Actualizado Enviado al backend: ', post_ticket);
 
-    // this.ticketService.putTicket(post_ticket)
-    // .subscribe({
-    //     next: (response) => {
-    //       this.sweetAlertservice.toast_alerta('Datos actualizados correctamente!', 1000, 'info');
-    //     },
-    //     error: (err) => {
-    //       console.error('Error al actualizar ticket:', err);
-    //       this.sweetAlertservice.toast_alerta('Error al actualizar datos.', 2000, 'error');
-    //     },
-    // });
+    this.ticketService.putTicket(post_ticket)
+    .subscribe({
+        next: (response) => {
+          this.sweetAlertservice.toast_alerta('Datos actualizados correctamente!', 1000, 'info');
+        },
+        error: (err) => {
+          console.error('Error al actualizar ticket:', err);
+          this.sweetAlertservice.toast_alerta('Error al actualizar datos.', 2000, 'error');
+        },
+    });
 
   }
 
