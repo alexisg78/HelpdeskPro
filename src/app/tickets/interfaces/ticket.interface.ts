@@ -70,7 +70,7 @@ export interface Sistema {
 }
 
 export interface Seguimiento {
-  codigo: number
-  descripcion: string
+  codigoppal: number
+  seguimiento: string
 }
 

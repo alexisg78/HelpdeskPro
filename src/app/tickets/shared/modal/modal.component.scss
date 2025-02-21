@@ -1,0 +1,9 @@
+ion-modal {
+  --height: 50%;
+  --border-radius: 16px;
+}
+
+ion-modal ion-toolbar {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+}
