@@ -374,7 +374,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
     post_ticket.tipoticket= this.ticketRecibido?.tipoticket || 1
 
-    console.log('Objeto Actualizado Enviado al backend: ', post_ticket);
+    // console.log('Objeto Actualizado Enviado al backend: ', post_ticket);
 
     this.ticketService.putTicket(post_ticket)
     .subscribe({
