@@ -8,7 +8,7 @@ import { take } from 'rxjs';
 @Component({
   selector: 'details-page',
   templateUrl: './details-page.component.html',
-  styles: ``,
+  styles: `:host {min-width: 221px;}`,
   standalone: false
 })
 export class DetailsPageComponent implements OnInit{

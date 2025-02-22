@@ -1,3 +1,12 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 600px;
+  min-width: 221px;
+  margin: auto;
+  padding: 1rem;
+}
+
 ion-modal {
   --height: 50%;
   --border-radius: 16px;
@@ -7,3 +16,4 @@ ion-modal ion-toolbar {
   --background: var(--ion-color-primary);
   --color: var(--ion-color-primary-contrast);
 }
+

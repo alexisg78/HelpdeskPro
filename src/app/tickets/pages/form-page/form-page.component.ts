@@ -14,6 +14,7 @@ import { SweetAlertService } from 'src/app/sweet-alert/sweet-alert-service.servi
     display: block;
     width: 100%;
     max-width: 600px;
+    min-width: 221px;
     margin: auto;
     padding: 1rem;
   }`,
