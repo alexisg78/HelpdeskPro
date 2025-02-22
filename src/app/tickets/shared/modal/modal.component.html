@@ -1,0 +1,46 @@
+<div class="border-solid border-primary-500 p-1 -mx-1 -mt-4 border-1">
+
+  <div class="mx-auto p-d-flex p-flex-column p-ai-center p-jc-center p-mx-auto p-p-1 p-shadow-2 p-border-round-lg p-fluid">
+
+    <ion-textarea class="p-mb-2 p-w-full font-medium text-black-alpha-80 h-8rem p-h-full"
+      label="Seguimiento"
+      labelPlacement="floating"
+      fill="solid"
+      placeholder="Ingrese el requerimiento"
+      style="overflow-y: auto;"
+      [autoGrow]="false"
+      [readonly]="true"
+      [(ngModel)]="textoSeguimiento"
+      >
+    </ion-textarea>
+    <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+      <ng-template>
+        <ion-header class="justify-content-center">
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button  (click)="cancel()">Cancelar</ion-button>
+            </ion-buttons>
+            <!-- <ion-title>Ingrese el seguimiento</ion-title> -->
+            <ion-buttons slot="end">
+              <ion-button (click)="confirm()" [strong]="true">Confirmar</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <ion-item>
+            <ion-input
+            label="Ingrese el seguimiento"
+            labelPlacement="stacked"
+            type="text"
+            placeholder="Seguimiento"
+            [(ngModel)]=  "seguimiento"
+            ></ion-input>
+          </ion-item>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+    <ion-button id="open-modal" expand="block">Seguimiento</ion-button>
+
+  </div>
+
+</div>

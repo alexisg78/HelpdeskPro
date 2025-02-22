@@ -1,7 +1,7 @@
 import { Component,  Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
-import { Area, Empresa, HelpDesk, Operador, Responsable } from '../../interfaces/ticket.interface';
+import { Area, Empresa, Estado, HelpDesk, Operador, Responsable, Seguimiento } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
 import { forkJoin, Subscription } from 'rxjs';
 import { SweetAlertService } from 'src/app/sweet-alert/sweet-alert-service.service';
@@ -14,6 +14,7 @@ import { SweetAlertService } from 'src/app/sweet-alert/sweet-alert-service.servi
     display: block;
     width: 100%;
     max-width: 600px;
+    min-width: 221px;
     margin: auto;
     padding: 1rem;
   }`,
@@ -25,32 +26,31 @@ export class FormPageComponent implements OnInit, OnDestroy {
   public ticketRecibido!: HelpDesk | null;
 
   @Input()
-  public botonVolverVisible: boolean= false;
+  public botonVisible: boolean= false;
 
   public ticket?: HelpDesk | null
-  public responsables!: Responsable[];
-  public operadores!: Operador[];
-
-  public buscaOperador: any;
-  public buscaResponsable: any;
-  public isOperador: boolean= false;
 
   public empresas!: Empresa[];
   public areas!: Area[];
+  public estados!: Estado[];
+  public seguimiento!: Seguimiento | null
 
+  // Responsables y Operadores
+  public responsables!: Responsable[];
+  public operadores!: Operador[];
   public buscarOper!: Operador[];
   public buscarResp!: Responsable[];
+  public buscaOperador: any;
+  public buscaResponsable: any;
 
+  public isOperador: boolean= false;
   public results: string = '';
   public showResults: boolean = false;
   public timeoutId: any;
-
-  public enviarHelpdesk!: HelpDesk;
   public isLoading: boolean= false
 
   public myForm!: FormGroup;
   private subscriptions: Subscription = new Subscription();
-
 
   constructor(
     private fb: FormBuilder,
@@ -65,8 +65,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
       codigoppal: 0,
       area: [this.ticketRecibido?.area, Validators.required],
       empresa: [this.ticketRecibido?.empresa, Validators.required],
-      //codigoempresa: [this.ticketRecibido?.empresa.codigo],
-      estado: [{ codigo: 1, descripcion: 'SIN RECIBIR' }],
+      estado: [this.ticketRecibido?.estado, Validators.required],
       responsable: [this.ticketRecibido?.responsable],
       solicita: [this.ticketRecibido?.solicita],
       sistema: [{ codigo: 1, descripcion: '' }],
@@ -84,11 +83,19 @@ export class FormPageComponent implements OnInit, OnDestroy {
     forkJoin({
       responsables: this.ticketService.getResponsables(),
       empresas: this.ticketService.getEmpresa(),
-      areas: this.ticketService.getArea()
-    }).subscribe(({ responsables, empresas, areas }) => {
+      areas: this.ticketService.getArea(),
+      estados: this.ticketService.getEstado(),
+    }).subscribe(({ responsables, empresas, areas, estados }) => {
       this.responsables = responsables;
       this.empresas = empresas;
       this.areas = areas;
+      this.estados = estados
+
+      const estadoDefecto =  this.estados ? this.estados.find(e => e.codigo === 1) : this.ticketRecibido?.estado
+      this.myForm.patchValue({
+          estado: estadoDefecto,
+        });
+
     });
 
     this.subscriptions.add(
@@ -137,33 +144,37 @@ export class FormPageComponent implements OnInit, OnDestroy {
       });
 
       //Si las listas no están cargadas, cargar ambas
-      if (!this.empresas || !this.areas || this.empresas.length === 0 || this.areas.length === 0) {
+      if (!this.empresas || !this.areas || !this.estados || this.empresas.length === 0 || this.areas.length === 0 || this.estados.length === 0) {
         forkJoin({
-          empresas: this.ticketService.getEmpresa(),
-          areas: this.ticketService.getArea()
-        }).subscribe(({ empresas, areas }) => {
-          this.empresas = empresas;
-          this.areas = areas;
-          this.patchEmpresaArea();
+          empresa: this.ticketService.getEmpresa(),
+          area: this.ticketService.getArea(),
+          estados: this.ticketService.getEstado()
+        }).subscribe(({ empresa, area, estados }) => {
+          this.empresas = empresa;
+          this.areas = area;
+          this.estados = estados
+          this.patchSelect();
         });
       } else {
-        this.patchEmpresaArea();
+        this.patchSelect();
       }
 
-      this.botonVolverVisible = true;
+      this.botonVisible = true;
+
     }
   }
 
-  patchEmpresaArea() {
+  patchSelect() {
     const empresaSeleccionada = this.empresas ? this.empresas.find(e => e.codigo === this.ticketRecibido?.empresa.codigo) : this.ticketRecibido?.empresa
     const areaSeleccionada =  this.areas ? this.areas.find(a => a.codigo === this.ticketRecibido?.area.codigo) : this.ticketRecibido?.area
+    const estadoSeleccionado =  this.estados ? this.estados.find(e => e.codigo === this.ticketRecibido?.estado?.codigo) : this.ticketRecibido?.estado
 
-    if (!empresaSeleccionada || !areaSeleccionada) return;
+    if (!empresaSeleccionada || !areaSeleccionada || !estadoSeleccionado) return;
 
     this.myForm.patchValue({
       empresa: empresaSeleccionada,
-      // codigoempresa: empresaSeleccionada.codigo,
-      area: areaSeleccionada
+      area: areaSeleccionada,
+      estado: estadoSeleccionado,
     });
   }
 
@@ -171,9 +182,7 @@ export class FormPageComponent implements OnInit, OnDestroy {
   onEmpresaChange(event: any) {
     const empresaSeleccionada = this.myForm.get('empresa')?.value;
     if (empresaSeleccionada) {
-      //const { codigo }= empresaSeleccionada
       this.myForm.patchValue({
-      // codigoempresa: codigo
     })
 
     if (!empresaSeleccionada) return
@@ -296,18 +305,14 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
     if (isOp) {
       this.isOperador= true
-      //this.myForm.patchValue({ solicita: per }); // Actualiza el formulario
       searchbar.value = per;
-
       this.buscarOper = [];
       this.showResults = false;
     }
 
     if (!isOp) {
       this.isOperador= false
-      //this.myForm.patchValue({ responsable: per }); // Actualiza el formulario
       searchbar.value = per;
-
       this.buscarResp = [];
       this.showResults = false;
     }
@@ -330,7 +335,6 @@ export class FormPageComponent implements OnInit, OnDestroy {
     this.myForm.patchValue({ responsable: this.buscaResponsable })
 
     let post_ticket: HelpDesk = this.myForm.value
-    //console.log('Objeto enviado al backend: ', post_ticket);
 
     if (!post_ticket) return
 
