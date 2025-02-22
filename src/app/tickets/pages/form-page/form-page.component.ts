@@ -46,13 +46,10 @@ export class FormPageComponent implements OnInit, OnDestroy {
   public results: string = '';
   public showResults: boolean = false;
   public timeoutId: any;
-
-  // public enviarHelpdesk!: HelpDesk;
   public isLoading: boolean= false
 
   public myForm!: FormGroup;
   private subscriptions: Subscription = new Subscription();
-
 
   constructor(
     private fb: FormBuilder,
@@ -307,18 +304,14 @@ export class FormPageComponent implements OnInit, OnDestroy {
 
     if (isOp) {
       this.isOperador= true
-      //this.myForm.patchValue({ solicita: per }); // Actualiza el formulario
       searchbar.value = per;
-
       this.buscarOper = [];
       this.showResults = false;
     }
 
     if (!isOp) {
       this.isOperador= false
-      //this.myForm.patchValue({ responsable: per }); // Actualiza el formulario
       searchbar.value = per;
-
       this.buscarResp = [];
       this.showResults = false;
     }
