@@ -22,7 +22,8 @@
     label="Empresa"
     label-placement="floating"
     fill="solid"
-    (ionChange)="onEmpresaChange($event)">
+    (ionChange)="onEmpresaChange($event)"
+    interface="popover">
 
     <ion-select-option [value]="item"
         *ngFor="let item of empresas">
@@ -35,7 +36,8 @@
     formControlName="area"
     label="Área"
     label-placement="floating"
-    fill="solid">
+    fill="solid"
+    interface="popover">
 
     <ion-select-option [value]="item"
         *ngFor="let item of areas">
@@ -48,7 +50,8 @@
     formControlName="estado"
     label="Estado"
     label-placement="floating"
-    fill="solid">
+    fill="solid"
+    interface="popover">
 
     <ion-select-option [value]="item"
         *ngFor="let item of estados">

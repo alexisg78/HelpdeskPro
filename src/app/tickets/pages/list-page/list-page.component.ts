@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HelpDesk } from '../../interfaces/ticket.interface';
+import { forkJoin, take } from 'rxjs';
+
+import { Area, Empresa, HelpDesk } from '../../interfaces/ticket.interface';
 import { TicketsService } from '../../services/tickets-service.service';
 import { Router } from '@angular/router';
-import { take } from 'rxjs';
 
 @Component({
   selector: 'list-page',
@@ -15,11 +16,22 @@ export class ListPageComponent implements OnInit{
   public tickets: HelpDesk[] = []
   public ticketSeleccionado!: HelpDesk | null
   public selectedTicket: any = null;
+  public empresas!: Empresa[];
+  public areas!: Area[];
 
   constructor  (private ticketsService : TicketsService, private router: Router) {}
 
   ngOnInit(): void {
     this.getActualiza()
+
+    forkJoin({
+      empresas: this.ticketsService.getEmpresa(),
+      areas: this.ticketsService.getArea(),
+    }).subscribe(({ empresas, areas }) => {
+      this.empresas = empresas;
+      this.areas = areas;
+    });
+
   }
 
   selectRow(item: any) {
