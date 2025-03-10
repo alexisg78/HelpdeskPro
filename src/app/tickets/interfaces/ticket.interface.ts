@@ -74,3 +74,7 @@ export interface Seguimiento {
   seguimiento: string
 }
 
+export interface Filtros  {
+  codEmpresa?: number
+  codArea?: number
+}

@@ -1,11 +1,13 @@
 <ion-content class="ion-padding sm: min-w-max">
-  <div class="flex justify-content-end sm: mr-0 justify-content-center md: mr-0 h-3rem">
+  <div class="flex justify-content-center sm: mr-0 justify-content-center md: mr-0 h-3rem">
       <!-- empresa -->
-      <ion-select class="font-medium text-black-alpha-80 ml-2"
+      <ion-select class="font-medium text-black-alpha-80 ml-1"
         label="Empresa"
         label-placement="floating"
         fill="solid"
-        interface="popover">
+        interface="popover"
+        (ionChange)="filterByEmpresa($event)"
+        >
 
       <ion-select-option [value]="item"
           *ngFor="let item of empresas">
@@ -14,11 +16,13 @@
     </ion-select>
 
     <!-- area -->
-    <ion-select class="font-medium text-black-alpha-80 ml-2"
+    <ion-select class="font-medium text-black-alpha-80 ml-1"
       label="Área"
       label-placement="floating"
       fill="solid"
-      interface="popover">
+      interface="popover"
+      (ionChange)="filterByArea($event)"
+      >
 
       <ion-select-option [value]="item"
           *ngFor="let item of areas">
@@ -27,7 +31,7 @@
     </ion-select>
 
     <ion-button
-      class="button-actualizar ml-5"
+      class="button-actualizar mr-2 mb-1"
       slot="end"
       (click)="getActualiza()"
       color="primary"
