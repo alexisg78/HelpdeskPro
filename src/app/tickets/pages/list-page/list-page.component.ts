@@ -11,23 +11,27 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './list-page.component.css',
   standalone: false
 })
-export class ListPageComponent implements OnInit{
+export class ListPageComponent implements OnInit {
 
-  public tickets: HelpDesk[] = []
-  public tickets_backup: HelpDesk[] = []
-  public ticketSeleccionado!: HelpDesk | null
+  public tickets: HelpDesk[] = [];
+  public tickets_backup: HelpDesk[] = [];
+  public ticketSeleccionado!: HelpDesk | null;
+  public empresaSeleccionada!: Empresa | null;
+  public areaSeleccionada!: Area | null;
   public selectedTicket: any = null;
   public empresas!: Empresa[];
   public areas!: Area[];
-  public filtros?: Filtros
-  //public filtroActivo: boolean = false
+  public filtros?: Filtros;
+  public tickets_filtrados?: HelpDesk[] = [];
 
-  constructor  (private ticketsService : TicketsService, private router: Router, private route: ActivatedRoute ) {}
+  constructor(private ticketsService: TicketsService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-
+    this.empresaSeleccionada= {codigo: 0, descripcion: 'SIN INFORMACIÓN'}
+    this.areaSeleccionada= {codigo: 0, descripcion: 'SIN DATOS'}
     this.getActualiza();
 
+    // Carga las empresas y áreas
     forkJoin({
       empresas: this.ticketsService.getEmpresa(),
       areas: this.ticketsService.getArea(),
@@ -35,75 +39,93 @@ export class ListPageComponent implements OnInit{
       this.empresas = empresas;
       this.areas = areas;
     });
-
-    // Verificar si hay filtros pasados a través de queryParams
-    // this.route.queryParams.subscribe(params => {
-    //   if (params['data']) {
-    //     this.filtros = JSON.parse(params['data']);
-    //     console.log('filtros: ', this.filtros)
-    //     this.aplicarFiltros(this.filtros);
-    //   }else{
-    //     console.log('filtros: ', params)
-    //     this.getActualiza();
-    //   }
-    // });
   }
 
   selectRow(item: any) {
     this.selectedTicket = item;
-    this.ticketSeleccionado= item;
+    this.ticketSeleccionado = item;
   }
 
-  getTicket(item:HelpDesk, id: number){
+  getTicket(item: HelpDesk, id: number) {
 
     this.filtros = {
       codEmpresa: item.empresa.codigo,
       codArea: item.area.codigo
     };
 
-    this.router.navigate([`helpdesk/details`, id], { queryParams: { data: JSON.stringify(this.filtros)} });
-    this.selectRow(item)
+    this.router.navigate([`helpdesk/details`, id], { queryParams: { data: JSON.stringify(this.filtros) } });
+    this.selectRow(item);
+
+    // Guarda los filtros en localStorage
+    localStorage.setItem('Filtros', JSON.stringify(this.filtros));
   }
 
-  getActualiza(){
+  getActualiza() {
+    // Carga los tickets desde el servicio
     this.ticketsService.getTickets().pipe(take(1))
-    .subscribe( tickets => {
-      this.tickets =  tickets;
-      this.tickets_backup= tickets;
-      this.selectedTicket= this.tickets[0]
-    });
+      .subscribe(tickets => {
+        this.tickets = tickets;
+        this.tickets_backup = tickets;
+        this.selectedTicket = this.tickets[0];
+        this.getFiltros();
+      });
   }
 
   filterByEmpresa(event: CustomEvent) {
-    if ( event.detail.value.codigo === 0 ) {
+    if (event.detail.value.codigo === 0) {
+      localStorage.removeItem('Filtros');
       this.getActualiza();
       return;
     }
 
-    this.tickets= this.tickets_backup;
-    this.tickets= this.tickets.filter( t => t.empresa.codigo === event.detail.value.codigo )
-
+    this.tickets = this.tickets_backup.filter(t => t.empresa.codigo === event.detail.value.codigo);
+    this.tickets_filtrados = this.tickets;
   }
 
   filterByArea(event: CustomEvent) {
-    if ( event.detail.value.codigo === 0 ) {
+    if (event.detail.value.codigo === 0) {
+      localStorage.removeItem('Filtros');
       this.getActualiza();
       return;
     }
 
-    this.tickets= this.tickets_backup;
-    this.tickets= this.tickets.filter( t => t.area.codigo === event.detail.value.codigo )
-
+    this.tickets = this.tickets_backup.filter(t => t.area.codigo === event.detail.value.codigo);
+    this.tickets_filtrados = this.tickets;
   }
 
-  aplicarFiltros(objFiltro: Filtros){
-    this.tickets= this.tickets_backup;
+  aplicarFiltros(objFiltro: Filtros) {
+    this.tickets = this.tickets_backup;
+
     if (!objFiltro) return;
 
-    if (objFiltro.codEmpresa && objFiltro.codArea) { this.tickets= this.tickets.filter( t => t.empresa.codigo === objFiltro.codEmpresa && t.area.codigo === objFiltro.codArea ); return}
-    if (objFiltro.codEmpresa && !objFiltro.codArea){ this.tickets= this.tickets.filter( t => t.area.codigo === objFiltro.codArea ); return}
-    if (!objFiltro.codEmpresa && objFiltro.codArea){ this.tickets= this.tickets.filter( t => t.area.codigo === objFiltro.codArea ); return}
+    //console.log('Filtros para aplicar: ', objFiltro);
 
+    if (objFiltro.codEmpresa && objFiltro.codArea) {
+      this.tickets = this.tickets.filter(t => t.empresa.codigo === objFiltro.codEmpresa && t.area.codigo === objFiltro.codArea);
+    } else if (objFiltro.codEmpresa) {
+      this.tickets = this.tickets.filter(t => t.empresa.codigo === objFiltro.codEmpresa);
+    } else if (objFiltro.codArea) {
+      this.tickets = this.tickets.filter(t => t.area.codigo === objFiltro.codArea);
+    }
+
+    this.tickets_filtrados = this.tickets;
+  }
+
+  getFiltros() {
+    const gFiltros = localStorage.getItem('Filtros');
+
+    if (gFiltros) {
+      const filtrosParsed: Filtros = JSON.parse(gFiltros);
+      this.filtros = filtrosParsed;
+      this.aplicarFiltros(filtrosParsed);
+    }
+  }
+
+  limpiarFiltros(event: CustomEvent){
+    const gFiltros = localStorage.getItem('Filtros');
+    if (gFiltros && (event.detail.codEmpresa === 0 || event.detail.codArea === 0) ) {
+      localStorage.removeItem('Filtros')
+    }
   }
 
 }

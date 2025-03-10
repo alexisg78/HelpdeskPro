@@ -7,6 +7,7 @@
         fill="solid"
         interface="popover"
         (ionChange)="filterByEmpresa($event)"
+        (ionChange)="limpiarFiltros($event)"
         >
 
       <ion-select-option [value]="item"
@@ -16,12 +17,13 @@
     </ion-select>
 
     <!-- area -->
-    <ion-select class="font-medium text-black-alpha-80 ml-1"
+    <ion-select class="font-medium text-black-alpha-80 ml-1 mr-1"
       label="Área"
       label-placement="floating"
       fill="solid"
       interface="popover"
       (ionChange)="filterByArea($event)"
+      (ionChange)="limpiarFiltros($event)"
       >
 
       <ion-select-option [value]="item"
@@ -31,7 +33,7 @@
     </ion-select>
 
     <ion-button
-      class="button-actualizar mr-2 mb-1"
+      class="button-actualizar mr-2 mt-2"
       slot="end"
       (click)="getActualiza()"
       color="primary"
