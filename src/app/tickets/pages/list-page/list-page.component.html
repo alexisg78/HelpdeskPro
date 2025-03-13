@@ -1,3 +1,4 @@
+<!-- (ionChange)="limpiarFiltros($event)" -->
 <ion-content class="ion-padding sm: min-w-max">
   <div class="flex justify-content-center sm: mr-0 justify-content-center md: mr-0 h-3rem">
     <!-- area -->
@@ -7,7 +8,6 @@
       fill="solid"
       interface="popover"
       (ionChange)="filterByArea($event)"
-      (ionChange)="limpiarFiltros($event)"
       >
 
       <ion-select-option [value]="item"
@@ -23,7 +23,6 @@
       fill="solid"
       interface="popover"
       (ionChange)="filterByEmpresa($event)"
-      (ionChange)="limpiarFiltros($event)"
       >
 
       <ion-select-option [value]="item"

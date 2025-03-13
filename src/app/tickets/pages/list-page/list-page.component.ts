@@ -77,13 +77,15 @@ export class ListPageComponent implements OnInit {
     const codEmpresa = event.detail.value.codigo;
 
     if (codEmpresa === 0 || !event.detail.value) {
-      this.getActualiza();
+      // this.getActualiza();
+      this.tickets= this.tickets_backup
       return;
     }
     this.empresaSeleccionada = this.empresas.filter(e => e.codigo === codEmpresa);
+    // this.tickets = this.tickets_backup.filter(t => t.empresa.codigo === event.detail.value.codigo);
+
     this.filterByEmpresaYArea(codEmpresa, this.areaSeleccionada?.[0]?.codigo || 0);
 
-    // this.tickets = this.tickets_backup.filter(t => t.empresa.codigo === event.detail.value.codigo);
     // this.tickets_filtrados = this.tickets;
 
   }
@@ -92,17 +94,18 @@ export class ListPageComponent implements OnInit {
 
     const codArea = event.detail.value.codigo;
     this.areaSeleccionada = this.areas.filter(a => a.codigo === codArea);
-    this.filterByEmpresaYArea(this.empresaSeleccionada?.[0]?.codigo || 0, codArea);
+
 
     if (event.detail.value.codigo === 0 || !event.detail.value) {
-      this.getActualiza();
+      // this.getActualiza();
+      this.tickets= this.tickets_backup
       return;
     }
 
-    // this.tickets = this.tickets_backup.filter(t => t.area.codigo === event.detail.value.codigo);
+    this.tickets = this.tickets_backup.filter(t => t.area.codigo === event.detail.value.codigo);
     // this.tickets_filtrados = this.tickets;
 
-
+    this.filterByEmpresaYArea(this.empresaSeleccionada?.[0]?.codigo || 0, codArea);
 
   }
 
@@ -144,16 +147,11 @@ export class ListPageComponent implements OnInit {
 
   }
 
-  limpiarFiltros(event: CustomEvent){
-    const gFiltros = localStorage.getItem('Filtros');
-    if (gFiltros && (event.detail.codEmpresa === 0 || event.detail.codArea === 0) ) {
-      localStorage.removeItem('Filtros')
-    }
-  }
-
-  selectValue(){
-    this.empresaSeleccionada= this.empresas.filter(e => e.codigo === this.filtros?.codEmpresa)
-    this.areaSeleccionada= this.empresas.filter(a => a.codigo === this.filtros?.codArea)
-  }
+  // limpiarFiltros(event: CustomEvent){
+  //   const gFiltros = localStorage.getItem('Filtros');
+  //   if (gFiltros && (event.detail.codEmpresa === 0 || event.detail.codArea === 0) ) {
+  //     localStorage.removeItem('Filtros')
+  //   }
+  // }
 
 }
