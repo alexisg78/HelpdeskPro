@@ -74,44 +74,48 @@ export class ListPageComponent implements OnInit {
 
   filterByEmpresa(event: CustomEvent) {
 
-    if (event.detail.value.codigo === 0 || !event.detail.value) {
-      localStorage.removeItem('Filtros');
+    const codEmpresa = event.detail.value.codigo;
+
+    if (codEmpresa === 0 || !event.detail.value) {
       this.getActualiza();
       return;
     }
-    this.empresaSeleccionada= this.empresas.filter(e => e.codigo === event.detail.value.codigo)
+    this.empresaSeleccionada = this.empresas.filter(e => e.codigo === codEmpresa);
+    this.filterByEmpresaYArea(codEmpresa, this.areaSeleccionada?.[0]?.codigo || 0);
 
-    this.tickets = this.tickets_backup.filter(t => t.empresa.codigo === event.detail.value.codigo);
-    this.tickets_filtrados = this.tickets;
-    this.filterByEmpresaYArea(event.detail.value.codigo, 0, this.tickets_filtrados)
+    // this.tickets = this.tickets_backup.filter(t => t.empresa.codigo === event.detail.value.codigo);
+    // this.tickets_filtrados = this.tickets;
+
   }
 
   filterByArea(event: CustomEvent) {
-    if (event.detail.value.codigo === 0 || !event.detail.value) {
 
+    const codArea = event.detail.value.codigo;
+    this.areaSeleccionada = this.areas.filter(a => a.codigo === codArea);
+    this.filterByEmpresaYArea(this.empresaSeleccionada?.[0]?.codigo || 0, codArea);
+
+    if (event.detail.value.codigo === 0 || !event.detail.value) {
       this.getActualiza();
       return;
     }
 
-    this.tickets = this.tickets_backup.filter(t => t.area.codigo === event.detail.value.codigo);
-    this.tickets_filtrados = this.tickets;
+    // this.tickets = this.tickets_backup.filter(t => t.area.codigo === event.detail.value.codigo);
+    // this.tickets_filtrados = this.tickets;
 
-    this.filterByEmpresaYArea(0, event.detail.value.codigo, this.tickets_filtrados)
+
 
   }
 
-  filterByEmpresaYArea(codEmpresa: number , codArea: number, ticketFiltrados: HelpDesk[]) {
+  filterByEmpresaYArea(codEmpresa: number, codArea: number) {
+    this.tickets = this.tickets_backup.filter(t =>
+        (codEmpresa === 0 || t.empresa.codigo === codEmpresa) &&
+        (codArea === 0 || t.area.codigo === codArea)
+    );
 
-    if ((codEmpresa === 0 || !codEmpresa) || (codArea === 0 || !codArea)) return;
-    let tickets_fil
-
-    tickets_fil = ticketFiltrados.filter(t => { t.empresa.codigo === codEmpresa && t.area.codigo === codArea && t.empresa.codigo !== 0 && t.area.codigo !== 0});
-    this.tickets = tickets_fil
-    console.log('Tickets Filtrados tickets_fil: ', tickets_fil)
-    console.log('Tickets Filtrados: ', this.tickets)
-
-    this.tickets_filtrados = this.tickets;
+    this.tickets_filtrados = [...this.tickets];
+    console.log('Tickets Filtrados: ', this.tickets_filtrados)
   }
+
 
   aplicarFiltros(objFiltro: Filtros) {
     this.tickets = this.tickets_backup;
