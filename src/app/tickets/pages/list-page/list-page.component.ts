@@ -73,40 +73,16 @@ export class ListPageComponent implements OnInit {
   }
 
   filterByEmpresa(event: CustomEvent) {
-
     const codEmpresa = event.detail.value.codigo;
-
-    if (codEmpresa === 0 || !event.detail.value) {
-      // this.getActualiza();
-      this.tickets= this.tickets_backup
-      return;
-    }
     this.empresaSeleccionada = this.empresas.filter(e => e.codigo === codEmpresa);
-    // this.tickets = this.tickets_backup.filter(t => t.empresa.codigo === event.detail.value.codigo);
-
     this.filterByEmpresaYArea(codEmpresa, this.areaSeleccionada?.[0]?.codigo || 0);
-
-    // this.tickets_filtrados = this.tickets;
-
   }
 
   filterByArea(event: CustomEvent) {
-
     const codArea = event.detail.value.codigo;
     this.areaSeleccionada = this.areas.filter(a => a.codigo === codArea);
-
-
-    if (event.detail.value.codigo === 0 || !event.detail.value) {
-      // this.getActualiza();
-      this.tickets= this.tickets_backup
-      return;
-    }
-
     this.tickets = this.tickets_backup.filter(t => t.area.codigo === event.detail.value.codigo);
-    // this.tickets_filtrados = this.tickets;
-
     this.filterByEmpresaYArea(this.empresaSeleccionada?.[0]?.codigo || 0, codArea);
-
   }
 
   filterByEmpresaYArea(codEmpresa: number, codArea: number) {
@@ -116,7 +92,7 @@ export class ListPageComponent implements OnInit {
     );
 
     this.tickets_filtrados = [...this.tickets];
-    console.log('Tickets Filtrados: ', this.tickets_filtrados)
+    // console.log('Tickets Filtrados: ', this.tickets_filtrados)
   }
 
 
