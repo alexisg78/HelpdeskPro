@@ -8,9 +8,12 @@
       fill="solid"
       interface="popover"
       (ionChange)="filterByArea($event)"
+      [(ngModel)]="selectedArea"
       >
 
-      <ion-select-option [value]="item"
+      <ion-select-option
+          [value]="item"
+          (click)="limpiarFiltros(item.codigo)"
           *ngFor="let item of areas">
           {{item.descripcion}}
       </ion-select-option>
@@ -23,9 +26,11 @@
       fill="solid"
       interface="popover"
       (ionChange)="filterByEmpresa($event)"
+      [(ngModel)]="selectedEmpresa"
       >
 
       <ion-select-option [value]="item"
+          (click)="limpiarFiltros(item.codigo)"
           *ngFor="let item of empresas">
           {{item.descripcion}}
       </ion-select-option>
