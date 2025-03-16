@@ -2,12 +2,12 @@
 
   <div class="mx-auto p-d-flex p-flex-column p-ai-center p-jc-center p-mx-auto p-p-1 p-shadow-2 p-border-round-lg p-fluid">
 
-    <ion-textarea class="p-mb-2 p-w-full font-medium text-black-alpha-80 h-8rem p-h-full"
+    <ion-textarea class="p-mb-2 p-w-full font-medium text-black-alpha-80 min-h-8rem mb-2"
       label="Seguimiento"
       labelPlacement="floating"
       fill="solid"
       placeholder="Ingrese el requerimiento"
-      style="overflow-y: auto;"
+      style="overflow-y: auto; resize: none; line-height: 1.8; text-align: start"
       [autoGrow]="false"
       [readonly]="true"
       [(ngModel)]="textoSeguimiento"
@@ -20,7 +20,6 @@
             <ion-buttons slot="start">
               <ion-button  (click)="cancel()">Cancelar</ion-button>
             </ion-buttons>
-            <!-- <ion-title>Ingrese el seguimiento</ion-title> -->
             <ion-buttons slot="end">
               <ion-button (click)="confirm()" [strong]="true">Confirmar</ion-button>
             </ion-buttons>
@@ -39,7 +38,7 @@
         </ion-content>
       </ng-template>
     </ion-modal>
-    <ion-button id="open-modal" expand="block">Seguimiento</ion-button>
+    <ion-button class="mt-1" id="open-modal" expand="block">Seguimiento</ion-button>
 
   </div>
 
