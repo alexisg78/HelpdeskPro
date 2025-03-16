@@ -1,84 +1,183 @@
 {
+
+  "Auth" : [ {
+      "username": "ADMIN",
+      "password": "123456",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+    }
+  ],
+
   "HelpDesk": [
     {
-      "fecha": "2024-01-30",
-      "titulo": "Error en el sistema",
-      "textoreclamo": "El sistema no carga los datos correctamente.",
-      "nombreoperador": "Juan Pérez",
-      "area": "Sistemas",
-      "responsable": "María López",
-      "userid_atiende": "user123",
-      "empresa": "HE",
       "codigoppal": 101,
-      "codigoestado": 1,
-      "estado": "Pendiente",
-      "color": 2,
+      "area": { "id": 1, "nombre": "Soporte Técnico" },
+      "empresa": { "id": 1, "nombre": "TechCorp" },
+      "estado": { "id": 1, "nombre": "Pendiente" },
+      "responsable": { "id": 3, "nombre": "Juan Pérez" },
+      "solicita": { "id": 5, "nombre": "Ana Gómez" },
+      "sistema": { "id": 2, "nombre": "ERP System" },
+      "fecha": "2025-02-15T10:30:00Z",
+      "titulo": "Problema con la conexión VPN",
+      "textoreclamo": "No puedo acceder a la VPN de la empresa desde casa.",
+      "userid_atiende": "admin01",
+      "codigotiporeclamo": 2,
+      "codigomenu": 4,
       "urgente": true,
-      "codigoempresa": 5
+      "helpdesk": true,
+      "tipoticket": 1
     },
     {
-      "fecha": "2024-01-28",
-      "titulo": "Problema con impresora",
-      "textoreclamo": "La impresora no responde en red.",
-      "nombreoperador": "Ana Martínez",
-      "area": "Técnica",
-      "responsable": "Carlos Gómez",
-      "userid_atiende": "user456",
-      "empresa": "ALIARE",
       "codigoppal": 102,
-      "codigoestado": 2,
-      "estado": "En proceso",
-      "color": 3,
+      "area": { "id": 2, "nombre": "Recursos Humanos" },
+      "empresa": { "id": 1, "nombre": "TechCorp" },
+      "estado": { "id": 2, "nombre": "En Progreso" },
+      "responsable": { "id": 6, "nombre": "María López" },
+      "solicita": { "id": 8, "nombre": "Carlos Díaz" },
+      "sistema": { "id": 3, "nombre": "HR Management" },
+      "fecha": "2025-02-14T15:45:00Z",
+      "titulo": "Error al generar recibo de sueldo",
+      "textoreclamo": "El sistema no me permite descargar mi recibo de sueldo.",
+      "userid_atiende": "soporte02",
+      "codigotiporeclamo": 3,
+      "codigomenu": 7,
       "urgente": false,
-      "codigoempresa": 7
+      "helpdesk": true,
+      "tipoticket": 2
     },
     {
-      "fecha": "2024-01-25",
-      "titulo": "Acceso denegado",
-      "textoreclamo": "El usuario no puede acceder al sistema.",
-      "nombreoperador": "Pedro Sánchez",
-      "area": "Sistemas",
-      "responsable": "Laura Fernández",
-      "userid_atiende": "user789",
-      "empresa": "HE",
       "codigoppal": 103,
-      "codigoestado": 1,
-      "estado": "Pendiente",
-      "color": 1,
+      "area": { "id": 3, "nombre": "Infraestructura" },
+      "empresa": { "id": 2, "nombre": "SoftDev" },
+      "estado": { "id": 3, "nombre": "Resuelto" },
+      "responsable": { "id": 9, "nombre": "Roberto Castillo" },
+      "solicita": { "id": 12, "nombre": "Laura Méndez" },
+      "sistema": { "id": 4, "nombre": "Red Corporativa" },
+      "fecha": "2025-02-13T09:20:00Z",
+      "titulo": "Problema con el acceso a servidores",
+      "textoreclamo": "No puedo conectarme al servidor central desde mi equipo.",
+      "userid_atiende": "infra01",
+      "codigotiporeclamo": 1,
+      "codigomenu": 5,
       "urgente": true,
-      "codigoempresa": 5
+      "helpdesk": false,
+      "tipoticket": 3
     },
     {
-      "fecha": "2024-01-20",
-      "titulo": "Problema con correo electrónico",
-      "textoreclamo": "No se pueden enviar correos desde Outlook.",
-      "nombreoperador": "Luis Rodríguez",
-      "area": "Soporte",
-      "responsable": "Sofía Herrera",
-      "userid_atiende": "user321",
-      "empresa": "ALIARE",
       "codigoppal": 104,
-      "codigoestado": 3,
-      "estado": "Resuelto",
-      "color": 4,
+      "area": { "id": 4, "nombre": "Desarrollo" },
+      "empresa": { "id": 3, "nombre": "InnovaTech" },
+      "estado": { "id": 1, "nombre": "Pendiente" },
+      "responsable": { "id": 11, "nombre": "Sofía Ramírez" },
+      "solicita": { "id": 14, "nombre": "Pedro Sánchez" },
+      "sistema": { "id": 5, "nombre": "Gestor de Proyectos" },
+      "fecha": "2025-02-12T14:00:00Z",
+      "titulo": "Error en la carga de tareas",
+      "textoreclamo": "El sistema no permite asignar tareas a ciertos usuarios.",
+      "userid_atiende": "devsupport",
+      "codigotiporeclamo": 4,
+      "codigomenu": 8,
       "urgente": false,
-      "codigoempresa": 7
+      "helpdesk": true,
+      "tipoticket": 1
     },
     {
-      "fecha": "2024-01-18",
-      "titulo": "Falla en servidor",
-      "textoreclamo": "El servidor dejó de responder.",
-      "nombreoperador": "Ricardo Torres",
-      "area": "Infraestructura",
-      "responsable": "José Ramírez",
-      "userid_atiende": "user654",
-      "empresa": "HE",
       "codigoppal": 105,
-      "codigoestado": 1,
-      "estado": "Pendiente",
-      "color": 5,
+      "area": { "id": 5, "nombre": "Soporte de Aplicaciones" },
+      "empresa": { "id": 1, "nombre": "TechCorp" },
+      "estado": { "id": 2, "nombre": "En Progreso" },
+      "responsable": { "id": 15, "nombre": "Lucía Fernández" },
+      "solicita": { "id": 17, "nombre": "Fernando Gómez" },
+      "sistema": { "id": 6, "nombre": "CRM System" },
+      "fecha": "2025-02-11T11:10:00Z",
+      "titulo": "Problema con la carga de clientes",
+      "textoreclamo": "No se pueden agregar nuevos clientes al CRM.",
+      "userid_atiende": "crmadmin",
+      "codigotiporeclamo": 5,
+      "codigomenu": 6,
       "urgente": true,
-      "codigoempresa": 5
+      "helpdesk": true,
+      "tipoticket": 2
     }
+  ],
+
+ "Area" : [
+    { "codigo": 1, "descripcion": "Soporte Técnico" },
+    { "codigo": 2, "descripcion": "Recursos Humanos" },
+    { "codigo": 3, "descripcion": "Infraestructura" },
+    { "codigo": 4, "descripcion": "Desarrollo" },
+    { "codigo": 5, "descripcion": "Atención al Cliente" }
+  ],
+
+
+  "Empresa" : [
+    { "codigo": 1, "descripcion": "TechCorp" },
+    { "codigo": 2, "descripcion": "SoftDev" },
+    { "codigo": 3, "descripcion": "InnovaTech" },
+    { "codigo": 4, "descripcion": "RedCom" },
+    { "codigo": 5, "descripcion": "DataSys" }
+  ],
+
+  "Estado" : [
+    { "codigo": 1, "descripcion": "Pendiente", "color": "0xff0000" },
+    { "codigo": 2, "descripcion": "En Progreso", "color": "0xffff00" },
+    { "codigo": 3, "descripcion": "Resuelto", "color": "0x00ff00" },
+    { "codigo": 4, "descripcion": "Cancelado", "color": "0x808080" },
+    { "codigo": 5, "descripcion": "Escalado", "color": "0x0000ff" }
+  ],
+
+  "TipoReclamo" : [
+    { "codigo": 1, "descripcion": "Problema de Red" },
+    { "codigo": 2, "descripcion": "Error de Aplicación" },
+    { "codigo": 3, "descripcion": "Acceso Denegado" },
+    { "codigo": 4, "descripcion": "Falla de Hardware" },
+    { "codigo": 5, "descripcion": "Consulta General" }
+  ],
+
+  "Menu" : [
+    { "codigo": 1, "descripcion": "Dashboard" },
+    { "codigo": 2, "descripcion": "Tickets Abiertos" },
+    { "codigo": 3, "descripcion": "Historial de Reclamos" },
+    { "codigo": 4, "descripcion": "Gestión de Usuarios" },
+    { "codigo": 5, "descripcion": "Configuraciones" }
+  ],
+
+  "Sector" : [
+    { "codigo": 1, "descripcion": "Administración" },
+    { "codigo": 2, "descripcion": "IT" },
+    { "codigo": 3, "descripcion": "Seguridad" },
+    { "codigo": 4, "descripcion": "Soporte Técnico" },
+    { "codigo": 5, "descripcion": "Marketing" }
+  ],
+
+  "Responsable" : [
+    { "codigo": 1, "descripcion": "Juan Pérez" },
+    { "codigo": 2, "descripcion": "María Gómez" },
+    { "codigo": 3, "descripcion": "Carlos Díaz" },
+    { "codigo": 4, "descripcion": "Sofía Ramírez" },
+    { "codigo": 5, "descripcion": "Lucía Fernández" }
+  ],
+
+  "Operador" : [
+    { "codigo": 1, "descripcion": "Ana Méndez" },
+    { "codigo": 2, "descripcion": "Pedro Sánchez" },
+    { "codigo": 3, "descripcion": "Laura Torres" },
+    { "codigo": 4, "descripcion": "Roberto Castillo" },
+    { "codigo": 5, "descripcion": "Fernando Gómez" }
+  ],
+
+  "Sistema" : [
+    { "codigo": 1, "descripcion": "ERP System" },
+    { "codigo": 2, "descripcion": "CRM System" },
+    { "codigo": 3, "descripcion": "Gestor de Tickets" },
+    { "codigo": 4, "descripcion": "Intranet Corporativa" },
+    { "codigo": 5, "descripcion": "Portal de Empleados" }
+  ],
+
+  "Seguimiento" : [
+    { "codigoppal": 101, "seguimiento": "Ticket creado y asignado a soporte." },
+    { "codigoppal": 102, "seguimiento": "En espera de respuesta del usuario." },
+    { "codigoppal": 103, "seguimiento": "Escalado al equipo de infraestructura." },
+    { "codigoppal": 104, "seguimiento": "Solución implementada, esperando confirmación." },
+    { "codigoppal": 105, "seguimiento": "Ticket cerrado satisfactoriamente." }
   ]
 }

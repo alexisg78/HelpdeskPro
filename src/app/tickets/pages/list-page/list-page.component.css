@@ -1,3 +1,8 @@
+ion-select {
+  width: 100%;
+  min-width: 110px;
+}
+
 .table-container {
   overflow-x: auto; /* Scroll horizontal en pantallas pequeñas */
   max-width: 100%;

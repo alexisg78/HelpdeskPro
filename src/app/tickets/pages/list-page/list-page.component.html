@@ -1,6 +1,43 @@
-<ion-content class="ion-padding">
-  <div class="flex justify-content-end mr-3 sm: mr-0 md: mr-0 h-3rem">
+<!-- (ionChange)="limpiarFiltros($event)" -->
+<ion-content class="ion-padding sm: min-w-max">
+  <div class="ion-padding flex align-items-center justify-content-center sm: mr-0 justify-content-center md: mr-0 h-3rem">
+    <!-- area -->
+    <ion-select class="font-medium text-black-alpha-80 ml-1 mr-1"
+      label="Área"
+      label-placement="floating"
+      fill="solid"
+      interface="popover"
+      (ionChange)="filterByArea($event)"
+      [(ngModel)]="selectedArea"
+      >
+
+      <ion-select-option
+          [value]="item"
+          (click)="limpiarFiltros(item.codigo)"
+          *ngFor="let item of areas">
+          {{item.descripcion}}
+      </ion-select-option>
+    </ion-select>
+
+    <!-- empresa -->
+    <ion-select class="font-medium text-black-alpha-80 ml-1"
+      label="Empresa"
+      label-placement="floating"
+      fill="solid"
+      interface="popover"
+      (ionChange)="filterByEmpresa($event)"
+      [(ngModel)]="selectedEmpresa"
+      >
+
+      <ion-select-option [value]="item"
+          (click)="limpiarFiltros(item.codigo)"
+          *ngFor="let item of empresas">
+          {{item.descripcion}}
+      </ion-select-option>
+    </ion-select>
+
     <ion-button
+      class="button-actualizar mr-2 mt-2 h-3rem sm: min-w-max lg: min-w-max"
       slot="end"
       (click)="getActualiza()"
       color="primary"
@@ -9,6 +46,7 @@
       Actualizar
     </ion-button>
   </div>
+
   <div class="table-container p-3 col-12">
     <table class="custom-table">
       <thead>
@@ -28,7 +66,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of tickets"
-            [class.selected]="item === selectedTicket"
+            [class.selected]="item === selectedTicket || item.codigoppal === ticketSeleccionado?.codigoppal"
             (click)="selectRow(item)">
           <td class="text-base font-medium select-none p-text-center nowrap">{{ item.fecha }}</td>
           <td class="text-base font-medium select-none p-text-center truncate">{{ item.titulo }}</td>

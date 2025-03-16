@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { SweetAlertModule } from '../sweet-alert/sweet-alert.module';
@@ -33,6 +33,7 @@ import { SharedModule } from './shared/shared.module';
     TicketsRoutingModule,
     SharedModule,
     SweetAlertModule,
+    FormsModule
   ],
   exports:[
     DetailsPageComponent,
